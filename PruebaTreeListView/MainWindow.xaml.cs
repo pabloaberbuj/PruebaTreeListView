@@ -26,7 +26,7 @@ namespace PruebaTreeListView
         {
             InitializeComponent();
             cb_pacientes.Items.Clear();
-            cb_pacientes.ItemsSource = Paciente.nuevosPacientes();
+            cb_pacientes.ItemsSource = Paciente.MuchosPacientes();
             view = (CollectionView)CollectionViewSource.GetDefaultView(LVChequeos.Items);
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("Lista");
             PropertyGroupDescription groupDescription2 = new PropertyGroupDescription("Resultado");

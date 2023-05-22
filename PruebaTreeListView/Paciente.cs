@@ -38,6 +38,20 @@ namespace PruebaTreeListView
                 new Paciente("902", "Monica")
             };
         }
+        public static List<Paciente> MuchosPacientes()
+        {
+            List<Paciente> Muchos = nuevosPacientes();
+            for (int i=0;i<2000;i++)
+            {
+                List<Paciente> agregar = nuevosPacientes();
+                foreach (Paciente pac in agregar)
+                {
+                    pac.ID += "-" + i.ToString();
+                }
+                Muchos.AddRange(agregar);
+            }
+            return Muchos;
+        }
     }
 
 }

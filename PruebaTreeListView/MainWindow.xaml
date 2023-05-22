@@ -10,6 +10,9 @@
         WindowState="Maximized">
     <Window.Resources>
         <local:Contador x:Key="Contador"/>
+        <ItemsPanelTemplate x:Key="VSP"> 
+            <VirtualizingStackPanel/>
+        </ItemsPanelTemplate>
     </Window.Resources>
 
     <Grid>
@@ -47,7 +50,7 @@
             </Grid.RowDefinitions>
             <TextBlock Text="Paciente: " FontWeight="Bold"/>
             <ComboBox Grid.Column="1" Name="cb_pacientes" Margin="10,0,10,10" Width="100" Height="30" IsEditable="True" IsTextSearchEnabled="False" IsDropDownOpen="False"  StaysOpenOnEdit="True" KeyUp="cb_pacientes_KeyUp" d:IsHidden="True" HorizontalAlignment="Left"
-                      SelectionChanged="cb_pacientes_SelectionChanged">
+                      SelectionChanged="cb_pacientes_SelectionChanged" ItemsPanel="{StaticResource VSP}">
             </ComboBox>
             <TextBlock Grid.Row="1" Text="Curso: " FontWeight="Bold" HorizontalAlignment="Left"/>
             <ComboBox Grid.Row="1" Grid.Column="1" Name="cb_cursos" Margin="10,0,10,10" Width="100" Height="30" IsEditable="False" IsTextSearchEnabled="False" IsDropDownOpen="False"  StaysOpenOnEdit="True" d:IsHidden="True" HorizontalAlignment="Left" SelectionChanged="cb_cursos_SelectionChanged">
