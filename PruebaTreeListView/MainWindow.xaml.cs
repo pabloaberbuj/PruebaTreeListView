@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using VMS.TPS.Common.Model.API;
+using VMS.TPS.Common.Model.Types;
 
 namespace PruebaTreeListView
 {
@@ -22,25 +24,38 @@ namespace PruebaTreeListView
     {
         CollectionView view;
         List<Chequeo> Chequeos;
+        List<string> pacientesRes;
+        Patient pacienteSeleccionado;
+        Course cursoSeleccionado;
+        PlanningItem planSeleccionado;
+        VMS.TPS.Common.Model.API.Application app;
         public MainWindow()
         {
+             app = VMS.TPS.Common.Model.API.Application.CreateApplication("paberbuj", "123qwe");
+            
+            
+            var pacientes = app.PatientSummaries.OrderByDescending(p=>p.CreationDateTime);
+            pacientesRes = new List<string>();
+            foreach (PatientSummary pacienteSummary in pacientes)
+            {
+                pacientesRes.Add(pacienteSummary.Id + " " + pacienteSummary.LastName + ", " + pacienteSummary.FirstName);
+            }
+            
+            pacientes = null;
+            //app.Dispose();
+            //System.Threading.Thread.Sleep(5000);
             InitializeComponent();
-            cb_pacientes.Items.Clear();
-            cb_pacientes.ItemsSource = Paciente.nuevosPacientes();
-            view = (CollectionView)CollectionViewSource.GetDefaultView(LVChequeos.Items);
-            PropertyGroupDescription groupDescription = new PropertyGroupDescription("Lista");
-            PropertyGroupDescription groupDescription2 = new PropertyGroupDescription("Resultado");
-            view.GroupDescriptions.Add(groupDescription);
+            
             //view.GroupDescriptions.Add(groupDescription2);
         }
 
 
-        /*private void txtFilter_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+        private void txtFilter_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
         {
             CollectionViewSource.GetDefaultView(cb_pacientes.ItemsSource).Refresh();
-        }*/
+        }
 
-        /*public bool Expanded(Lista lista)
+        public bool Expanded(Lista lista)
         {
             if (lista == Lista.Tipo1)
             {
@@ -54,7 +69,7 @@ namespace PruebaTreeListView
             {
                 return true;
             }
-        }*/
+        }
 
         private void RB_OK_Checked(object sender, RoutedEventArgs e)
         {
@@ -77,13 +92,14 @@ namespace PruebaTreeListView
             CollectionView viewPaciente = (CollectionView)CollectionViewSource.GetDefaultView(cb_pacientes.ItemsSource);
             viewPaciente.Filter = ((o) =>
                 {
+                    //string idmasnombre = ((PatientSummary)o).Id + " " + ((PatientSummary)o).LastName + ", " + ((PatientSummary)o).FirstName;
                     if (String.IsNullOrEmpty(cb_pacientes.Text))
                         return false;
-                    else if (cb_pacientes.Text.Length < 2)
+                    else if (cb_pacientes.Text.Length < 3)
                         return false;
                     else
                     {
-                        if (((Paciente)o).ToString().ToLower().Contains(cb_pacientes.Text.ToLower()))
+                       if (((string)o).ToLower().Contains(cb_pacientes.Text.ToLower()))
                         {
                             return true;
                         }
@@ -94,6 +110,15 @@ namespace PruebaTreeListView
                     }
                 });
             viewPaciente.Refresh();
+            if (cb_pacientes.Text.Length>=3)
+            {
+                cb_pacientes.IsDropDownOpen = true;
+                TextBox textBox = (TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender);
+                textBox.SelectionStart = ((ComboBox)sender).Text.Length;
+                textBox.SelectionLength = 0;
+            }
+            
+            
         }
 
         private void BT_HabilitarLV_Click(object sender, RoutedEventArgs e)
@@ -105,19 +130,49 @@ namespace PruebaTreeListView
 
         private void cb_pacientes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (cb_pacientes.SelectedIndex > -1)
+            if (cb_pacientes.SelectedIndex>-1)
             {
-                cb_cursos.ItemsSource = ((Paciente)cb_pacientes.SelectedItem).Cursos;
+                string ID = ((string)cb_pacientes.SelectedItem).Split(' ')[0];
+                if (pacienteSeleccionado!=null)
+                {
+                    app.ClosePatient();
+                    pacienteSeleccionado = null;
+                }
+                pacienteSeleccionado = app.OpenPatientById(ID);
+                if (pacienteSeleccionado != null)
+                {
+                    cb_cursos.ItemsSource = pacienteSeleccionado.Courses;
+                }
             }
-
         }
 
         private void cb_cursos_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (cb_cursos.SelectedIndex > -1)
             {
-                cb_planes.ItemsSource = ((Curso)cb_cursos.SelectedItem).Planes;
+                cursoSeleccionado = (Course)cb_cursos.SelectedItem;
+                cb_planes.ItemsSource = cursoSeleccionado.PlanSetups;
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void cb_pacientes_Loaded(object sender, RoutedEventArgs e)
+        {
+            cb_pacientes.ItemsSource = pacientesRes;
+            view = (CollectionView)CollectionViewSource.GetDefaultView(LVChequeos.Items);
+            PropertyGroupDescription groupDescription = new PropertyGroupDescription("Lista");
+            PropertyGroupDescription groupDescription2 = new PropertyGroupDescription("Resultado");
+            view.GroupDescriptions.Add(groupDescription);
+            
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            app.Dispose();
         }
     }
 }

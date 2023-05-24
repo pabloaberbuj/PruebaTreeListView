@@ -4,12 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PruebaTreeListView"
+         xmlns:toolkit="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.Input.Toolkit"
         mc:Ignorable="d"
         Title="MainWindow"
         WindowStartupLocation="CenterScreen"
-        WindowState="Maximized">
+        WindowState="Maximized"
+        Closing="Window_Closing">
     <Window.Resources>
         <local:Contador x:Key="Contador"/>
+        <ItemsPanelTemplate x:Key="VSP">
+            <VirtualizingStackPanel/>
+        </ItemsPanelTemplate>
     </Window.Resources>
 
     <Grid>
@@ -35,7 +40,7 @@
         <Grid >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="500"/>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
@@ -46,9 +51,10 @@
                 <RowDefinition Height="1.5*"/>
             </Grid.RowDefinitions>
             <TextBlock Text="Paciente: " FontWeight="Bold"/>
-            <ComboBox Grid.Column="1" Name="cb_pacientes" Margin="10,0,10,10" Width="100" Height="30" IsEditable="True" IsTextSearchEnabled="False" IsDropDownOpen="False"  StaysOpenOnEdit="True" KeyUp="cb_pacientes_KeyUp" d:IsHidden="True" HorizontalAlignment="Left"
-                      SelectionChanged="cb_pacientes_SelectionChanged">
+            <ComboBox Grid.Column="1" Name="cb_pacientes" Margin="10,0,10,10" Width="300" Height="30" IsEditable="True" IsTextSearchEnabled="False" IsDropDownOpen="False"  StaysOpenOnEdit="False" KeyUp="cb_pacientes_KeyUp" d:IsHidden="True" HorizontalAlignment="Left"
+                      SelectionChanged="cb_pacientes_SelectionChanged" ItemsPanel="{StaticResource VSP}" Loaded="cb_pacientes_Loaded">
             </ComboBox>
+
             <TextBlock Grid.Row="1" Text="Curso: " FontWeight="Bold" HorizontalAlignment="Left"/>
             <ComboBox Grid.Row="1" Grid.Column="1" Name="cb_cursos" Margin="10,0,10,10" Width="100" Height="30" IsEditable="False" IsTextSearchEnabled="False" IsDropDownOpen="False"  StaysOpenOnEdit="True" d:IsHidden="True" HorizontalAlignment="Left" SelectionChanged="cb_cursos_SelectionChanged">
                 <ComboBox.Style>
