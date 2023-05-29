@@ -55,7 +55,7 @@ namespace PruebaTreeListView
             CollectionViewSource.GetDefaultView(cb_pacientes.ItemsSource).Refresh();
         }
 
-        public bool Expanded(Lista lista)
+        /*public bool Expanded(Lista lista)
         {
             if (lista == Lista.Tipo1)
             {
@@ -69,11 +69,11 @@ namespace PruebaTreeListView
             {
                 return true;
             }
-        }
+        }*/
 
         private void RB_OK_Checked(object sender, RoutedEventArgs e)
         {
-            ((Chequeo)((RadioButton)sender).DataContext).Resultado = true;
+            ((Chequeo)((RadioButton)sender).DataContext).ResultadoTest = true;
             view.Refresh();
             //((RadioButton)sender).IsChecked = true;
             //((RadioButton)sender).UpdateLayout();*/
@@ -82,7 +82,7 @@ namespace PruebaTreeListView
 
         private void RB_Falla_Checked(object sender, RoutedEventArgs e)
         {
-            ((Chequeo)((RadioButton)sender).DataContext).Resultado = false;
+            ((Chequeo)((RadioButton)sender).DataContext).ResultadoTest = false;
             view.Refresh();
             //((RadioButton)sender).IsChecked = true;
         }
@@ -117,13 +117,12 @@ namespace PruebaTreeListView
                 textBox.SelectionStart = ((ComboBox)sender).Text.Length;
                 textBox.SelectionLength = 0;
             }
-            
-            
         }
 
         private void BT_HabilitarLV_Click(object sender, RoutedEventArgs e)
         {
-            Chequeos = Chequeo.GetChequeos();
+            Row_SeleccionPaciente.IsEnabled = false;
+            Chequeos = Chequeo.ListaChequeos();
             LVChequeos.Visibility = Visibility.Visible;
             LVChequeos.ItemsSource = Chequeos;
         }
@@ -135,12 +134,15 @@ namespace PruebaTreeListView
                 string ID = ((string)cb_pacientes.SelectedItem).Split(' ')[0];
                 if (pacienteSeleccionado!=null)
                 {
+                    cb_cursos.ItemsSource = null;
                     app.ClosePatient();
                     pacienteSeleccionado = null;
+                    
                 }
                 pacienteSeleccionado = app.OpenPatientById(ID);
-                if (pacienteSeleccionado != null)
+                if (pacienteSeleccionado != null && pacienteSeleccionado.Courses.Count()>0)
                 {
+                    
                     cb_cursos.ItemsSource = pacienteSeleccionado.Courses;
                 }
             }
@@ -151,7 +153,13 @@ namespace PruebaTreeListView
             if (cb_cursos.SelectedIndex > -1)
             {
                 cursoSeleccionado = (Course)cb_cursos.SelectedItem;
-                cb_planes.ItemsSource = cursoSeleccionado.PlanSetups;
+                
+                if (cursoSeleccionado.PlanSetups.Count()+ cursoSeleccionado.PlanSums.Count() > 0)
+                {
+                    List<PlanningItem> planes = cursoSeleccionado.PlanSetups.ToList<PlanningItem>();
+                    planes.AddRange(cursoSeleccionado.PlanSums);
+                    cb_planes.ItemsSource = planes;
+                }
             }
         }
 
@@ -173,6 +181,19 @@ namespace PruebaTreeListView
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             app.Dispose();
+        }
+
+        private void cb_planes_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            planSeleccionado = (PlanningItem)cb_planes.SelectedItem;
+            if (planSeleccionado is PlanSetup)
+            {
+                tbl_fisico.Text = ((PlanSetup)planSeleccionado).CreationUserName;
+                if (((PlanSetup)planSeleccionado).ApprovalStatus==PlanSetupApprovalStatus.PlanningApproved || ((PlanSetup)planSeleccionado).ApprovalStatus == PlanSetupApprovalStatus.TreatmentApproved)
+                {
+                    tbl_medico.Text = ((PlanSetup)planSeleccionado).PlanningApprover;
+                }
+            }
         }
     }
 }

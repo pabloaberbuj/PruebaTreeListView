@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow"
         WindowStartupLocation="CenterScreen"
-        WindowState="Maximized"
+        WindowState="Normal"
         Closing="Window_Closing">
     <Window.Resources>
         <local:Contador x:Key="Contador"/>
@@ -33,15 +33,17 @@
             </Style>
         </Grid.Resources>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="4*"/>
+            <RowDefinition Height="180" Name="Row_SeleccionPaciente"/>
+            <RowDefinition Height="4*" Name ="Analisis"/>
         </Grid.RowDefinitions>
         <Grid >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="500"/>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3.5*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="90"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -68,7 +70,7 @@
                 </ComboBox.Style>
             </ComboBox>
             <TextBlock Grid.Row="2" Text="Plan: " FontWeight="Bold"/>
-            <ComboBox Grid.Row="2" Grid.Column="1" Name="cb_planes" Margin="10,0,10,10" Width="100" Height="30" IsEditable="False" IsTextSearchEnabled="False" IsDropDownOpen="False"  StaysOpenOnEdit="True" d:IsHidden="True" HorizontalAlignment="Left">
+            <ComboBox Grid.Row="2" Grid.Column="1" Name="cb_planes" Margin="10,0,10,10" Width="100" Height="30" IsEditable="False" IsTextSearchEnabled="False" IsDropDownOpen="False"  StaysOpenOnEdit="True" d:IsHidden="True" HorizontalAlignment="Left" SelectionChanged="cb_planes_SelectionChanged">
                 <ComboBox.Style>
                     <Style TargetType="ComboBox">
                         <Style.Triggers>
@@ -87,6 +89,10 @@
             <TextBlock Grid.Row="2" Grid.Column="2" Text="Dosis fracción: " FontWeight="Bold" HorizontalAlignment="Left"/>
             <TextBox Grid.Row="2" Grid.Column="3" Name="tb_dosisFraccion" Margin="10,0,10,10" Width="100" Height="30" HorizontalAlignment="Left"/>
             <Button Grid.Row="3" Grid.ColumnSpan="4" x:Name="BT_HabilitarLV" Content="Analizar" Margin="10,0,10,10" Width="100" Height="30" Click="BT_HabilitarLV_Click"/>
+            <TextBlock Grid.Column="4" Text="Planificado por:" FontWeight="Bold"/>
+            <TextBlock Grid.Column="5" Name="tbl_fisico"/>
+            <TextBlock Grid.Column="4" Grid.Row="1" Text="Aprobado por:" FontWeight="Bold"/>
+            <TextBlock Grid.Column="5" Grid.Row="1" Name="tbl_medico"/>
         </Grid>
         <ListView x:Name="LVChequeos" Grid.Row="1" Visibility="Hidden">
             <ListView.View>

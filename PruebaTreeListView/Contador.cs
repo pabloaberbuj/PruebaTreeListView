@@ -16,7 +16,7 @@ namespace PruebaTreeListView
 
             foreach (Chequeo chequeo in groupItems)
             {
-                if (chequeo.Resultado==true)
+                if (chequeo.ResultadoTest == true)
                     ResultadoOK++;
             }
 

@@ -11,7 +11,7 @@ namespace PruebaTreeListView
         public string Nombre { get; set; }
         public List<Plan> Planes { get; set; }
 
-        public Curso(string _nombre)
+        /*public Curso(string _nombre)
         {
             Nombre = _nombre;
             Planes = new List<Plan>()
@@ -20,7 +20,7 @@ namespace PruebaTreeListView
                 new Plan(_nombre + "Plan 2",Tecnica.IMRT),
                 new Plan(_nombre + "Plan 3",Tecnica.VMAT),
             };
-        }
+        }*/
         public override string ToString()
         {
             return Nombre;

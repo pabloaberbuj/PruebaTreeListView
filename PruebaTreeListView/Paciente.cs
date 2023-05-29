@@ -23,11 +23,11 @@ namespace PruebaTreeListView
         {
             ID = _id;
             Nombre = _nombre;
-            Cursos = new List<Curso>()
+            /*Cursos = new List<Curso>()
             {
                 new Curso(Nombre + " Curso 1"),
                 new Curso(Nombre + " Curso 2"),
-            };
+            };*/
         }
 
         public override string ToString()
