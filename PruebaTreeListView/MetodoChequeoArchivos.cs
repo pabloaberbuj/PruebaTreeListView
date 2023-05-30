@@ -87,7 +87,8 @@ namespace PruebaTreeListView
         {
             //var carpeta = MetodosAuxiliares.CarpetaDRRs(plan);
             //var archivos = Directory.GetFiles(MetodosAuxiliares.CarpetaDRRs(plan));
-            if (Directory.GetFiles(MetodosAuxiliares.CarpetaDRRs(plan)).Any(f => Path.GetExtension(f)==".png"))
+            
+            if (Directory.Exists(MetodosAuxiliares.CarpetaDRRs(plan)) && Directory.GetFiles(MetodosAuxiliares.CarpetaDRRs(plan)).Any(f => Path.GetExtension(f)==".png"))
             {
                 var imagenes = Directory.GetFiles(MetodosAuxiliares.CarpetaDRRs(plan)).Where(f => Path.GetExtension(f) == ".png");
                 if (imagenes != null)

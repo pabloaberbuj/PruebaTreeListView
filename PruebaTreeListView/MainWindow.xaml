@@ -42,6 +42,8 @@
                 <ColumnDefinition Width="3.5*"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="90"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
@@ -89,15 +91,17 @@
             <TextBlock Grid.Row="2" Grid.Column="2" Text="Dosis fracción: " FontWeight="Bold" HorizontalAlignment="Left"/>
             <TextBox Grid.Row="2" Grid.Column="3" Name="tb_dosisFraccion" Margin="10,0,10,10" Width="100" Height="30" HorizontalAlignment="Left"/>
             <Button Grid.Row="3" Grid.ColumnSpan="4" x:Name="BT_HabilitarLV" Content="Analizar" Margin="10,0,10,10" Width="100" Height="30" Click="BT_HabilitarLV_Click"/>
-            <TextBlock Grid.Column="4" Text="Planificado por:" FontWeight="Bold"/>
-            <TextBlock Grid.Column="5" Name="tbl_fisico"/>
-            <TextBlock Grid.Column="4" Grid.Row="1" Text="Aprobado por:" FontWeight="Bold"/>
-            <TextBlock Grid.Column="5" Grid.Row="1" Name="tbl_medico"/>
+            <TextBlock Grid.Column="4" Text="Tecnica:" FontWeight="Bold"/>
+            <ComboBox Grid.Column="5" Name="cb_Tecnicas" IsEditable="False" Width="90" Height="25"/>
+            <TextBlock Grid.Column="6" Text="Planificado por:" FontWeight="Bold"/>
+            <TextBlock Grid.Column="7" Name="tbl_fisico"/>
+            <TextBlock Grid.Column="6" Grid.Row="1" Text="Aprobado por:" FontWeight="Bold"/>
+            <TextBlock Grid.Column="7" Grid.Row="1" Name="tbl_medico"/>
         </Grid>
         <ListView x:Name="LVChequeos" Grid.Row="1" Visibility="Hidden">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Nombre" DisplayMemberBinding="{Binding Nombre}" Width="80"/>
+                    <GridViewColumn Header="Nombre" DisplayMemberBinding="{Binding Nombre}" Width="300"/>
                     <GridViewColumn Header="Manual">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -105,7 +109,7 @@
                                     <StackPanel.Style>
                                         <Style TargetType="StackPanel">
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding EsManual}" Value="False">
+                                                <DataTrigger Binding="{Binding EsAutomatico}" Value="True">
                                                     <Setter Property="Visibility" Value="Hidden"/>
                                                 </DataTrigger>
                                             </Style.Triggers>
@@ -115,7 +119,7 @@
                                         <RadioButton.Style>
                                             <Style TargetType="RadioButton">
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Resultado}" Value="True">
+                                                    <DataTrigger Binding="{Binding ResultadoTest}" Value="True">
                                                         <Setter Property="IsChecked" Value="True"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -126,7 +130,7 @@
                                         <RadioButton.Style>
                                             <Style TargetType="RadioButton">
                                                 <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding Resultado}" Value="False">
+                                                    <DataTrigger Binding="{Binding ResultadoTest}" Value="False">
                                                         <Setter Property="IsChecked" Value="True"/>
                                                     </DataTrigger>
                                                 </Style.Triggers>
@@ -145,11 +149,11 @@
                                         <Style TargetType="Ellipse">
                                             <Setter Property="Fill" Value="Transparent"/>
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Resultado}"  Value="True">
+                                                <DataTrigger Binding="{Binding ResultadoTest}"  Value="True">
                                                     <Setter Property="Fill" Value="LightGreen"/>
                                                     <Setter Property="Stroke" Value="Black"/>
                                                 </DataTrigger>
-                                                <DataTrigger Binding="{Binding Resultado}"  Value="False">
+                                                <DataTrigger Binding="{Binding ResultadoTest}"  Value="False">
                                                     <Setter Property="Fill" Value="Red"/>
                                                     <Setter Property="Stroke" Value="Black"/>
                                                 </DataTrigger>
@@ -167,7 +171,7 @@
                                     <TextBlock.Style>
                                         <Style TargetType="TextBlock">
                                             <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Resultado}" Value="False">
+                                                <DataTrigger Binding="{Binding ResultadoTest}" Value="False">
                                                     <Setter Property="TextBlock.Text" Value="{Binding MensajeSiFalso}"/>
                                                 </DataTrigger>
                                             </Style.Triggers>

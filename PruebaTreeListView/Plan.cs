@@ -33,6 +33,20 @@ namespace PruebaTreeListView
             EsPlanSuma = _esPlanSuma;
             PlanSumaEclipse = _planSumaEclipse;
         }
+
+        public Plan(Ecl.PlanSetup _planEclipse, Aria aria, Tecnica _tecnica, double _dosisTotal, double _dosisDia, double _dosisFraccion, bool _esCamillaEspecial, bool _esPlanSuma, Ecl.PlanSum _planSumaEclipse = null)
+        {
+            PlanEclipse = _planEclipse;
+            PlanAria = MetodosAuxiliares.AriaPlanDeEclipse(aria,_planEclipse);
+            Tecnica = _tecnica;
+            DosisTotal = _dosisTotal;
+            DosisDia = _dosisDia;
+            DosisFraccion = _dosisFraccion;
+            EsCamillaEspecial = _esCamillaEspecial;
+            EsPlanSuma = _esPlanSuma;
+            PlanSumaEclipse = _planSumaEclipse;
+        }
+
         public string NombreMasID()
         {
             return PlanEclipse.Course.Patient.LastName.ToUpper() + ", " + PlanEclipse.Course.Patient.FirstName.ToUpper() + " " + PlanEclipse.Course.Patient.Id;
@@ -115,7 +129,17 @@ namespace PruebaTreeListView
             
         }
 
+        public List<Chequeo> Chequear()
+        {
+            List<Chequeo> chequeos = Chequeo.SeleccionarChequeos(this);
+            foreach (Chequeo chequeo in chequeos)
+            {
+                chequeo.AplicarMetodo(this);
+            }
+            return chequeos;
+        }
     }
+
 
     public enum Tecnica
     {

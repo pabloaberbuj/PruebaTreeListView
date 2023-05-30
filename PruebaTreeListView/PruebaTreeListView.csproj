@@ -224,7 +224,6 @@
     <Compile Include="Paciente.cs" />
     <Compile Include="PacienteCorrimientos.cs" />
     <Compile Include="Plan.cs" />
-    <Compile Include="PlanOriginal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

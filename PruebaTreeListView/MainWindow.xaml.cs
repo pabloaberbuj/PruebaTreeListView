@@ -12,8 +12,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using VMS.TPS.Common.Model.API;
+using Ecl=VMS.TPS.Common.Model.API;
 using VMS.TPS.Common.Model.Types;
+using AriaQ;
 
 namespace PruebaTreeListView
 {
@@ -25,27 +26,27 @@ namespace PruebaTreeListView
         CollectionView view;
         List<Chequeo> Chequeos;
         List<string> pacientesRes;
-        Patient pacienteSeleccionado;
-        Course cursoSeleccionado;
-        PlanningItem planSeleccionado;
+        Ecl.Patient pacienteSeleccionado;
+        Ecl.Course cursoSeleccionado;
+        Ecl.PlanningItem planEclipseSeleccionado;
         VMS.TPS.Common.Model.API.Application app;
+        Aria aria = new Aria();
         public MainWindow()
         {
              app = VMS.TPS.Common.Model.API.Application.CreateApplication("paberbuj", "123qwe");
             
             
             var pacientes = app.PatientSummaries.OrderByDescending(p=>p.CreationDateTime);
+            
             pacientesRes = new List<string>();
-            foreach (PatientSummary pacienteSummary in pacientes)
+            foreach (Ecl.PatientSummary pacienteSummary in pacientes)
             {
                 pacientesRes.Add(pacienteSummary.Id + " " + pacienteSummary.LastName + ", " + pacienteSummary.FirstName);
             }
             
             pacientes = null;
-            //app.Dispose();
-            //System.Threading.Thread.Sleep(5000);
             InitializeComponent();
-            
+            cb_Tecnicas.ItemsSource = Enum.GetValues(typeof(Tecnica));
             //view.GroupDescriptions.Add(groupDescription2);
         }
 
@@ -122,7 +123,7 @@ namespace PruebaTreeListView
         private void BT_HabilitarLV_Click(object sender, RoutedEventArgs e)
         {
             Row_SeleccionPaciente.IsEnabled = false;
-            Chequeos = Chequeo.ListaChequeos();
+            Chequeos = PlanSeleccionado().Chequear();
             LVChequeos.Visibility = Visibility.Visible;
             LVChequeos.ItemsSource = Chequeos;
         }
@@ -152,11 +153,11 @@ namespace PruebaTreeListView
         {
             if (cb_cursos.SelectedIndex > -1)
             {
-                cursoSeleccionado = (Course)cb_cursos.SelectedItem;
+                cursoSeleccionado = (Ecl.Course)cb_cursos.SelectedItem;
                 
                 if (cursoSeleccionado.PlanSetups.Count()+ cursoSeleccionado.PlanSums.Count() > 0)
                 {
-                    List<PlanningItem> planes = cursoSeleccionado.PlanSetups.ToList<PlanningItem>();
+                    List<Ecl.PlanningItem> planes = cursoSeleccionado.PlanSetups.ToList<Ecl.PlanningItem>();
                     planes.AddRange(cursoSeleccionado.PlanSums);
                     cb_planes.ItemsSource = planes;
                 }
@@ -172,8 +173,8 @@ namespace PruebaTreeListView
         {
             cb_pacientes.ItemsSource = pacientesRes;
             view = (CollectionView)CollectionViewSource.GetDefaultView(LVChequeos.Items);
-            PropertyGroupDescription groupDescription = new PropertyGroupDescription("Lista");
-            PropertyGroupDescription groupDescription2 = new PropertyGroupDescription("Resultado");
+            PropertyGroupDescription groupDescription = new PropertyGroupDescription("Categoria");
+            PropertyGroupDescription groupDescription2 = new PropertyGroupDescription("ResultadoTest");
             view.GroupDescriptions.Add(groupDescription);
             
         }
@@ -185,15 +186,21 @@ namespace PruebaTreeListView
 
         private void cb_planes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            planSeleccionado = (PlanningItem)cb_planes.SelectedItem;
-            if (planSeleccionado is PlanSetup)
+            planEclipseSeleccionado = (Ecl.PlanningItem)cb_planes.SelectedItem;
+            if (planEclipseSeleccionado is Ecl.PlanSetup)
             {
-                tbl_fisico.Text = ((PlanSetup)planSeleccionado).CreationUserName;
-                if (((PlanSetup)planSeleccionado).ApprovalStatus==PlanSetupApprovalStatus.PlanningApproved || ((PlanSetup)planSeleccionado).ApprovalStatus == PlanSetupApprovalStatus.TreatmentApproved)
+                tbl_fisico.Text = ((Ecl.PlanSetup)planEclipseSeleccionado).CreationUserName;
+                if (((Ecl.PlanSetup)planEclipseSeleccionado).ApprovalStatus==PlanSetupApprovalStatus.PlanningApproved || ((Ecl.PlanSetup)planEclipseSeleccionado).ApprovalStatus == PlanSetupApprovalStatus.TreatmentApproved)
                 {
-                    tbl_medico.Text = ((PlanSetup)planSeleccionado).PlanningApprover;
+                    tbl_medico.Text = ((Ecl.PlanSetup)planEclipseSeleccionado).PlanningApprover;
                 }
             }
+            
+
+        }
+        private Plan PlanSeleccionado()
+        {
+            return new Plan((Ecl.PlanSetup)planEclipseSeleccionado, aria, (Tecnica)cb_Tecnicas.SelectedItem, Convert.ToDouble(tb_dosisTotal.Text), Convert.ToDouble(tb_dosisDia.Text), Convert.ToDouble(tb_dosisFraccion.Text), false, false);
         }
     }
 }
