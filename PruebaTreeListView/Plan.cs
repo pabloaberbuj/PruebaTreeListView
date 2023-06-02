@@ -56,75 +56,64 @@ namespace PruebaTreeListView
             return PlanEclipse.Course.Patient.LastName.ToUpper() + ", " + PlanEclipse.Course.Patient.FirstName.ToUpper() + "-" + PlanEclipse.Course.Patient.Id;
         }
 
-        public void ObtenerTecnica()
+        public static Tecnica ObtenerTecnica(Ecl.PlanSetup PlanEclipse)
         {
             if (PlanEclipse.Beams.Count(f => !f.IsSetupField)>0)
             {
                 Ecl.Beam primerCampo = PlanEclipse.Beams.Where(f => !f.IsSetupField).First();
                 if (primerCampo.EnergyModeDisplayName.Contains("E"))
                 {
-                    Tecnica = Tecnica.Electrones;
-                    return;
+                    return Tecnica.Electrones;
                 }
                 if (MetodosAuxiliares.esRadioCirugia(PlanEclipse))
                 {
                     if (primerCampo.EnergyModeDisplayName == "6X-SRS")
                     {
-                        Tecnica = Tecnica.RC_HazSRS;
-                        return;
+                        return Tecnica.RC_HazSRS;
                     }
                     else
                     {
-                        Tecnica = Tecnica.RC_VMAT;
-                        return;
+                        return Tecnica.RC_VMAT;
                     }
                 }
                 else if (MetodosAuxiliares.esSBRT(PlanEclipse))
                 {
                     if (primerCampo.EnergyModeDisplayName == "6X-SRS")
                     {
-                        Tecnica = Tecnica.SBRT_HazSRS;
-                        return;
+                        return Tecnica.SBRT_HazSRS;
                     }
                     else
                     {
-                        Tecnica = Tecnica.SBRT_VMAT;
-                        return;
+                        return Tecnica.SBRT_VMAT;
                     }
                 }
                 else if (primerCampo.MLCPlanType==MLCPlanType.DoseDynamic && primerCampo.ControlPoints.Count>10)
                 {
-                    Tecnica = Tecnica.IMRT;
-                    return;
+                    return Tecnica.IMRT;
                 }
                 else if (primerCampo.MLCPlanType==MLCPlanType.VMAT)
                 {
-                    Tecnica = Tecnica.VMAT;
-                    return;
+                    return Tecnica.VMAT;
                 }
                 else if (primerCampo.Technique.Id == "ARC" && primerCampo.MLCPlanType != MLCPlanType.VMAT)
                 {
                     if (PlanEclipse.Id.ToUpper().Contains("TBI") && primerCampo.ControlPoints.First().JawPositions==new VRect<double>(20,20,20,20))
                     {
-                        Tecnica = Tecnica.TBI;
-                        return;
+                        return Tecnica.TBI;
                     }
                     else
                     {
-                        Tecnica = Tecnica.Arcos3DC;
-                        return;
+                        return Tecnica.Arcos3DC;
                     }
                 }
                 else
                 {
-                    Tecnica = Tecnica.Static3DC;
-                    return;
+                    return Tecnica.Static3DC;
                 }
             }
             else
             {
-                Tecnica = Tecnica.Indefinida;
-                return;
+                return Tecnica.Indefinida;
             }
             
         }

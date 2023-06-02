@@ -50,7 +50,7 @@ namespace PruebaTreeListView
             NivelDeAccion = _NivelDeAccion;
             TargetMethod = _TargetMethod;
             EsAutomatico = _EsAutomatico;
-            ResultadoTest = false;
+            ResultadoTest = null;
             AplicaAStatic3DC = _AplicaAStatic3DC;
             //AplicaAMama3DC = _AplicaAMama3DC;
             AplicaAArcos3DC = _AplicaAArcos3DC;

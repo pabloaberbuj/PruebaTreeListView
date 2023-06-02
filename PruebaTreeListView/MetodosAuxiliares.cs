@@ -184,10 +184,17 @@ namespace PruebaTreeListView
             }
         }
 
-        public static AriaQ.PlanSetup AriaPlanDeEclipse(Aria aria, VMS.TPS.Common.Model.API.PlanSetup planEclipse)
+        /*public static AriaQ.PlanSetup AriaPlanDeEclipse(Aria aria, VMS.TPS.Common.Model.API.PlanSetup planEclipse)
         {
             return aria.PlanSetups.FirstOrDefault(p => p.PlanSetupId == planEclipse.Id && p.Course.CourseId == planEclipse.Course.Id && p.Course.Patient.PatientId == planEclipse.Course.Patient.Id);
+        }*/
+        public static AriaQ.PlanSetup AriaPlanDeEclipse(Aria aria, VMS.TPS.Common.Model.API.PlanSetup planEclipse)
+        {
+            var paciente = aria.Patients.FirstOrDefault(p => p.PatientId == planEclipse.Course.Patient.Id);
+            var curso = paciente.Courses.FirstOrDefault(c => c.CourseId == planEclipse.Course.Id);
+            return curso.PlanSetups.FirstOrDefault(p => p.PlanSetupId == planEclipse.Id);
         }
+
 
         public static string CarpetaDRRs(Plan plan)
         {

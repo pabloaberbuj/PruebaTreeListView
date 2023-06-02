@@ -186,21 +186,26 @@ namespace PruebaTreeListView
 
         private void cb_planes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            planEclipseSeleccionado = (Ecl.PlanningItem)cb_planes.SelectedItem;
-            if (planEclipseSeleccionado is Ecl.PlanSetup)
+            if (cb_planes.Items.Count>0)
             {
-                tbl_fisico.Text = ((Ecl.PlanSetup)planEclipseSeleccionado).CreationUserName;
-                if (((Ecl.PlanSetup)planEclipseSeleccionado).ApprovalStatus==PlanSetupApprovalStatus.PlanningApproved || ((Ecl.PlanSetup)planEclipseSeleccionado).ApprovalStatus == PlanSetupApprovalStatus.TreatmentApproved)
+                planEclipseSeleccionado = (Ecl.PlanningItem)cb_planes.SelectedItem;
+                if (planEclipseSeleccionado is Ecl.PlanSetup)
                 {
-                    tbl_medico.Text = ((Ecl.PlanSetup)planEclipseSeleccionado).PlanningApprover;
+                    tbl_fisico.Text = ((Ecl.PlanSetup)planEclipseSeleccionado).CreationUserName;
+                    if (((Ecl.PlanSetup)planEclipseSeleccionado).ApprovalStatus == PlanSetupApprovalStatus.PlanningApproved || ((Ecl.PlanSetup)planEclipseSeleccionado).ApprovalStatus == PlanSetupApprovalStatus.TreatmentApproved)
+                    {
+                        tbl_medico.Text = ((Ecl.PlanSetup)planEclipseSeleccionado).PlanningApprover;
+                    }
+                }
+                if (planEclipseSeleccionado!=null)
+                {
+                    cb_Tecnicas.SelectedItem = Plan.ObtenerTecnica((Ecl.PlanSetup)planEclipseSeleccionado);
                 }
             }
-            
-
         }
         private Plan PlanSeleccionado()
         {
-            return new Plan((Ecl.PlanSetup)planEclipseSeleccionado, aria, (Tecnica)cb_Tecnicas.SelectedItem, Convert.ToDouble(tb_dosisTotal.Text), Convert.ToDouble(tb_dosisDia.Text), Convert.ToDouble(tb_dosisFraccion.Text), false, false);
+            return new Plan((Ecl.PlanSetup)planEclipseSeleccionado, aria, (Tecnica)cb_Tecnicas.SelectedItem, Convert.ToDouble(tb_dosisTotal.Text), Convert.ToDouble(tb_dosisDia.Text), Convert.ToDouble(tb_dosisFraccion.Text), chb_esCamillaEspecial.IsChecked==true, false);
         }
     }
 }
