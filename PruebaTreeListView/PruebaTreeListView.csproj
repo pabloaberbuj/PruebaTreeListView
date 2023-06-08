@@ -206,6 +206,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Chequeo.cs" />
+    <Compile Include="Commands.cs" />
     <Compile Include="Contador.cs" />
     <Compile Include="Curso.cs" />
     <Compile Include="dcm.cs" />

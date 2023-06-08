@@ -15,6 +15,9 @@
             <VirtualizingStackPanel/>
         </ItemsPanelTemplate>
     </Window.Resources>
+    <Window.CommandBindings>
+        <CommandBinding Command="local:Commands.Analizar" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
+    </Window.CommandBindings>
 
     <Grid>
         <Grid.Resources>
@@ -35,12 +38,24 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width=".5*"/>
-                <ColumnDefinition Width="230"/>
-                <ColumnDefinition Width=".5*"/>
             </Grid.ColumnDefinitions>
-            <GroupBox Header="Seleccion" Height="130" Margin="10,10,10,10">
+            <GroupBox Name="gb_Seleccion" Header="Seleccion" Height="130" Margin="10,10,10,10">
+                <GroupBox.Style>
+                    <Style TargetType="GroupBox">
+                        <Setter  Property="BorderBrush" Value="Green"/>
+                        <Setter  Property="BorderThickness" Value="1.5"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=cb_planes, Path=SelectedIndex}" Value="-1">
+                                <Setter Property="BorderBrush" Value="#FFD5DFE5"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </GroupBox.Style>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -83,7 +98,23 @@
                     </ComboBox>
                 </Grid>
             </GroupBox>
-            <GroupBox Header="Características" Grid.Column="1" Height="130" Margin="10,10,10,10">
+            <GroupBox Header="Características" Name="gb_Caracteristicas" Grid.Column="2" Height="130" Margin="10,10,10,10">
+                <GroupBox.Style>
+                    <Style TargetType="GroupBox">
+                        <Setter  Property="BorderBrush" Value="Green"/>
+                        <Setter  Property="BorderThickness" Value="1.5"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=cb_Tecnicas, Path=SelectedIndex}" Value="-1">
+                                <Setter Property="BorderBrush" Value="#FFD5DFE5"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=chb_TecnicaOK, Path=IsChecked}" Value="False">
+                                <Setter Property="BorderBrush" Value="#FFD5DFE5"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </GroupBox.Style>
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*"/>
@@ -92,34 +123,55 @@
                     </Grid.RowDefinitions>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock  Margin="0,7,0,0" Text="Técnica:" FontWeight="Bold"/>
-                        <ComboBox Name="cb_Tecnicas" Margin="10,0,0,0" IsEditable="False" Width="90" Height="20"/>
+                        <ComboBox Name="cb_Tecnicas" Margin="10,0,0,0" IsEditable="False" Width="110" Height="23"/>
+                        <CheckBox Name="chb_TecnicaOK" Margin="10" Content="OK" Width="35" Height="17"/>
                     </StackPanel>
                     <CheckBox Name="chb_esCamillaEspecial" Grid.Row="1" Content="Es camilla especial"/>
                     <CheckBox Name="chb_esPediatrico" Grid.Row="2" Content="Es pediátrico"/>
                 </Grid>
             </GroupBox>
-            <GroupBox Grid.Column="2" Header="Prescripción Sitramed" Height="130" Margin="10,10,10,10">
+            <GroupBox Grid.Column="1" Name="gb_Prescripcion" Header="Prescripción Sitramed" Height="130" Margin="10,10,10,10">
+                <GroupBox.Style>
+                    <Style TargetType="GroupBox">
+                        <Setter  Property="BorderBrush" Value="Green"/>
+                        <Setter  Property="BorderThickness" Value="1.5"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ElementName=tb_dosisTotal, Path=Text}" Value="">
+                                <Setter Property="BorderBrush" Value="#FFD5DFE5"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=tb_dosisDia, Path=Text}" Value="">
+                                <Setter Property="BorderBrush" Value="#FFD5DFE5"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding ElementName=tb_dosisFraccion, Path=Text}" Value="">
+                                <Setter Property="BorderBrush" Value="#FFD5DFE5"/>
+                                <Setter Property="BorderThickness" Value="1"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </GroupBox.Style>
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="90"/>
-                        <ColumnDefinition Width="85"/>
-                        <ColumnDefinition Width="30"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Margin="0,5,0,0" Text="Dosis Total:" FontWeight="Bold"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" Name="tb_dosisTotal" Margin="0,-10,0,0" Width="80" Height="20"/>
-                    <TextBlock Grid.Row="0" Grid.Column="2" Margin="0,5,0,0" Text="cGy"/>
-                    <TextBlock Grid.Row="1" Margin="0,5,0,0" Text="Dosis Día:" FontWeight="Bold"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Name="tb_dosisDia" Margin="0,-10,0,0" Width="80" Height="20"/>
-                    <TextBlock Grid.Row="1" Grid.Column="2" Margin="0,5,0,0" Text="cGy"/>
-                    <TextBlock Grid.Row="2" Margin="0,5,0,0" Text="Dosis Fracción:" FontWeight="Bold"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" Name="tb_dosisFraccion" Margin="0,-10,0,0" Width="80" Height="20"/>
-                    <TextBlock Grid.Row="2" Grid.Column="2" Margin="0,5,0,0" Text="cGy"/>
-                </Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="90"/>
+                            <ColumnDefinition Width="85"/>
+                            <ColumnDefinition Width="30"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Margin="0,5,0,0" Text="Dosis Total:" FontWeight="Bold"/>
+                        <TextBox Grid.Row="0" Grid.Column="1" Name="tb_dosisTotal" Margin="0,-10,0,0" Width="80" Height="20" PreviewTextInput="tb_numero_PreviewTextInput"/>
+                        <TextBlock Grid.Row="0" Grid.Column="2" Margin="0,5,0,0" Text="cGy"/>
+                        <TextBlock Grid.Row="1" Margin="0,5,0,0" Text="Dosis Día:" FontWeight="Bold"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Name="tb_dosisDia" Margin="0,-10,0,0" Width="80" Height="20"  PreviewTextInput="tb_numero_PreviewTextInput"/>
+                        <TextBlock Grid.Row="1" Grid.Column="2" Margin="0,5,0,0" Text="cGy"/>
+                        <TextBlock Grid.Row="2" Margin="0,5,0,0" Text="Dosis Fracción:" FontWeight="Bold"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Name="tb_dosisFraccion" Margin="0,-10,0,0" Width="80" Height="20"  PreviewTextInput="tb_numero_PreviewTextInput"/>
+                        <TextBlock Grid.Row="2" Grid.Column="2" Margin="0,5,0,0" Text="cGy"/>
+                    </Grid>
             </GroupBox>
             <Grid Grid.Column="3" Margin="0,30,0,0">
                 <Grid.RowDefinitions>
@@ -135,122 +187,126 @@
                 <TextBlock Grid.Column="1" Name="tbl_fisico"/>
                 <TextBlock Grid.Column="0" Grid.Row="1" Text="Aprobado por:" FontWeight="Bold"/>
                 <TextBlock Grid.Column="1" Grid.Row="1" Name="tbl_medico"/>
-                <Button Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_HabilitarLV" Content="Analizar" Margin="10,0,10,10" Width="100" Height="30" Click="BT_HabilitarLV_Click"/>
+                <Button Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_HabilitarLV" Content="Analizar" Margin="10,0,10,10" Width="100" Height="30" Command="local:Commands.Analizar" />
             </Grid>
-            
         </Grid>
-        <ListView x:Name="LVChequeos" Grid.Row="1" Visibility="Hidden">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Nombre" DisplayMemberBinding="{Binding Nombre}" Width="300"/>
-                    <GridViewColumn Header="Manual">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <StackPanel.Style>
-                                        <Style TargetType="StackPanel">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding EsAutomatico}" Value="True">
-                                                    <Setter Property="Visibility" Value="Hidden"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </StackPanel.Style>
-                                    <RadioButton Name="RB_OK"  Content="OK" Margin="5,0,0,0" Checked="RB_OK_Checked">
-                                        <RadioButton.Style>
-                                            <Style TargetType="RadioButton">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ResultadoTest}" Value="True">
-                                                        <Setter Property="IsChecked" Value="True"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </RadioButton.Style>
-                                    </RadioButton>
-                                    <RadioButton Name="RB_Falla" Content="Falla" Margin="5,0,0,0" Checked="RB_Falla_Checked">
-                                        <RadioButton.Style>
-                                            <Style TargetType="RadioButton">
-                                                <Style.Triggers>
-                                                    <DataTrigger Binding="{Binding ResultadoTest}" Value="False">
-                                                        <Setter Property="IsChecked" Value="True"/>
-                                                    </DataTrigger>
-                                                </Style.Triggers>
-                                            </Style>
-                                        </RadioButton.Style>
-                                    </RadioButton>
-                                </StackPanel>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Resultado" Width="80">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Ellipse Width="20" Height="20" >
-                                    <Ellipse.Resources>
-                                        <Style TargetType="Ellipse">
-                                            <Setter Property="Fill" Value="Transparent"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ResultadoTest}"  Value="True">
-                                                    <Setter Property="Fill" Value="LightGreen"/>
-                                                    <Setter Property="Stroke" Value="Black"/>
-                                                </DataTrigger>
-                                                <DataTrigger Binding="{Binding ResultadoTest}"  Value="False">
-                                                    <Setter Property="Fill" Value="Red"/>
-                                                    <Setter Property="Stroke" Value="Black"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </Ellipse.Resources>
-                                </Ellipse>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Mensaje" Width="300">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock>
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ResultadoTest}" Value="False">
-                                                    <Setter Property="TextBlock.Text" Value="{Binding MensajeSiFalso}"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
+        <TabControl x:Name="TabControl" Grid.Row="1">
+            <TabItem Name="TabItem1">
+                <ListView x:Name="LVChequeos" Grid.Row="1" Visibility="Hidden">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Nombre" DisplayMemberBinding="{Binding Nombre}" Width="300"/>
+                            <GridViewColumn Header="Manual">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <StackPanel.Style>
+                                                <Style TargetType="StackPanel">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding EsAutomatico}" Value="True">
+                                                            <Setter Property="Visibility" Value="Hidden"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </StackPanel.Style>
+                                            <RadioButton Name="RB_OK"  Content="OK" Margin="5,0,0,0" Checked="RB_OK_Checked">
+                                                <RadioButton.Style>
+                                                    <Style TargetType="RadioButton">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding ResultadoTest}" Value="True">
+                                                                <Setter Property="IsChecked" Value="True"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </RadioButton.Style>
+                                            </RadioButton>
+                                            <RadioButton Name="RB_Falla" Content="Falla" Margin="5,0,0,0" Checked="RB_Falla_Checked">
+                                                <RadioButton.Style>
+                                                    <Style TargetType="RadioButton">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding ResultadoTest}" Value="False">
+                                                                <Setter Property="IsChecked" Value="True"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </RadioButton.Style>
+                                            </RadioButton>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Resultado" Width="80">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Ellipse Width="20" Height="20" >
+                                            <Ellipse.Resources>
+                                                <Style TargetType="Ellipse">
+                                                    <Setter Property="Fill" Value="Transparent"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ResultadoTest}"  Value="True">
+                                                            <Setter Property="Fill" Value="LightGreen"/>
+                                                            <Setter Property="Stroke" Value="Black"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding ResultadoTest}"  Value="False">
+                                                            <Setter Property="Fill" Value="Red"/>
+                                                            <Setter Property="Stroke" Value="Black"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Ellipse.Resources>
+                                        </Ellipse>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                            <GridViewColumn Header="Mensaje" Width="300">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock>
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding ResultadoTest}" Value="False">
+                                                            <Setter Property="TextBlock.Text" Value="{Binding MensajeSiFalso}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
 
-            <ListView.GroupStyle>
-                <GroupStyle x:Name="groupstyleCount">
-                    <GroupStyle.ContainerStyle>
-                        <Style TargetType="{x:Type GroupItem}">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate>
-                                        <Expander IsExpanded="True">
-                                            <Expander.Header>
-                                                <StackPanel x:Name="tb_prueba" Orientation="Horizontal">
-                                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="14"/>
-                                                    <TextBlock Text="{Binding Path=Items, Converter={StaticResource Contador}}" Margin="10,0,0,0"/>
-                                                    <TextBlock Text="/"/>
-                                                    <TextBlock Text="{Binding Path=ItemCount}" />
-                                                </StackPanel>
-                                            </Expander.Header>
-                                            <ItemsPresenter />
-                                        </Expander>
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </GroupStyle.ContainerStyle>
-                </GroupStyle>
-            </ListView.GroupStyle>
-        </ListView>
+                    <ListView.GroupStyle>
+                        <GroupStyle x:Name="groupstyleCount">
+                            <GroupStyle.ContainerStyle>
+                                <Style TargetType="{x:Type GroupItem}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate>
+                                                <Expander IsExpanded="True">
+                                                    <Expander.Header>
+                                                        <StackPanel x:Name="tb_prueba" Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="14"/>
+                                                            <TextBlock Text="{Binding Path=Items, Converter={StaticResource Contador}}" Margin="10,0,0,0"/>
+                                                            <TextBlock Text="/"/>
+                                                            <TextBlock Text="{Binding Path=ItemCount}" />
+                                                        </StackPanel>
+                                                    </Expander.Header>
+                                                    <ItemsPresenter />
+                                                </Expander>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.ContainerStyle>
+                        </GroupStyle>
+                    </ListView.GroupStyle>
+                </ListView>
+            </TabItem>
+        </TabControl>
+        
 
     </Grid>
 </Window>

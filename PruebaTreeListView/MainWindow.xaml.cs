@@ -15,6 +15,8 @@ using System.Windows.Shapes;
 using Ecl=VMS.TPS.Common.Model.API;
 using VMS.TPS.Common.Model.Types;
 using AriaQ;
+using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace PruebaTreeListView
 {
@@ -56,36 +58,17 @@ namespace PruebaTreeListView
             CollectionViewSource.GetDefaultView(cb_pacientes.ItemsSource).Refresh();
         }
 
-        /*public bool Expanded(Lista lista)
-        {
-            if (lista == Lista.Tipo1)
-            {
-                return true;
-            }
-            else if (lista == Lista.Tipo2)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
-        }*/
 
         private void RB_OK_Checked(object sender, RoutedEventArgs e)
         {
             ((Chequeo)((RadioButton)sender).DataContext).ResultadoTest = true;
             view.Refresh();
-            //((RadioButton)sender).IsChecked = true;
-            //((RadioButton)sender).UpdateLayout();*/
-            //LVChequeos.Ite
         }
 
         private void RB_Falla_Checked(object sender, RoutedEventArgs e)
         {
             ((Chequeo)((RadioButton)sender).DataContext).ResultadoTest = false;
             view.Refresh();
-            //((RadioButton)sender).IsChecked = true;
         }
 
         private void cb_pacientes_KeyUp(object sender, KeyEventArgs e)
@@ -93,7 +76,6 @@ namespace PruebaTreeListView
             CollectionView viewPaciente = (CollectionView)CollectionViewSource.GetDefaultView(cb_pacientes.ItemsSource);
             viewPaciente.Filter = ((o) =>
                 {
-                    //string idmasnombre = ((PatientSummary)o).Id + " " + ((PatientSummary)o).LastName + ", " + ((PatientSummary)o).FirstName;
                     if (String.IsNullOrEmpty(cb_pacientes.Text))
                         return false;
                     else if (cb_pacientes.Text.Length < 3)
@@ -118,14 +100,6 @@ namespace PruebaTreeListView
                 textBox.SelectionStart = ((ComboBox)sender).Text.Length;
                 textBox.SelectionLength = 0;
             }
-        }
-
-        private void BT_HabilitarLV_Click(object sender, RoutedEventArgs e)
-        {
-            Row_SeleccionPaciente.IsEnabled = false;
-            Chequeos = PlanSeleccionado().Chequear();
-            LVChequeos.Visibility = Visibility.Visible;
-            LVChequeos.ItemsSource = Chequeos;
         }
 
         private void cb_pacientes_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -164,11 +138,6 @@ namespace PruebaTreeListView
             }
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            
-        }
-
         private void cb_pacientes_Loaded(object sender, RoutedEventArgs e)
         {
             cb_pacientes.ItemsSource = pacientesRes;
@@ -200,6 +169,7 @@ namespace PruebaTreeListView
                 if (planEclipseSeleccionado!=null)
                 {
                     cb_Tecnicas.SelectedItem = Plan.ObtenerTecnica((Ecl.PlanSetup)planEclipseSeleccionado);
+                    chb_TecnicaOK.IsChecked = false;
                 }
             }
         }
@@ -207,6 +177,46 @@ namespace PruebaTreeListView
         {
             return new Plan((Ecl.PlanSetup)planEclipseSeleccionado, aria, (Tecnica)cb_Tecnicas.SelectedItem, Convert.ToDouble(tb_dosisTotal.Text), Convert.ToDouble(tb_dosisDia.Text), Convert.ToDouble(tb_dosisFraccion.Text), chb_esCamillaEspecial.IsChecked==true, false);
         }
+
+        private void tb_numero_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9.-]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
+
+        private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = tb_dosisTotal.Text != "" && tb_dosisDia.Text!= "" && tb_dosisFraccion.Text!="" && cb_planes.SelectedIndex!=-1;
+        }
+
+        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            /*gb_Caracteristicas.IsEnabled = false;
+            gb_Seleccion.IsEnabled = false;
+            gb_Prescripcion.IsEnabled = false;*/
+            Chequeos = PlanSeleccionado().Chequear();
+            LVChequeos.Visibility = Visibility.Visible;
+            LVChequeos.ItemsSource = Chequeos;
+        }
     }
+
+    /*public class SoloNumerosRule: ValidationRule
+    {
+        public override ValidationResult Validate(object value, CultureInfo cultureInfo)
+        {
+            double valor = 0;
+            try
+            {
+                if (((string)value).Length > 0)
+                    valor = Double.Parse((String)value);
+            }
+            catch (Exception)
+            {
+                return new ValidationResult(false, $"Sólo números");
+            }
+            return ValidationResult.ValidResult;
+        }
+    }*/
+
 }
 
