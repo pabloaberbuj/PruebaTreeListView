@@ -17,6 +17,7 @@ using VMS.TPS.Common.Model.Types;
 using AriaQ;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using VMS.TPS.Common.Model.API;
 
 namespace PruebaTreeListView
 {
@@ -191,12 +192,19 @@ namespace PruebaTreeListView
 
         private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+
+            Chequeos = PlanSeleccionado().Chequear();
+            TabItem item1 = new TabItem();
+            item1.Header = "item1";
+            item1.Content = new LV_Chequeos(Chequeos);
+            TabControl.Items.Add(item1);
+            TabItem item2 = new TabItem();
+            item2.Header = "item2";
+            item2.Content = new LV_Chequeos(Chequeos);
+            TabControl.Items.Add(item2);
             /*gb_Caracteristicas.IsEnabled = false;
             gb_Seleccion.IsEnabled = false;
             gb_Prescripcion.IsEnabled = false;*/
-            Chequeos = PlanSeleccionado().Chequear();
-            LVChequeos.Visibility = Visibility.Visible;
-            LVChequeos.ItemsSource = Chequeos;
         }
     }
 
