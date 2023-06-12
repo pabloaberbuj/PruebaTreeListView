@@ -6,22 +6,23 @@ using System.Threading.Tasks;
 using AriaQ;
 using Ecl = VMS.TPS.Common.Model.API;
 using VMS.TPS.Common.Model.Types;
+using VMS.TPS.Common.Model.API;
 
 namespace PruebaTreeListView
 {
     public class Plan
     {
         public Ecl.PlanSetup PlanEclipse { get; set; }
-        public PlanSetup PlanAria { get; set; }
+        public AriaQ.PlanSetup PlanAria { get; set; }
         public Tecnica Tecnica { get; set; }
         public double DosisTotal { get; set; }
         public double DosisDia { get; set; }
         public double DosisFraccion { get; set; }
         public bool EsCamillaEspecial { get; set; }
         public bool EsPlanSuma { get; set; }
-        public Ecl.PlanSum PlanSumaEclipse { get; set; }
+        public List<Plan> PlanesSumandos { get; set; }
 
-        public Plan(Ecl.PlanSetup _planEclipse, PlanSetup _planAria, Tecnica _tecnica, double _dosisTotal, double _dosisDia, double _dosisFraccion, bool _esCamillaEspecial, bool _esPlanSuma, Ecl.PlanSum _planSumaEclipse = null)
+        public Plan(Ecl.PlanSetup _planEclipse, AriaQ.PlanSetup _planAria, Tecnica _tecnica, double _dosisTotal, double _dosisDia, double _dosisFraccion, bool _esCamillaEspecial)
         {
             PlanEclipse = _planEclipse;
             PlanAria = _planAria;
@@ -30,23 +31,40 @@ namespace PruebaTreeListView
             DosisDia = _dosisDia;
             DosisFraccion = _dosisFraccion;
             EsCamillaEspecial = _esCamillaEspecial;
-            EsPlanSuma = _esPlanSuma;
-            PlanSumaEclipse = _planSumaEclipse;
+            EsPlanSuma = false;
         }
 
-        public Plan(Ecl.PlanSetup _planEclipse, Aria aria, Tecnica _tecnica, double _dosisTotal, double _dosisDia, double _dosisFraccion, bool _esCamillaEspecial, bool _esPlanSuma, Ecl.PlanSum _planSumaEclipse = null)
+        public Plan(Ecl.PlanSetup _planEclipse, Aria aria, Tecnica _tecnica, double _dosisTotal, double _dosisDia, double _dosisFraccion, bool _esCamillaEspecial)
         {
             PlanEclipse = _planEclipse;
-            PlanAria = MetodosAuxiliares.AriaPlanDeEclipse(aria,_planEclipse);
+            PlanAria = MetodosAuxiliares.AriaPlanDeEclipse(aria, _planEclipse);
             Tecnica = _tecnica;
             DosisTotal = _dosisTotal;
             DosisDia = _dosisDia;
             DosisFraccion = _dosisFraccion;
             EsCamillaEspecial = _esCamillaEspecial;
-            EsPlanSuma = _esPlanSuma;
-            PlanSumaEclipse = _planSumaEclipse;
+            EsPlanSuma = false;
         }
 
+        public Plan(VMS.TPS.Common.Model.API.PlanSum planSumaEclipse, Aria aria)
+        {
+            EsPlanSuma = true;
+            PlanesSumandos = new List<Plan>();
+            foreach (VMS.TPS.Common.Model.API.PlanSetup planSetup in planSumaEclipse.PlanSetups)
+            {
+                PlanesSumandos.Add(new Plan(planSetup, MetodosAuxiliares.AriaPlanDeEclipse(aria, planSetup), Tecnica.Indefinida, double.NaN, double.NaN, double.NaN, false));
+            }
+        }
+
+        public List<VMS.TPS.Common.Model.API.PlanSetup> planesEclipse()
+        {
+            List<VMS.TPS.Common.Model.API.PlanSetup> planesEclipse = new List<VMS.TPS.Common.Model.API.PlanSetup>();
+            foreach (Plan plan in this.PlanesSumandos)
+            {
+                planesEclipse.Add(plan.PlanEclipse);
+            }
+            return planesEclipse;
+        }
         public string NombreMasID()
         {
             return PlanEclipse.Course.Patient.LastName.ToUpper() + ", " + PlanEclipse.Course.Patient.FirstName.ToUpper() + " " + PlanEclipse.Course.Patient.Id;
@@ -58,7 +76,7 @@ namespace PruebaTreeListView
 
         public static Tecnica ObtenerTecnica(Ecl.PlanSetup PlanEclipse)
         {
-            if (PlanEclipse.Beams.Count(f => !f.IsSetupField)>0)
+            if (PlanEclipse.Beams.Count(f => !f.IsSetupField) > 0)
             {
                 Ecl.Beam primerCampo = PlanEclipse.Beams.Where(f => !f.IsSetupField).First();
                 if (primerCampo.EnergyModeDisplayName.Contains("E"))
@@ -87,17 +105,17 @@ namespace PruebaTreeListView
                         return Tecnica.SBRT_VMAT;
                     }
                 }
-                else if (primerCampo.MLCPlanType==MLCPlanType.DoseDynamic && primerCampo.ControlPoints.Count>10)
+                else if (primerCampo.MLCPlanType == MLCPlanType.DoseDynamic && primerCampo.ControlPoints.Count > 10)
                 {
                     return Tecnica.IMRT;
                 }
-                else if (primerCampo.MLCPlanType==MLCPlanType.VMAT)
+                else if (primerCampo.MLCPlanType == MLCPlanType.VMAT)
                 {
                     return Tecnica.VMAT;
                 }
                 else if (primerCampo.Technique.Id == "ARC" && primerCampo.MLCPlanType != MLCPlanType.VMAT)
                 {
-                    if (PlanEclipse.Id.ToUpper().Contains("TBI") && primerCampo.ControlPoints.First().JawPositions==new VRect<double>(20,20,20,20))
+                    if (PlanEclipse.Id.ToUpper().Contains("TBI") && primerCampo.ControlPoints.First().JawPositions == new VRect<double>(20, 20, 20, 20))
                     {
                         return Tecnica.TBI;
                     }
@@ -115,7 +133,7 @@ namespace PruebaTreeListView
             {
                 return Tecnica.Indefinida;
             }
-            
+
         }
 
         public List<Chequeo> Chequear()

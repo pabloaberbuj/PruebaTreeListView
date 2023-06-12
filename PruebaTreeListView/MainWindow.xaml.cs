@@ -18,6 +18,7 @@ using AriaQ;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using VMS.TPS.Common.Model.API;
+using UglyToad.PdfPig.DocumentLayoutAnalysis.WordExtractor;
 
 namespace PruebaTreeListView
 {
@@ -31,7 +32,7 @@ namespace PruebaTreeListView
         List<string> pacientesRes;
         Ecl.Patient pacienteSeleccionado;
         Ecl.Course cursoSeleccionado;
-        Ecl.PlanningItem planEclipseSeleccionado;
+        //Ecl.PlanningItem planEclipseSeleccionado;
         VMS.TPS.Common.Model.API.Application app;
         Aria aria = new Aria();
         public MainWindow()
@@ -142,11 +143,6 @@ namespace PruebaTreeListView
         private void cb_pacientes_Loaded(object sender, RoutedEventArgs e)
         {
             cb_pacientes.ItemsSource = pacientesRes;
-            view = (CollectionView)CollectionViewSource.GetDefaultView(LVChequeos.Items);
-            PropertyGroupDescription groupDescription = new PropertyGroupDescription("Categoria");
-            PropertyGroupDescription groupDescription2 = new PropertyGroupDescription("ResultadoTest");
-            view.GroupDescriptions.Add(groupDescription);
-            
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -156,27 +152,45 @@ namespace PruebaTreeListView
 
         private void cb_planes_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (cb_planes.Items.Count>0)
+            if (PlanEclipseSeleccionado()!=null)
             {
-                planEclipseSeleccionado = (Ecl.PlanningItem)cb_planes.SelectedItem;
-                if (planEclipseSeleccionado is Ecl.PlanSetup)
+                if (PlanEclipseSeleccionado() is Ecl.PlanSetup)
                 {
-                    tbl_fisico.Text = ((Ecl.PlanSetup)planEclipseSeleccionado).CreationUserName;
-                    if (((Ecl.PlanSetup)planEclipseSeleccionado).ApprovalStatus == PlanSetupApprovalStatus.PlanningApproved || ((Ecl.PlanSetup)planEclipseSeleccionado).ApprovalStatus == PlanSetupApprovalStatus.TreatmentApproved)
+                    tbl_fisico.Text = ((Ecl.PlanSetup)PlanEclipseSeleccionado()).CreationUserName;
+                    if (((Ecl.PlanSetup)PlanEclipseSeleccionado()).ApprovalStatus == PlanSetupApprovalStatus.PlanningApproved || ((Ecl.PlanSetup)PlanEclipseSeleccionado()).ApprovalStatus == PlanSetupApprovalStatus.TreatmentApproved)
                     {
-                        tbl_medico.Text = ((Ecl.PlanSetup)planEclipseSeleccionado).PlanningApprover;
+                        tbl_medico.Text = ((Ecl.PlanSetup)PlanEclipseSeleccionado()).PlanningApprover;
                     }
-                }
-                if (planEclipseSeleccionado!=null)
-                {
-                    cb_Tecnicas.SelectedItem = Plan.ObtenerTecnica((Ecl.PlanSetup)planEclipseSeleccionado);
+                    cb_Tecnicas.SelectedItem = Plan.ObtenerTecnica((Ecl.PlanSetup)PlanEclipseSeleccionado());
                     chb_TecnicaOK.IsChecked = false;
+
+                }
+                if (PlanEclipseSeleccionado() is Ecl.PlanSum)
+                {
+                    gb_Prescripcion.IsEnabled = false;
+                    gb_Caracteristicas.IsEnabled = false;
                 }
             }
         }
         private Plan PlanSeleccionado()
         {
-            return new Plan((Ecl.PlanSetup)planEclipseSeleccionado, aria, (Tecnica)cb_Tecnicas.SelectedItem, Convert.ToDouble(tb_dosisTotal.Text), Convert.ToDouble(tb_dosisDia.Text), Convert.ToDouble(tb_dosisFraccion.Text), chb_esCamillaEspecial.IsChecked==true, false);
+            if ((PlanEclipseSeleccionado()!=null && PlanEclipseSeleccionado() is Ecl.PlanSetup))
+            {
+                return new Plan((Ecl.PlanSetup)PlanEclipseSeleccionado(), aria, (Tecnica)cb_Tecnicas.SelectedItem, Convert.ToDouble(tb_dosisTotal.Text), Convert.ToDouble(tb_dosisDia.Text), Convert.ToDouble(tb_dosisFraccion.Text), chb_esCamillaEspecial.IsChecked == true);
+            }
+            else
+            {
+                return new Plan((Ecl.PlanSum)PlanEclipseSeleccionado(), aria);
+            }
+            
+        }
+        private PlanningItem PlanEclipseSeleccionado()
+        {
+            if (cb_planes.SelectedIndex!=-1)
+            {
+                return (Ecl.PlanningItem)cb_planes.SelectedItem;
+            }
+            return null;
         }
 
         private void tb_numero_PreviewTextInput(object sender, TextCompositionEventArgs e)
@@ -187,24 +201,25 @@ namespace PruebaTreeListView
 
         private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = tb_dosisTotal.Text != "" && tb_dosisDia.Text!= "" && tb_dosisFraccion.Text!="" && cb_planes.SelectedIndex!=-1;
+            e.CanExecute = tb_dosisTotal.Text != "" && tb_dosisDia.Text!= "" && tb_dosisFraccion.Text!="" && cb_planes.SelectedIndex!=-1 && chb_TecnicaOK.IsChecked==true;
         }
 
         private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            if (!PlanSeleccionado().EsPlanSuma)
+            {
+                TabItem item1 = new TabItem();
+                item1.Header = PlanSeleccionado().PlanEclipse.Id;
+                LV_Chequeos lV_Chequeos = new LV_Chequeos(Chequeos);
+                item1.Content = lV_Chequeos;
+                Chequeos = PlanSeleccionado().Chequear();
+                view = (CollectionView)CollectionViewSource.GetDefaultView(lV_Chequeos.Items);
+                PropertyGroupDescription groupDescription = new PropertyGroupDescription("Categoria");
+                PropertyGroupDescription groupDescription2 = new PropertyGroupDescription("ResultadoTest");
+                view.GroupDescriptions.Add(groupDescription);
 
-            Chequeos = PlanSeleccionado().Chequear();
-            TabItem item1 = new TabItem();
-            item1.Header = "item1";
-            item1.Content = new LV_Chequeos(Chequeos);
-            TabControl.Items.Add(item1);
-            TabItem item2 = new TabItem();
-            item2.Header = "item2";
-            item2.Content = new LV_Chequeos(Chequeos);
-            TabControl.Items.Add(item2);
-            /*gb_Caracteristicas.IsEnabled = false;
-            gb_Seleccion.IsEnabled = false;
-            gb_Prescripcion.IsEnabled = false;*/
+            }
+
         }
     }
 

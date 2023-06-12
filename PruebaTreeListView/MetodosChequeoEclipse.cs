@@ -1,4 +1,4 @@
-﻿ using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -291,7 +291,7 @@ namespace PruebaTreeListView
         public static bool? DoseRate(Plan plan)
         {
 
-            foreach (Beam campo in plan.PlanEclipse.Beams.Where(c=>!c.IsSetupField))
+            foreach (Beam campo in plan.PlanEclipse.Beams.Where(c => !c.IsSetupField))
             {
                 if (DoseRate(campo) == false)
                 {
@@ -537,42 +537,53 @@ namespace PruebaTreeListView
 
         public static bool? CoincidenciaDosisConPrescripcion(Plan plan)
         {
-            return plan.DosisTotal == Math.Round(plan.PlanEclipse.TotalPrescribedDose.Dose,0) && plan.DosisFraccion == Math.Round(plan.PlanEclipse.UniqueFractionation.PrescribedDosePerFraction.Dose,2); //Falta DosisDia
+            return plan.DosisTotal == Math.Round(plan.PlanEclipse.TotalPrescribedDose.Dose, 0) && plan.DosisFraccion == Math.Round(plan.PlanEclipse.UniqueFractionation.PrescribedDosePerFraction.Dose, 2); //Falta DosisDia
         }
 
 
 
         public static bool? IsosSimilaresEnPlanSuma(Plan plan)
         {
-            foreach (PlanSetup etapaA in plan.PlanSumaEclipse.PlanSetups)
+            if (plan.EsPlanSuma)
             {
-                foreach (PlanSetup etapaB in plan.PlanSumaEclipse.PlanSetups)
+                List<PlanSetup> planesEclipse = plan.planesEclipse();
+                foreach (PlanSetup etapaA in planesEclipse)
                 {
-                    if (MetodosAuxiliares.isosDiferentes(etapaA, etapaB))
+                    foreach (PlanSetup etapaB in planesEclipse)
                     {
-                        return false;
+                        if (MetodosAuxiliares.isosDiferentes(etapaA, etapaB))
+                        {
+                            return false;
+                        }
                     }
                 }
+                return true;
             }
-            return true;
+            return null;
+
+
         }
 
         public static bool? PlanesEnMismoEquipo(Plan plan)
         {
-            string IdEquipo = plan.PlanSumaEclipse.PlanSetups.First().Beams.First().TreatmentUnit.Id;
-            foreach (PlanSetup planS in plan.PlanSumaEclipse.PlanSetups)
+            if (plan.EsPlanSuma)
             {
-                foreach (Beam campo in planS.Beams)
+                List<PlanSetup> planesEclipse = plan.planesEclipse();
+                string IdEquipo = planesEclipse.First().Beams.First().TreatmentUnit.Id;
+                foreach (PlanSetup planS in planesEclipse.Skip(1))
                 {
-                    if (!campo.TreatmentUnit.Id.Equals(IdEquipo))
+                    foreach (Beam campo in planS.Beams)
                     {
-                        return false;
+                        if (!campo.TreatmentUnit.Id.Equals(IdEquipo))
+                        {
+                            return false;
+                        }
                     }
                 }
+                return true;
             }
-            return true;
+            return null;
         }
-
         public static bool? TieneTablaDeTolerancia(Plan plan)
         {
             return !plan.PlanEclipse.Beams.Any(b => string.IsNullOrEmpty(b.ToleranceTableLabel));
@@ -598,7 +609,7 @@ namespace PruebaTreeListView
         public static bool? TargetEsTipoPTV(Plan plan)
         {
             Structure target = plan.PlanEclipse.StructureSet.Structures.First(s => s.Id == plan.PlanEclipse.TargetVolumeID);
-            return target.DicomType=="PTV" || target.Id.ToLower().Contains("ptv");
+            return target.DicomType == "PTV" || target.Id.ToLower().Contains("ptv");
         }
     }
 }

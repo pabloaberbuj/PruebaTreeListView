@@ -18,7 +18,7 @@ namespace PruebaTreeListView
     /// <summary>
     /// Interaction logic for LV_Chequeos.xaml
     /// </summary>
-    public partial class LV_Chequeos : UserControl
+    public partial class LV_Chequeos : ListView
     {
         CollectionView view;
         List<Chequeo> chequeos;
