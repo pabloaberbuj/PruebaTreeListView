@@ -131,7 +131,7 @@ namespace PruebaTreeListView
 
         public static bool? ExistenCarpetasDeTodosLosSubPlanes(Plan plan)
         {
-            foreach (var subPlan in plan.PlanSumaEclipse.PlanSetups)
+            foreach (var subPlan in plan.planesEclipse())
             {
                 if (!Directory.GetDirectories(CarpetaPaciente(plan)).Any(d => new DirectoryInfo(d).Name == subPlan.Id))
                 {

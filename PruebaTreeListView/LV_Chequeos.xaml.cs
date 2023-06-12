@@ -18,7 +18,7 @@ namespace PruebaTreeListView
     /// <summary>
     /// Interaction logic for LV_Chequeos.xaml
     /// </summary>
-    public partial class LV_Chequeos : ListView
+    public partial class LV_Chequeos : UserControl
     {
         CollectionView view;
         List<Chequeo> chequeos;
@@ -27,6 +27,12 @@ namespace PruebaTreeListView
             chequeos = _chequeos;
             InitializeComponent();
             LVChequeos.ItemsSource = chequeos;
+            view = (CollectionView)CollectionViewSource.GetDefaultView(LVChequeos.Items);
+            PropertyGroupDescription groupDescription = new PropertyGroupDescription("Categoria");
+            PropertyGroupDescription groupDescription2 = new PropertyGroupDescription("ResultadoTest");
+            view.GroupDescriptions.Add(groupDescription);
+
+
         }
         private void RB_OK_Checked(object sender, RoutedEventArgs e)
         {

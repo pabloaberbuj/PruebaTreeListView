@@ -213,11 +213,6 @@ namespace PruebaTreeListView
                 LV_Chequeos lV_Chequeos = new LV_Chequeos(Chequeos);
                 item1.Content = lV_Chequeos;
                 Chequeos = PlanSeleccionado().Chequear();
-                view = (CollectionView)CollectionViewSource.GetDefaultView(lV_Chequeos.Items);
-                PropertyGroupDescription groupDescription = new PropertyGroupDescription("Categoria");
-                PropertyGroupDescription groupDescription2 = new PropertyGroupDescription("ResultadoTest");
-                view.GroupDescriptions.Add(groupDescription);
-
             }
 
         }
