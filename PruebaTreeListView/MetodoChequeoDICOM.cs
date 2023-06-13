@@ -20,7 +20,7 @@ namespace PruebaTreeListView
         public static bool EquipoEsDicomRT(Plan plan)
         {
             List<EquipoDicomRT> _equiposDicomRT = equiposDicomRT();
-            return _equiposDicomRT.Any(e=>e.ID==plan.PlanEclipse.Beams.First().TreatmentUnit.Id);
+            return _equiposDicomRT.Any(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id);
         }
 
 
@@ -28,7 +28,7 @@ namespace PruebaTreeListView
         {
             if (equiposDicomRT().Any(e => e.ID == EquipoId))
             {
-                if (plan.Tecnica==Tecnica.TBI)
+                if (plan.Tecnica == Tecnica.TBI)
                 {
                     return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\1 - Inicios\1 - TBI\" + plan.NombreMasID();
                 }
@@ -66,6 +66,7 @@ namespace PruebaTreeListView
 
         public static string CarpetaPaciente(Plan plan)
         {
+            
             string carpetaEnTto = CarpetaPacienteEnTratamiento(plan, plan.PlanEclipse.Beams.First().TreatmentUnit.Id);
             if (Directory.Exists(carpetaEnTto))
             {
@@ -89,8 +90,8 @@ namespace PruebaTreeListView
             if (plan.EsPlanSuma)
             {
                 string carpetaPaciente = CarpetaPaciente(plan);
-                
-                if (Directory.GetDirectories(carpetaPaciente).Any(d=> new DirectoryInfo(d).Name==plan.PlanEclipse.Id))
+
+                if (Directory.GetDirectories(carpetaPaciente).Any(d => new DirectoryInfo(d).Name == plan.PlanEclipse.Id))
                 {
                     return Directory.GetDirectories(carpetaPaciente).First(d => new DirectoryInfo(d).Name == plan.PlanEclipse.Id);
                 }
@@ -131,9 +132,13 @@ namespace PruebaTreeListView
 
         public static bool? ExistenCarpetasDeTodosLosSubPlanes(Plan plan)
         {
-            foreach (var subPlan in plan.planesEclipse())
+            if (!equiposDicomRT().Any(e => e.ID == plan.PlanesSumandos.First().PlanEclipse.Beams.First().TreatmentUnit.Id))
             {
-                if (!Directory.GetDirectories(CarpetaPaciente(plan)).Any(d => new DirectoryInfo(d).Name == subPlan.Id))
+                return null;
+            }
+            foreach (var subPlan in plan.PlanesSumandos)
+            {
+                if (!Directory.GetDirectories(CarpetaPaciente(subPlan)).Any(d => new DirectoryInfo(d).Name == subPlan.PlanEclipse.Id))
                 {
                     return false;
                 }
@@ -144,12 +149,12 @@ namespace PruebaTreeListView
         {
             var archivos = Directory.GetFiles(CarpetaPaciente(plan));
             var extensiones = Path.GetExtension(archivos.First());
-            return Directory.GetFiles(CarpetaPaciente(plan)).Where(f => Path.GetExtension(f) == ".dcm").Count() ==  1;
+            return Directory.GetFiles(CarpetaPaciente(plan)).Where(f => Path.GetExtension(f) == ".dcm").Count() == 1;
         }
 
         public static bool? ArchivoCoincideConPlan(Plan plan)
         {
-            if (ExisteCarpetaEnEquipo(plan) == false || HayUnicoDicomEnCarpetaPlan(plan)==false)
+            if (ExisteCarpetaEnEquipo(plan) == false || HayUnicoDicomEnCarpetaPlan(plan) == false)
             {
                 return null;
             }
@@ -161,7 +166,7 @@ namespace PruebaTreeListView
 
         public static bool? DicomTieneTiempos(Plan plan)
         {
-            if (ArchivoCoincideConPlan(plan)==false)
+            if (ArchivoCoincideConPlan(plan) == false)
             {
                 return null;
             }
@@ -181,7 +186,7 @@ namespace PruebaTreeListView
 
         public static bool? DicomEsCompatibleConConsolaVieja(Plan plan)
         {
-            if (ArchivoCoincideConPlan(plan)==false)
+            if (ArchivoCoincideConPlan(plan) == false)
             {
                 return null;
             }

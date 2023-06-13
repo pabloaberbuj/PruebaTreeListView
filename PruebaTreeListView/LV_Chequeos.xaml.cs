@@ -31,8 +31,6 @@ namespace PruebaTreeListView
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("Categoria");
             PropertyGroupDescription groupDescription2 = new PropertyGroupDescription("ResultadoTest");
             view.GroupDescriptions.Add(groupDescription);
-
-
         }
         private void RB_OK_Checked(object sender, RoutedEventArgs e)
         {

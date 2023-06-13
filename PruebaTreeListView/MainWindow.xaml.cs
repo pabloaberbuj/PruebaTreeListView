@@ -174,14 +174,19 @@ namespace PruebaTreeListView
         }
         private Plan PlanSeleccionado()
         {
-            if ((PlanEclipseSeleccionado()!=null && PlanEclipseSeleccionado() is Ecl.PlanSetup))
+            if (PlanEclipseSeleccionado()!=null && PlanEclipseSeleccionado() is Ecl.PlanSetup)
             {
                 return new Plan((Ecl.PlanSetup)PlanEclipseSeleccionado(), aria, (Tecnica)cb_Tecnicas.SelectedItem, Convert.ToDouble(tb_dosisTotal.Text), Convert.ToDouble(tb_dosisDia.Text), Convert.ToDouble(tb_dosisFraccion.Text), chb_esCamillaEspecial.IsChecked == true);
             }
-            else
+            else if (PlanEclipseSeleccionado() != null && PlanEclipseSeleccionado() is Ecl.PlanSum)
             {
                 return new Plan((Ecl.PlanSum)PlanEclipseSeleccionado(), aria);
             }
+            else
+            {
+                return null;
+            }
+
             
         }
         private PlanningItem PlanEclipseSeleccionado()
@@ -201,7 +206,19 @@ namespace PruebaTreeListView
 
         private void CommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = tb_dosisTotal.Text != "" && tb_dosisDia.Text!= "" && tb_dosisFraccion.Text!="" && cb_planes.SelectedIndex!=-1 && chb_TecnicaOK.IsChecked==true;
+            if (PlanSeleccionado()==null)
+            {
+                e.CanExecute = false;
+            }
+            else if (!PlanSeleccionado().EsPlanSuma)
+            {
+                e.CanExecute = tb_dosisTotal.Text != "" && tb_dosisDia.Text != "" && tb_dosisFraccion.Text != "" && cb_planes.SelectedIndex != -1 && chb_TecnicaOK.IsChecked == true;
+            }
+            else
+            {
+                e.CanExecute = true;
+            }
+            
         }
 
         private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -209,10 +226,22 @@ namespace PruebaTreeListView
             if (!PlanSeleccionado().EsPlanSuma)
             {
                 TabItem item1 = new TabItem();
-                item1.Header = PlanSeleccionado().PlanEclipse.Id;
+                item1.Header = PlanEclipseSeleccionado().Id;
+                TabControl.Items.Add(item1);
+                Chequeos = PlanSeleccionado().Chequear();
                 LV_Chequeos lV_Chequeos = new LV_Chequeos(Chequeos);
                 item1.Content = lV_Chequeos;
+                item1.IsSelected = true;
+            }
+            else
+            {
+                TabItem item1 = new TabItem();
+                item1.Header = PlanEclipseSeleccionado().Id;
+                TabControl.Items.Add(item1);
                 Chequeos = PlanSeleccionado().Chequear();
+                LV_Chequeos lV_Chequeos = new LV_Chequeos(Chequeos);
+                item1.Content = lV_Chequeos;
+                item1.IsSelected = true;
             }
 
         }

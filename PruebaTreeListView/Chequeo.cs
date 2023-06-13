@@ -224,10 +224,10 @@ namespace PruebaTreeListView
         public static List<Chequeo> SeleccionarChequeos(Plan plan)
         {
             List<Chequeo> ListaCompletaChequeos = ListaChequeos();
-            /*if (plan.EsPlanSuma)
+            if (plan.EsPlanSuma)
             {
                 return ListaCompletaChequeos.Where(c => c.ExclusivoPlanSuma).ToList();
-            }*/
+            }
             List<Chequeo> ListaPlan = ListaCompletaChequeos.Where(c => c.AplicaTecnica(plan.Tecnica)).ToList();
             if (plan.EsCamillaEspecial)
             {
