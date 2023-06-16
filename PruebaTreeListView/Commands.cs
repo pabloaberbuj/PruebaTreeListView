@@ -19,5 +19,16 @@ namespace PruebaTreeListView
                     new KeyGesture(Key.A, ModifierKeys.Alt)
                 }
             );
+        public static readonly RoutedUICommand SiguientePlan = new RoutedUICommand
+            (
+                "Siguiente plan",
+                "Siguiente plan",
+                typeof(Commands),
+                new InputGestureCollection()
+                {
+                    new KeyGesture(Key.S, ModifierKeys.Alt)
+                }
+            );
+
     }
 }

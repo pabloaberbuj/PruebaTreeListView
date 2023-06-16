@@ -21,12 +21,24 @@ namespace PruebaTreeListView
     public partial class LV_Chequeos : UserControl
     {
         CollectionView view;
+        Plan planseleccionado;
         List<Chequeo> chequeos;
         public LV_Chequeos(List<Chequeo> _chequeos)
         {
             chequeos = _chequeos;
             InitializeComponent();
             LVChequeos.ItemsSource = chequeos;
+            view = (CollectionView)CollectionViewSource.GetDefaultView(LVChequeos.Items);
+            PropertyGroupDescription groupDescription = new PropertyGroupDescription("Categoria");
+            PropertyGroupDescription groupDescription2 = new PropertyGroupDescription("ResultadoTest");
+            view.GroupDescriptions.Add(groupDescription);
+        }
+
+        public LV_Chequeos(Plan _planSeleccionado)
+        {
+            planseleccionado = _planSeleccionado;
+            InitializeComponent();
+            LVChequeos.ItemsSource = planseleccionado.Chequear();
             view = (CollectionView)CollectionViewSource.GetDefaultView(LVChequeos.Items);
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("Categoria");
             PropertyGroupDescription groupDescription2 = new PropertyGroupDescription("ResultadoTest");

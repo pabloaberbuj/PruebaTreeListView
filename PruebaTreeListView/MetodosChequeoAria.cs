@@ -160,6 +160,42 @@ namespace PruebaTreeListView
             return true;
         }
 
+        public static bool? ImagenesAgendadasSegunEquipo(Plan plan)
+        {
+            //List<int> fraccionesConPlaca = new List<int>();
+            string sptId = "";
+            /*if (plan.Tecnica == Tecnica.IMRT || plan.Tecnica == Tecnica.VMAT || plan.Tecnica == Tecnica.Mama3DC)
+            {
+                int i = 1;
+                while (i < plan.PlanAria.RTPlans.First().NoFractions)
+                {
+                    fraccionesConPlaca.Add(i);
+                    i += 5;
+                }
+            }
+            else if (plan.Tecnica == Tecnica.Arcos3DC || plan.Tecnica == Tecnica.Electrones || plan.Tecnica == Tecnica.Static3DC)
+            {
+                fraccionesConPlaca.Add(1);
+            }*/
+            if (plan.PlanAria.Radiations.First().RadiationDevice.Machine.MachineId == "Equipo1")
+            {
+                sptId = "SingleExp";
+            }
+            else if (plan.PlanAria.Radiations.First().RadiationDevice.Machine.MachineId == "D-2300CD")
+            {
+                sptId = "kV";
+            }
+            var Sessions = plan.PlanAria.RTPlans.First().SessionRTPlans;
+            foreach (var session in Sessions)
+            {
+                if (session.Session.SessionProcedures.Count != 2 || session.Session.SessionProcedures.Any(p => !p.SessionProcedureTemplateId.Contains(sptId)))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         public static bool? PosicionImagerCorrecta(Plan plan)
         {
             if (plan.PlanAria.Radiations.First().RadiationDevice.Machine.MachineId == "Equipo1")

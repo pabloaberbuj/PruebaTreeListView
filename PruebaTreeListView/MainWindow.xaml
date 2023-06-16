@@ -17,7 +17,8 @@
         </ItemsPanelTemplate>
     </Window.Resources>
     <Window.CommandBindings>
-        <CommandBinding Command="local:Commands.Analizar" CanExecute="CommandBinding_CanExecute" Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="local:Commands.Analizar" CanExecute="CommandBinding_CanExecuteAnalizar" Executed="CommandBinding_ExecutedAnalizar"/>
+        <CommandBinding Command="local:Commands.SiguientePlan" CanExecute="CommandBinding_CanExecuteSiguientePlan" Executed="CommandBinding_ExecutedSiguientePlan"/>
     </Window.CommandBindings>
 
     <Grid>
@@ -85,7 +86,7 @@
                         </ComboBox.Style>
                     </ComboBox>
                     <TextBlock Grid.Row="2" Margin="0,5,0,0" Grid.Column="0" Text="Plan:" FontWeight="Bold"/>
-                    <ComboBox Grid.Row="2" Grid.Column="1" Name="cb_planes" Margin="10,0,10,10" Width="95" Height="25" IsEditable="False" IsTextSearchEnabled="False" IsDropDownOpen="False"  StaysOpenOnEdit="True" d:IsHidden="True" HorizontalAlignment="Left" SelectionChanged="cb_planes_SelectionChanged">
+                    <ComboBox Grid.Row="2" Grid.Column="1" Name="cb_planes" Margin="10,0,10,10" Width="95" Height="25" IsEditable="False" IsTextSearchEnabled="False" IsDropDownOpen="False"  StaysOpenOnEdit="True" d:IsHidden="True" HorizontalAlignment="Left" SelectionChanged="cb_planes_SelectionChanged" >
                         <ComboBox.Style>
                             <Style TargetType="ComboBox">
                                 <Style.Triggers>
@@ -179,6 +180,7 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="3*"/>
+                    <RowDefinition Height="3*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -188,7 +190,8 @@
                 <TextBlock Grid.Column="1" Name="tbl_fisico"/>
                 <TextBlock Grid.Column="0" Grid.Row="1" Text="Aprobado por:" FontWeight="Bold"/>
                 <TextBlock Grid.Column="1" Grid.Row="1" Name="tbl_medico"/>
-                <Button Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_HabilitarLV" Content="Analizar" Margin="10,0,10,10" Width="100" Height="30" Command="local:Commands.Analizar" />
+                <Button Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_Analizar" Content="Analizar" Margin="10,0,10,10" Width="100" Height="20" Command="local:Commands.Analizar" />
+                <Button Grid.Row="3" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_SiguientePlan" Content="Siguiente plan" Margin="10,0,10,10" Width="100" Height="20" Command="local:Commands.SiguientePlan" />
             </Grid>
         </Grid>
         <TabControl x:Name="TabControl" Grid.Row="1">
