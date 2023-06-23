@@ -13,7 +13,7 @@
         <ListView x:Name="LVChequeos" Grid.Row="1">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Nombre" DisplayMemberBinding="{Binding Nombre}" Width="300"/>
+                    <GridViewColumn Header="Nombre" DisplayMemberBinding="{Binding Nombre}" Width="350"/>
                     <GridViewColumn Header="Manual">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -56,7 +56,7 @@
                     <GridViewColumn Header="Resultado" Width="80">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Ellipse Width="20" Height="20" >
+                                <Ellipse Width="20" Height="20">
                                     <Ellipse.Resources>
                                         <Style TargetType="Ellipse">
                                             <Setter Property="Fill" Value="Transparent"/>

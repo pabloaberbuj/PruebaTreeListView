@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,11 +39,19 @@ namespace PruebaTreeListView
         {
             planseleccionado = _planSeleccionado;
             InitializeComponent();
-            LVChequeos.ItemsSource = planseleccionado.Chequear();
-            view = (CollectionView)CollectionViewSource.GetDefaultView(LVChequeos.Items);
+            //LVChequeos.ItemsSource = planseleccionado.Chequear();
+            List<Chequeo> chequeos = Chequeo.SeleccionarChequeos(planseleccionado);
+            ObservableCollection<Chequeo> obsCol = new ObservableCollection<Chequeo>();
+            LVChequeos.ItemsSource = obsCol;
+            /*view = (CollectionView)CollectionViewSource.GetDefaultView(LVChequeos.Items);
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("Categoria");
             PropertyGroupDescription groupDescription2 = new PropertyGroupDescription("ResultadoTest");
-            view.GroupDescriptions.Add(groupDescription);
+            view.GroupDescriptions.Add(groupDescription);*/
+            foreach (Chequeo chequeo in chequeos)
+            {
+                chequeo.AplicarMetodo(planseleccionado);
+                obsCol.Add(chequeo);
+            }
         }
         private void RB_OK_Checked(object sender, RoutedEventArgs e)
         {
