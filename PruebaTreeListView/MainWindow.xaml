@@ -4,12 +4,13 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PruebaTreeListView"
-
+        Width="1100"
         mc:Ignorable="d"
-        Title="MainWindow"
+        Title="Chequeos"
         WindowStartupLocation="CenterScreen"
         WindowState="Normal"
         Closing="Window_Closing">
+    
     <Window.Resources>
         <local:Contador x:Key="Contador"/>
         <ItemsPanelTemplate x:Key="VSP">
@@ -19,6 +20,7 @@
     <Window.CommandBindings>
         <CommandBinding Command="local:Commands.Analizar" CanExecute="CommandBinding_CanExecuteAnalizar" Executed="CommandBinding_ExecutedAnalizar"/>
         <CommandBinding Command="local:Commands.SiguientePlan" CanExecute="CommandBinding_CanExecuteSiguientePlan" Executed="CommandBinding_ExecutedSiguientePlan"/>
+        <CommandBinding Command="local:Commands.Reiniciar" CanExecute="CommandBinding_CanExecuteReiniciar" Executed="CommandBinding_ExecutedReiniciar"/>
     </Window.CommandBindings>
 
     <Grid>
@@ -43,7 +45,7 @@
                 <ColumnDefinition Width="400"/>
                 <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
             <GroupBox Name="gb_Seleccion" Header="Seleccion" Height="130" Margin="10,10,10,10">
                 <GroupBox.Style>
@@ -175,23 +177,25 @@
                     <TextBlock Grid.Row="2" Grid.Column="2" Margin="0,5,0,0" Text="cGy"/>
                 </Grid>
             </GroupBox>
-            <Grid Grid.Column="3" Margin="0,30,0,0">
+            <Grid Grid.Column="3" Margin="0,5,0,5">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="3*"/>
-                    <RowDefinition Height="3*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
+                    <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="1.7*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Planificado por:" FontWeight="Bold"/>
                 <TextBlock Grid.Column="1" Name="tbl_fisico"/>
                 <TextBlock Grid.Column="0" Grid.Row="1" Text="Aprobado por:" FontWeight="Bold"/>
                 <TextBlock Grid.Column="1" Grid.Row="1" Name="tbl_medico"/>
-                <Button Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_Analizar" Content="Analizar" Margin="10,0,10,10" Width="100" Height="20" Command="local:Commands.Analizar" />
-                <Button Grid.Row="3" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_SiguientePlan" Content="Siguiente plan" Margin="10,0,10,10" Width="100" Height="20" Command="local:Commands.SiguientePlan" />
+                <Button Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_Analizar" Content="Analizar" Margin="5,0,5,5" Width="100" Height="25" Command="local:Commands.Analizar" />
+                <Button Grid.Row="3" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_SiguientePlan" Content="Siguiente plan" Margin="5,0,5,5" Width="100" Height="25" Command="local:Commands.SiguientePlan" />
+                <Button Grid.Row="4" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_Reinicoar" Content="Reiniciar" Margin="5,0,5,5" Width="100" Height="25" Command="local:Commands.Reiniciar" />
             </Grid>
         </Grid>
         <TabControl x:Name="TabControl" Grid.Row="1">

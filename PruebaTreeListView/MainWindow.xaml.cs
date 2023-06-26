@@ -234,6 +234,7 @@ namespace PruebaTreeListView
         {
             if (!PlanSeleccionado().EsPlanSuma)
             {
+                //if (TabControl!=null && TabControl.Items!=null)
                 TabItem item1 = new TabItem();
                 item1.Header = PlanEclipseSeleccionado().Id;
                 TabControl.Items.Add(item1);
@@ -283,6 +284,17 @@ namespace PruebaTreeListView
         private void cb_planes_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
 
+        }
+
+        private void CommandBinding_CanExecuteReiniciar(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = TabControl!=null && TabControl.Items!= null && TabControl.Items.Count > 0;
+        }
+
+        private void CommandBinding_ExecutedReiniciar(object sender, ExecutedRoutedEventArgs e)
+        {
+            TabControl.Items.Clear();
+            cb_pacientes.SelectedItem = null;
         }
     }
 }

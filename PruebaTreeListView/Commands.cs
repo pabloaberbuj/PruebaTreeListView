@@ -29,6 +29,16 @@ namespace PruebaTreeListView
                     new KeyGesture(Key.S, ModifierKeys.Alt)
                 }
             );
+        public static readonly RoutedUICommand Reiniciar = new RoutedUICommand
+            (
+                "Reiniciar",
+                "Reiniciar",
+                typeof(Commands),
+                new InputGestureCollection()
+                {
+                    new KeyGesture(Key.S, ModifierKeys.Alt)
+                }
+            );
 
     }
 }

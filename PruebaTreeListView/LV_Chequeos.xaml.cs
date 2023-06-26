@@ -43,10 +43,10 @@ namespace PruebaTreeListView
             List<Chequeo> chequeos = Chequeo.SeleccionarChequeos(planseleccionado);
             ObservableCollection<Chequeo> obsCol = new ObservableCollection<Chequeo>();
             LVChequeos.ItemsSource = obsCol;
-            /*view = (CollectionView)CollectionViewSource.GetDefaultView(LVChequeos.Items);
+            view = (CollectionView)CollectionViewSource.GetDefaultView(LVChequeos.Items);
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("Categoria");
             PropertyGroupDescription groupDescription2 = new PropertyGroupDescription("ResultadoTest");
-            view.GroupDescriptions.Add(groupDescription);*/
+            view.GroupDescriptions.Add(groupDescription);
             foreach (Chequeo chequeo in chequeos)
             {
                 chequeo.AplicarMetodo(planseleccionado);

@@ -53,7 +53,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Resultado" Width="80">
+                    <GridViewColumn Width="40">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <Ellipse Width="20" Height="20">
