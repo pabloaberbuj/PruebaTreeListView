@@ -4,12 +4,12 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PruebaTreeListView"
-        Width="1100"
+        Width="1350"
         mc:Ignorable="d"
         Title="Chequeos"
         WindowStartupLocation="CenterScreen"
         WindowState="Normal"
-        Closing="Window_Closing">
+        Closing="Window_Closing" Loaded="Window_Loaded">
     
     <Window.Resources>
         <local:Contador x:Key="Contador"/>
@@ -46,6 +46,7 @@
                 <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="250"/>
             </Grid.ColumnDefinitions>
             <GroupBox Name="gb_Seleccion" Header="Seleccion" Height="130" Margin="10,10,10,10">
                 <GroupBox.Style>
@@ -199,6 +200,39 @@
                 <Button Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_SiguientePlan" Content="Siguiente plan" Margin="5,0,5,5" Width="100" Height="25" Command="local:Commands.SiguientePlan" />
                 <Button Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_Reinicoar" Content="Reiniciar" Margin="5,0,5,5" Width="100" Height="25" Command="local:Commands.Reiniciar" />
             </Grid>
+            <StackPanel Orientation="Vertical" Grid.Column="4" VerticalAlignment="Bottom">
+                <StackPanel.Resources>
+                    <Style TargetType="StackPanel">
+                        <Setter Property="Margin" Value="0,3,0,0"/>
+                    </Style>
+
+                </StackPanel.Resources>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Conexion con Eclipse"/>
+                    <Ellipse Name="Ell_ConexionEclipse" Height="15" Width="15"  Fill="Transparent" Margin="10,0,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Conexion con ARIA"/>
+                    <Ellipse Name="Ell_ConexionARIA" Height="15" Width="15"  Fill="Transparent" Margin="10,0,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Conexion con va$data"/>
+                    <Ellipse Name="Ell_ConexionVaData" Height="15" Width="15"  Fill="Transparent" Margin="10,0,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Conexion con CDD"/>
+                    <Ellipse Name="Ell_ConexionCDD" Height="15" Width="15"  Fill="Transparent" Margin="10,0,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Conexion con RefToIso"/>
+                    <Ellipse Name="Ell_ConexionDrive" Height="15"  Fill="Transparent"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Conexion con Exactrac"/>
+                    <Ellipse Name="Ell_ConexionExactrac" Height="15"  Fill="Transparent"/>
+                </StackPanel>
+            </StackPanel>
+
         </Grid>
         <TabControl x:Name="TabControl" Grid.Row="1">
         </TabControl>

@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,16 +11,53 @@ using VMS.TPS.Common.Model.Types;
 namespace PruebaTreeListView
 {
     public delegate bool? MyStaticMethodInvoker(Plan plan);
-    //public delegate bool? MyStaticMethodInvoker(Plan plan);
 
-    public class Chequeo
+    public class Chequeo : INotifyPropertyChanged
     {
-        public string Nombre { get; set; }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        void OnPropertyChanged(string propertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public string nombre;
+        public string Nombre
+        {
+            get { return nombre; }
+            set
+            {
+                if (nombre!=value)
+                {
+                    nombre = value;
+                    OnPropertyChanged("Nombre");
+                }
+            }
+        }
+
         public Categoria Categoria { get; set; }
         public NivelDeAccion NivelDeAccion { get; set; }
         public MyStaticMethodInvoker TargetMethod;
+
+        
+
+
         public bool EsAutomatico { get; set; }
-        public bool? ResultadoTest { get; set; }
+        public bool? resultadoTest;
+        public bool? ResultadoTest
+        {
+            get { return resultadoTest; }
+            set
+            {
+                if (resultadoTest != value)
+                {
+                    resultadoTest = value;
+                    OnPropertyChanged("ResultadoTest");
+                }
+            }
+        }
+
         public bool AplicaAStatic3DC { get; set; }
         //public bool AplicaAMama3DC { get; set; }
         public bool AplicaAArcos3DC { get; set; }
@@ -81,7 +120,7 @@ namespace PruebaTreeListView
             string[] lineaSep = lineaCSV.Split(';');
             Nombre = lineaSep[0];
             NivelDeAccion = NivelDeAccion.Justificar;
-            
+
             TargetMethod = new MyStaticMethodInvoker();
             EsAutomatico = Convert.ToBoolean(lineaSep[3]);
             ResultadoTest = false;

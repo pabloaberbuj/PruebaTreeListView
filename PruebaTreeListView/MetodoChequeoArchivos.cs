@@ -14,7 +14,7 @@ namespace PruebaTreeListView
     public static class MetodoChequeoArchivos
     {
         public static string pathPacientes = @"\\ariamevadb-svr\va_data$\Pacientes";
-        public static string pathDRRs = @"\\10.0.0.57\centro de datos2018\000_Centro de Datos 2021\Pacientes DRRs";
+        public static string pathDRRs = @"\\fisica0\centro de datos2018\000_Centro de Datos 2021\Pacientes DRRs";
         public static bool? HizoCalculoIndependienteFotones(Plan plan)
         {
             string archivoCI = MetodosAuxiliares.ArchivoCI(plan);

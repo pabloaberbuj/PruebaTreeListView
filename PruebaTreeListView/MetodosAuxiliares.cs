@@ -376,7 +376,46 @@ namespace PruebaTreeListView
         static string[] Scopes = { SheetsService.Scope.Spreadsheets };
         static string ApplicationName = "UploadPatMove";
 
+        public static bool ChequearRefToIso()
+        {
+            Ping p1 = new Ping();
+            PingReply PR = p1.Send("drive.google.com");
+            // check when the ping is not success
+            if (!PR.Status.ToString().Equals("Success"))
+            {
+                //MessageBox.Show("No se puede conectar con google drive\nReintentar en un rato");
+                return false;
+            }
+            UserCredential credential;
+            using (var stream =
+                   new FileStream(@"\\ariamevadb-svr\va_data$\Calculo Independiente\credentials.json", FileMode.Open, FileAccess.Read))
+            {
+                string credPath = @"\\ariamevadb-svr\va_data$\Calculo Independiente\token.json";
+                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+                    GoogleClientSecrets.FromStream(stream).Secrets,
+                                    Scopes,
+                                    "user",
+                                    CancellationToken.None,
+                                    new FileDataStore(credPath, true)).Result;
+            }
 
+            var service = new SheetsService(new BaseClientService.Initializer
+            {
+                HttpClientInitializer = credential,
+                ApplicationName = ApplicationName,
+
+            });
+            String spreadsheetId = "1HvxYpnQAe3eklrKRYf79mRkSb5R7ThePgOR7kglN-bE";
+            try
+            {
+                var ss = service.Spreadsheets.Get(spreadsheetId).Execute();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
         public static IList<IList<Object>> TraerTodosLosCorrimientos(string Equipo)
         {
             Ping p1 = new Ping();

@@ -41,7 +41,7 @@ namespace PruebaTreeListView
             InitializeComponent();
             //LVChequeos.ItemsSource = planseleccionado.Chequear();
             List<Chequeo> chequeos = Chequeo.SeleccionarChequeos(planseleccionado);
-            ObservableCollection<Chequeo> obsCol = new ObservableCollection<Chequeo>();
+            ObservableCollection<Chequeo> obsCol = new ObservableCollection<Chequeo>(chequeos);
             LVChequeos.ItemsSource = obsCol;
             view = (CollectionView)CollectionViewSource.GetDefaultView(LVChequeos.Items);
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("Categoria");
@@ -50,7 +50,7 @@ namespace PruebaTreeListView
             foreach (Chequeo chequeo in chequeos)
             {
                 chequeo.AplicarMetodo(planseleccionado);
-                obsCol.Add(chequeo);
+                //obsCol.Add(chequeo);
             }
         }
         private void RB_OK_Checked(object sender, RoutedEventArgs e)

@@ -19,6 +19,8 @@ using System.Globalization;
 using System.Text.RegularExpressions;
 using VMS.TPS.Common.Model.API;
 using UglyToad.PdfPig.DocumentLayoutAnalysis.WordExtractor;
+using System.IO;
+using System.Net.NetworkInformation;
 
 namespace PruebaTreeListView
 {
@@ -34,23 +36,11 @@ namespace PruebaTreeListView
         Ecl.Course cursoSeleccionado;
         //Ecl.PlanningItem planEclipseSeleccionado;
         VMS.TPS.Common.Model.API.Application app;
-        Aria aria = new Aria();
+        Aria aria;
         bool SeAnalizoPlanSuma = false;
         List<Plan> ListaPlanes = null;
         public MainWindow()
         {
-            app = VMS.TPS.Common.Model.API.Application.CreateApplication("paberbuj", "123qwe");
-
-
-            var pacientes = app.PatientSummaries.OrderByDescending(p => p.CreationDateTime);
-
-            pacientesRes = new List<string>();
-            foreach (Ecl.PatientSummary pacienteSummary in pacientes)
-            {
-                pacientesRes.Add(pacienteSummary.Id + " " + pacienteSummary.LastName + ", " + pacienteSummary.FirstName);
-            }
-
-            pacientes = null;
             InitializeComponent();
             cb_Tecnicas.ItemsSource = Enum.GetValues(typeof(Tecnica));
             //view.GroupDescriptions.Add(groupDescription2);
@@ -187,11 +177,11 @@ namespace PruebaTreeListView
         }
         private string PlanesSumando(Ecl.PlanSum planSuma)
         {
-            string suma ="(";
+            string suma = "(";
             foreach (Ecl.PlanSetup plan in planSuma.PlanSetups)
             {
                 suma += plan.Id;
-                if (plan!=planSuma.PlanSetups.Last())
+                if (plan != planSuma.PlanSetups.Last())
                 {
                     suma += "+";
                 }
@@ -251,34 +241,35 @@ namespace PruebaTreeListView
 
         private void CommandBinding_ExecutedAnalizar(object sender, ExecutedRoutedEventArgs e)
         {
-                if (TabControl!=null && TabControl.Items!=null)
+            if (TabControl != null && TabControl.Items != null)
+            {
+                foreach (TabItem item in TabControl.Items)
                 {
-                    foreach (TabItem item in TabControl.Items)
+                    if ((string)item.Header == PlanEclipseSeleccionado().Id)
                     {
-                        if ((string)item.Header == PlanEclipseSeleccionado().Id)
-                        {
-                            item.Content = null;
-                            LV_Chequeos lV_ChequeosIt = new LV_Chequeos(PlanSeleccionado());
-                            item.Content = lV_ChequeosIt;
-                            item.IsSelected = true;
-                            return;
-                        }
+                        item.Content = null;
+                        LV_Chequeos lV_ChequeosIt = new LV_Chequeos(PlanSeleccionado());
+                        item.Content = lV_ChequeosIt;
+                        item.IsSelected = true;
+                        return;
                     }
-                    TabItem item1 = new TabItem();
-                    item1.Header = PlanEclipseSeleccionado().Id;
-                    TabControl.Items.Add(item1);
-                    /*Chequeos = PlanSeleccionado().Chequear();
-                    LV_Chequeos lV_Chequeos = new LV_Chequeos(Chequeos);*/
-                    LV_Chequeos lV_Chequeos = new LV_Chequeos(PlanSeleccionado());
-                    item1.Content = lV_Chequeos;
-                    item1.IsSelected = true;
                 }
-                SeAnalizoPlanSuma = PlanSeleccionado().EsPlanSuma;
+                TabItem item1 = new TabItem();
+                item1.Header = PlanEclipseSeleccionado().Id;
+                TabControl.Items.Add(item1);
+                item1.IsSelected = true;
+                /*Chequeos = PlanSeleccionado().Chequear();
+                LV_Chequeos lV_Chequeos = new LV_Chequeos(Chequeos);*/
+                LV_Chequeos lV_Chequeos = new LV_Chequeos(PlanSeleccionado());
+                item1.Content = lV_Chequeos;
+
+            }
+            SeAnalizoPlanSuma = PlanSeleccionado().EsPlanSuma;
         }
 
         private void CommandBinding_CanExecuteSiguientePlan(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = (PlanEclipseSeleccionado() is VMS.TPS.Common.Model.API.PlanSum && SeAnalizoPlanSuma) || (ListaPlanes!=null && ListaPlanes.Last().PlanEclipse!=PlanEclipseSeleccionado());
+            e.CanExecute = (PlanEclipseSeleccionado() is VMS.TPS.Common.Model.API.PlanSum && SeAnalizoPlanSuma) || (ListaPlanes != null && ListaPlanes.Last().PlanEclipse != PlanEclipseSeleccionado());
         }
 
         private void CommandBinding_ExecutedSiguientePlan(object sender, ExecutedRoutedEventArgs e)
@@ -291,9 +282,9 @@ namespace PruebaTreeListView
                     cb_planes.SelectedItem = ListaPlanes.First().PlanEclipse;
                 }
             }
-            else if (ListaPlanes !=null)
+            else if (ListaPlanes != null)
             {
-                int indexActual = ListaPlanes.IndexOf(ListaPlanes.First(p=>p.PlanEclipse==PlanEclipseSeleccionado()));
+                int indexActual = ListaPlanes.IndexOf(ListaPlanes.First(p => p.PlanEclipse == PlanEclipseSeleccionado()));
                 cb_planes.SelectedItem = ListaPlanes[indexActual + 1].PlanEclipse;
             }
             gb_Seleccion.IsEnabled = false;
@@ -306,7 +297,7 @@ namespace PruebaTreeListView
 
         private void CommandBinding_CanExecuteReiniciar(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = TabControl!=null && TabControl.Items!= null && TabControl.Items.Count > 0;
+            e.CanExecute = TabControl != null && TabControl.Items != null && TabControl.Items.Count > 0;
         }
 
         private void CommandBinding_ExecutedReiniciar(object sender, ExecutedRoutedEventArgs e)
@@ -316,6 +307,37 @@ namespace PruebaTreeListView
             tbl_PlanesSumandos.Text = "";
             gb_Seleccion.IsEnabled = true;
             cb_Tecnicas.SelectedIndex = -1;
+        }
+        private void ChequeoInicial(Ellipse elipse, bool Resultado)
+        {
+            if (Resultado)
+            {
+                elipse.Fill = new SolidColorBrush(Colors.LightGreen);
+            }
+            else
+            {
+                elipse.Fill = new SolidColorBrush(Colors.Red);
+            }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            app = VMS.TPS.Common.Model.API.Application.CreateApplication("paberbuj", "123qwe");
+            ChequeoInicial(Ell_ConexionEclipse, app != null);
+            aria = new Aria();
+            ChequeoInicial(Ell_ConexionARIA, aria != null);
+            ChequeoInicial(Ell_ConexionVaData, Directory.Exists(@"\\ariamevadb-svr\va_data$"));
+            ChequeoInicial(Ell_ConexionCDD, Directory.Exists(@"\\fisica0"));
+            var iso = MetodosAuxiliares.ChequearRefToIso();
+            ChequeoInicial(Ell_ConexionDrive, MetodosAuxiliares.ChequearRefToIso());
+            var pacientes = app.PatientSummaries.OrderByDescending(p => p.CreationDateTime);
+
+            pacientesRes = new List<string>();
+            foreach (Ecl.PatientSummary pacienteSummary in pacientes)
+            {
+                pacientesRes.Add(pacienteSummary.Id + " " + pacienteSummary.LastName + ", " + pacienteSummary.FirstName);
+            }
+            pacientes = null;
         }
     }
 }
