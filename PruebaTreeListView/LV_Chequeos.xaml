@@ -13,8 +13,8 @@
         <ListView x:Name="LVChequeos" Grid.Row="1">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Nombre" DisplayMemberBinding="{Binding Nombre}" Width="350"/>
-                    <GridViewColumn Header="Manual">
+                    <GridViewColumn DisplayMemberBinding="{Binding Nombre}" Width="350"/>
+                    <GridViewColumn>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
@@ -76,7 +76,7 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Mensaje" Width="300">
+                    <GridViewColumn Width="300">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <TextBlock>

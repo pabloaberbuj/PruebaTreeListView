@@ -171,14 +171,33 @@ namespace PruebaTreeListView
                     tb_dosisTotal.Text = "";
                     tb_dosisFraccion.Text = "";
                     tb_dosisDia.Text = "";
+                    if (ListaPlanes == null)
+                    {
+                        tbl_PlanesSumandos.Text = "";
+                    }
 
                 }
                 if (PlanEclipseSeleccionado() is Ecl.PlanSum)
                 {
                     gb_Prescripcion.IsEnabled = false;
                     gb_Caracteristicas.IsEnabled = false;
+                    tbl_PlanesSumandos.Text = PlanesSumando((Ecl.PlanSum)PlanEclipseSeleccionado());
                 }
             }
+        }
+        private string PlanesSumando(Ecl.PlanSum planSuma)
+        {
+            string suma ="(";
+            foreach (Ecl.PlanSetup plan in planSuma.PlanSetups)
+            {
+                suma += plan.Id;
+                if (plan!=planSuma.PlanSetups.Last())
+                {
+                    suma += "+";
+                }
+            }
+            suma += ")";
+            return suma;
         }
         private Plan PlanSeleccionado()
         {
@@ -294,6 +313,9 @@ namespace PruebaTreeListView
         {
             TabControl.Items.Clear();
             cb_pacientes.SelectedItem = null;
+            tbl_PlanesSumandos.Text = "";
+            gb_Seleccion.IsEnabled = true;
+            cb_Tecnicas.SelectedIndex = -1;
         }
     }
 }
