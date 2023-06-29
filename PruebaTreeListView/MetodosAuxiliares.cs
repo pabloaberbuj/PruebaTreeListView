@@ -139,7 +139,7 @@ namespace PruebaTreeListView
         }
         public static bool esRadioCirugia(VMS.TPS.Common.Model.API.PlanSetup plan)
         {
-            if (plan.Beams.First().TreatmentUnit.Id == "D-2300CD" && plan.StructureSet.Image.UserOrigin.Equals(new VVector(0, 0, 0))) //es en el equipo4
+            if (plan.Beams.First().TreatmentUnit.Id == "D-2300CD" && plan.StructureSet!=null && plan.StructureSet.Image.UserOrigin.Equals(new VVector(0, 0, 0))) //es en el equipo4
             {
                 if (plan.Beams.First().EnergyModeDisplayName == "6X-SRS") //haz SRS
                 {

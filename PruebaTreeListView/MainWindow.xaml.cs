@@ -232,30 +232,29 @@ namespace PruebaTreeListView
 
         private void CommandBinding_ExecutedAnalizar(object sender, ExecutedRoutedEventArgs e)
         {
-            if (!PlanSeleccionado().EsPlanSuma)
-            {
-                //if (TabControl!=null && TabControl.Items!=null)
-                TabItem item1 = new TabItem();
-                item1.Header = PlanEclipseSeleccionado().Id;
-                TabControl.Items.Add(item1);
-                /*Chequeos = PlanSeleccionado().Chequear();
-                LV_Chequeos lV_Chequeos = new LV_Chequeos(Chequeos);*/
-                LV_Chequeos lV_Chequeos = new LV_Chequeos(PlanSeleccionado());
-                item1.Content = lV_Chequeos;
-                item1.IsSelected = true;
-            }
-            else
-            {
-                TabItem item1 = new TabItem();
-                item1.Header = PlanEclipseSeleccionado().Id;
-                TabControl.Items.Add(item1);
-                Chequeos = PlanSeleccionado().Chequear();
-                LV_Chequeos lV_Chequeos = new LV_Chequeos(Chequeos);
-                item1.Content = lV_Chequeos;
-                item1.IsSelected = true;
-                SeAnalizoPlanSuma = true;
-            }
-
+                if (TabControl!=null && TabControl.Items!=null)
+                {
+                    foreach (TabItem item in TabControl.Items)
+                    {
+                        if ((string)item.Header == PlanEclipseSeleccionado().Id)
+                        {
+                            item.Content = null;
+                            LV_Chequeos lV_ChequeosIt = new LV_Chequeos(PlanSeleccionado());
+                            item.Content = lV_ChequeosIt;
+                            item.IsSelected = true;
+                            return;
+                        }
+                    }
+                    TabItem item1 = new TabItem();
+                    item1.Header = PlanEclipseSeleccionado().Id;
+                    TabControl.Items.Add(item1);
+                    /*Chequeos = PlanSeleccionado().Chequear();
+                    LV_Chequeos lV_Chequeos = new LV_Chequeos(Chequeos);*/
+                    LV_Chequeos lV_Chequeos = new LV_Chequeos(PlanSeleccionado());
+                    item1.Content = lV_Chequeos;
+                    item1.IsSelected = true;
+                }
+                SeAnalizoPlanSuma = PlanSeleccionado().EsPlanSuma;
         }
 
         private void CommandBinding_CanExecuteSiguientePlan(object sender, CanExecuteRoutedEventArgs e)
