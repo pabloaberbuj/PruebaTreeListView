@@ -609,7 +609,16 @@ namespace PruebaTreeListView
         public static bool? TargetEsTipoPTV(Plan plan)
         {
             Structure target = plan.PlanEclipse.StructureSet.Structures.First(s => s.Id == plan.PlanEclipse.TargetVolumeID);
-            return target.DicomType == "PTV" || target.Id.ToLower().Contains("ptv");
+            return target.DicomType == "PTV";// || target.Id.ToLower().Contains("ptv");
         }
+        public static bool? CTTieneMasDe400Cortes(Plan plan)
+        {
+            return plan.PlanEclipse.StructureSet.Image.Series.Images.Count() - 1 < 400;
+        }
+        public static bool? PlanEnEquipo4(Plan plan)
+        {
+            return plan.PlanEclipse.Beams.First().TreatmentUnit.Id == "D-2300CD";
+        }
+
     }
 }

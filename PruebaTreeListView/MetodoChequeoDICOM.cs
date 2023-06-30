@@ -13,8 +13,8 @@ namespace PruebaTreeListView
         public static List<EquipoDicomRT> equiposDicomRT()
         {
             List<EquipoDicomRT> equiposDicomRT = new List<EquipoDicomRT>();
-            equiposDicomRT.Add(new EquipoDicomRT("Equipo 2", @"\\10.0.0.57\equipo2\DICOM RT", "Equipo 2 6EX"));
-            //equiposDicomRT.Add(new EquipoDicomRT("Equipo 3", @"\\10.0.0.57\equipo3\DICOM RT", "2100CMLC"));
+            equiposDicomRT.Add(new EquipoDicomRT("Equipo 2", @"\\fisica0\equipo2\DICOM RT", "Equipo 2 6EX"));
+            //equiposDicomRT.Add(new EquipoDicomRT("Equipo 3", @"\\fisica0.0.0.57\equipo3\DICOM RT", "2100CMLC"));
             return equiposDicomRT;
         }
         public static bool EquipoEsDicomRT(Plan plan)
@@ -116,6 +116,25 @@ namespace PruebaTreeListView
         {
             string EquipoId = plan.PlanEclipse.Beams.First().TreatmentUnit.Id;
             return Directory.Exists(CarpetaPacienteInicios(plan, EquipoId)) || Directory.Exists(CarpetaPacienteEnTratamiento(plan, EquipoId));
+        }
+
+        public static bool? NoRealizoAplicacionesDicomRT(Plan plan)
+        {
+            string EquipoId = plan.PlanEclipse.Beams.First().TreatmentUnit.Id;
+            if (ExisteCarpetaEnEquipo(plan)==false)
+            {
+                return null;
+            }
+            else if (Directory.Exists(CarpetaPacienteEnTratamiento(plan, EquipoId)))
+            {
+                var carpetabackup = Directory.GetDirectories(CarpetaPacienteEnTratamiento(plan, EquipoId)).First(d => d.ToLower().Contains("bac"));
+                if (Directory.GetFiles(carpetabackup).Count()>0)
+                {
+                    return Directory.GetFiles(carpetabackup).Where(f => f.ToLower().Contains("record")).Count() == 0;
+                }
+            }
+            return true;
+            
         }
 
         public static bool? NoExisteCarpetaEnOtroEquipo(Plan plan)

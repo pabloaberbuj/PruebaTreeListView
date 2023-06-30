@@ -19,10 +19,11 @@ namespace PruebaTreeListView
         public double DosisDia { get; set; }
         public double DosisFraccion { get; set; }
         public bool EsCamillaEspecial { get; set; }
+        public bool EsPediatrico { get; set; }
         public bool EsPlanSuma { get; set; }
         public List<Plan> PlanesSumandos { get; set; }
 
-        public Plan(Ecl.PlanSetup _planEclipse, AriaQ.PlanSetup _planAria, Tecnica _tecnica, double _dosisTotal, double _dosisDia, double _dosisFraccion, bool _esCamillaEspecial)
+        public Plan(Ecl.PlanSetup _planEclipse, AriaQ.PlanSetup _planAria, Tecnica _tecnica, double _dosisTotal, double _dosisDia, double _dosisFraccion, bool _esCamillaEspecial, bool _esPediatrico)
         {
             PlanEclipse = _planEclipse;
             PlanAria = _planAria;
@@ -31,10 +32,11 @@ namespace PruebaTreeListView
             DosisDia = _dosisDia;
             DosisFraccion = _dosisFraccion;
             EsCamillaEspecial = _esCamillaEspecial;
+            EsPediatrico = _esPediatrico;
             EsPlanSuma = false;
         }
 
-        public Plan(Ecl.PlanSetup _planEclipse, Aria aria, Tecnica _tecnica, double _dosisTotal, double _dosisDia, double _dosisFraccion, bool _esCamillaEspecial)
+        public Plan(Ecl.PlanSetup _planEclipse, Aria aria, Tecnica _tecnica, double _dosisTotal, double _dosisDia, double _dosisFraccion, bool _esCamillaEspecial, bool _esPediatrico)
         {
             PlanEclipse = _planEclipse;
             PlanAria = MetodosAuxiliares.AriaPlanDeEclipse(aria, _planEclipse);
@@ -43,6 +45,7 @@ namespace PruebaTreeListView
             DosisDia = _dosisDia;
             DosisFraccion = _dosisFraccion;
             EsCamillaEspecial = _esCamillaEspecial;
+            EsPediatrico = _esPediatrico;
             EsPlanSuma = false;
         }
 
@@ -52,7 +55,7 @@ namespace PruebaTreeListView
             PlanesSumandos = new List<Plan>();
             foreach (VMS.TPS.Common.Model.API.PlanSetup planSetup in planSumaEclipse.PlanSetups)
             {
-                PlanesSumandos.Add(new Plan(planSetup, MetodosAuxiliares.AriaPlanDeEclipse(aria, planSetup), Tecnica.Indefinida, double.NaN, double.NaN, double.NaN, false));
+                PlanesSumandos.Add(new Plan(planSetup, MetodosAuxiliares.AriaPlanDeEclipse(aria, planSetup), Tecnica.Indefinida, double.NaN, double.NaN, double.NaN, false, false));
             }
         }
 

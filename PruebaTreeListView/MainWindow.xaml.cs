@@ -214,7 +214,7 @@ namespace PruebaTreeListView
         {
             if (PlanEclipseSeleccionado() != null && PlanEclipseSeleccionado() is Ecl.PlanSetup)
             {
-                return new Plan((Ecl.PlanSetup)PlanEclipseSeleccionado(), aria, (Tecnica)cb_Tecnicas.SelectedItem, Convert.ToDouble(tb_dosisTotal.Text), Convert.ToDouble(tb_dosisDia.Text), Convert.ToDouble(tb_dosisFraccion.Text), chb_esCamillaEspecial.IsChecked == true);
+                return new Plan((Ecl.PlanSetup)PlanEclipseSeleccionado(), aria, (Tecnica)cb_Tecnicas.SelectedItem, Convert.ToDouble(tb_dosisTotal.Text), Convert.ToDouble(tb_dosisDia.Text), Convert.ToDouble(tb_dosisFraccion.Text), chb_esCamillaEspecial.IsChecked == true,chb_esPediatrico.IsChecked==true);
             }
             else if (PlanEclipseSeleccionado() != null && PlanEclipseSeleccionado() is Ecl.PlanSum)
             {
