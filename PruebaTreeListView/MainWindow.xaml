@@ -9,8 +9,8 @@
         Title="Chequeos"
         WindowStartupLocation="CenterScreen"
         WindowState="Normal"
-        Closing="Window_Closing" Loaded="Window_Loaded">
-    
+        Closing="Window_Closing" Loaded="Window_Loaded" ContentRendered="Window_ContentRendered">
+
     <Window.Resources>
         <local:Contador x:Key="Contador"/>
         <ItemsPanelTemplate x:Key="VSP">
@@ -42,11 +42,11 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="400"/>
-                <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="250"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="2.5*"/>
+                <ColumnDefinition Width="2.5*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <GroupBox Name="gb_Seleccion" Header="Seleccion" Height="130" Margin="10,10,10,10">
                 <GroupBox.Style>
@@ -200,39 +200,47 @@
                 <Button Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_SiguientePlan" Content="Siguiente plan" Margin="5,0,5,5" Width="100" Height="25" Command="local:Commands.SiguientePlan" />
                 <Button Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_Reinicoar" Content="Reiniciar" Margin="5,0,5,5" Width="100" Height="25" Command="local:Commands.Reiniciar" />
             </Grid>
-            <StackPanel Orientation="Vertical" Grid.Column="4" VerticalAlignment="Bottom">
-                <StackPanel.Resources>
-                    <Style TargetType="StackPanel">
+            <Grid Grid.Column="4">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="TextBlock">
                         <Setter Property="Margin" Value="0,3,0,0"/>
                     </Style>
-
-                </StackPanel.Resources>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Conexion con Eclipse"/>
-                    <Ellipse Name="Ell_ConexionEclipse" Height="15" Width="15"  Fill="Transparent" Margin="10,0,0,0"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Conexion con ARIA"/>
-                    <Ellipse Name="Ell_ConexionARIA" Height="15" Width="15"  Fill="Transparent" Margin="10,0,0,0"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Conexion con va$data"/>
-                    <Ellipse Name="Ell_ConexionVaData" Height="15" Width="15"  Fill="Transparent" Margin="10,0,0,0"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Conexion con CDD"/>
-                    <Ellipse Name="Ell_ConexionCDD" Height="15" Width="15"  Fill="Transparent" Margin="10,0,0,0"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Conexion con RefToIso"/>
-                    <Ellipse Name="Ell_ConexionDrive" Height="15"  Fill="Transparent"/>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Conexion con Exactrac"/>
-                    <Ellipse Name="Ell_ConexionExactrac" Height="15"  Fill="Transparent"/>
-                </StackPanel>
-            </StackPanel>
-
+                    <Style TargetType="Ellipse">
+                        <Setter Property="Width" Value="15"/>
+                        <Setter Property="Height" Value="15"/>
+                        <Setter Property="Fill" Value="Transparent"/>
+                        <Setter Property="Stroke" Value="Black"/>
+                        <Setter Property="Margin" Value="10,0,0,0"/>
+                        <Setter Property="Grid.Column" Value="1"/>
+                    </Style>
+                </Grid.Resources>
+                <TextBlock Text="Panel de conexiones" FontWeight="Bold" Grid.ColumnSpan="2" TextAlignment="Center"/>
+                <TextBlock Grid.Row="1" Text="Conexion con Eclipse"/>
+                <Ellipse Grid.Row="1" Name="Ell_ConexionEclipse"/>
+                <TextBlock Grid.Row="2" Text="Conexion con ARIA"/>
+                <Ellipse Grid.Row="2" Grid.Column="1" Name="Ell_ConexionARIA"/>
+                <TextBlock Grid.Row="3"  Text="Conexion con va$data"/>
+                <Ellipse Grid.Row="3" Name="Ell_ConexionVaData" Height="15" Width="15"  Fill="Transparent" Margin="10,0,0,0"/>
+                <TextBlock Grid.Row="4" Text="Conexion con CDD"/>
+                <Ellipse Grid.Row="4" Name="Ell_ConexionCDD" Height="15" Width="15"  Fill="Transparent" Margin="10,0,0,0"/>
+                <TextBlock Grid.Row="5" Text="Conexion con RefToIso"/>
+                <Ellipse Grid.Row="5" Name="Ell_ConexionDrive" Height="15"  Fill="Transparent"/>
+                <TextBlock Grid.Row="6" Text="Conexion con Exactrac"/>
+                <Ellipse Grid.Row="6" Name="Ell_ConexionExactrac" Height="15"  Fill="Transparent"/>
+            </Grid>
         </Grid>
         <TabControl x:Name="TabControl" Grid.Row="1">
         </TabControl>

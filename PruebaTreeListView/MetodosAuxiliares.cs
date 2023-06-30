@@ -379,7 +379,16 @@ namespace PruebaTreeListView
         public static bool ChequearRefToIso()
         {
             Ping p1 = new Ping();
-            PingReply PR = p1.Send("drive.google.com");
+            PingReply PR;
+            try
+            {
+                PR = p1.Send("drive.google.com");
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+             
             // check when the ping is not success
             if (!PR.Status.ToString().Equals("Success"))
             {

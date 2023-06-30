@@ -29,8 +29,8 @@ namespace PruebaTreeListView
     /// </summary>
     public partial class MainWindow : Window
     {
-        CollectionView view;
-        List<Chequeo> Chequeos;
+        //CollectionView view;
+        //List<Chequeo> Chequeos;
         List<string> pacientesRes;
         Ecl.Patient pacienteSeleccionado;
         Ecl.Course cursoSeleccionado;
@@ -41,9 +41,30 @@ namespace PruebaTreeListView
         List<Plan> ListaPlanes = null;
         public MainWindow()
         {
+            try
+            {
+                app = VMS.TPS.Common.Model.API.Application.CreateApplication("paberbuj", "123qwe");
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("No se puede conectar con Eclipse");
+            }
+            
+            aria = new Aria();
+            pacientesRes = new List<string>();
+            if (app!=null)
+            {
+                var pacientes = app.PatientSummaries.OrderByDescending(p => p.CreationDateTime);
+
+                foreach (Ecl.PatientSummary pacienteSummary in pacientes)
+                {
+                    pacientesRes.Add(pacienteSummary.Id + " " + pacienteSummary.LastName + ", " + pacienteSummary.FirstName);
+                }
+                pacientes = null;
+            }
             InitializeComponent();
             cb_Tecnicas.ItemsSource = Enum.GetValues(typeof(Tecnica));
-            //view.GroupDescriptions.Add(groupDescription2);
+            ConexionInicial();
         }
 
 
@@ -53,7 +74,7 @@ namespace PruebaTreeListView
         }
 
 
-        private void RB_OK_Checked(object sender, RoutedEventArgs e)
+        /*private void RB_OK_Checked(object sender, RoutedEventArgs e)
         {
             ((Chequeo)((RadioButton)sender).DataContext).ResultadoTest = true;
             view.Refresh();
@@ -63,7 +84,7 @@ namespace PruebaTreeListView
         {
             ((Chequeo)((RadioButton)sender).DataContext).ResultadoTest = false;
             view.Refresh();
-        }
+        }*/
 
         private void cb_pacientes_KeyUp(object sender, KeyEventArgs e)
         {
@@ -322,22 +343,30 @@ namespace PruebaTreeListView
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            app = VMS.TPS.Common.Model.API.Application.CreateApplication("paberbuj", "123qwe");
-            ChequeoInicial(Ell_ConexionEclipse, app != null);
-            aria = new Aria();
-            ChequeoInicial(Ell_ConexionARIA, aria != null);
-            ChequeoInicial(Ell_ConexionVaData, Directory.Exists(@"\\ariamevadb-svr\va_data$"));
-            ChequeoInicial(Ell_ConexionCDD, Directory.Exists(@"\\fisica0"));
-            var iso = MetodosAuxiliares.ChequearRefToIso();
-            ChequeoInicial(Ell_ConexionDrive, MetodosAuxiliares.ChequearRefToIso());
-            var pacientes = app.PatientSummaries.OrderByDescending(p => p.CreationDateTime);
+            
+        }
 
-            pacientesRes = new List<string>();
-            foreach (Ecl.PatientSummary pacienteSummary in pacientes)
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ConexionInicial()
+        {
+            ChequeoInicial(Ell_ConexionEclipse, app != null);
+            try
             {
-                pacientesRes.Add(pacienteSummary.Id + " " + pacienteSummary.LastName + ", " + pacienteSummary.FirstName);
+                var mach = aria.Machines.ToList();
+                ChequeoInicial(Ell_ConexionARIA, true);
             }
-            pacientes = null;
+            catch (Exception)
+            {
+                ChequeoInicial(Ell_ConexionARIA, false);
+            }
+            ChequeoInicial(Ell_ConexionVaData, Directory.Exists(@"\\ariamevadb-svr\va_data$"));
+            ChequeoInicial(Ell_ConexionCDD, Directory.Exists(@"\\fisica0\centro_de_datos2018\000_Centro de Datos 2021"));
+            ChequeoInicial(Ell_ConexionExactrac, Directory.Exists(@"\\ET6XWIN10\fileRef"));
+            ChequeoInicial(Ell_ConexionDrive, MetodosAuxiliares.ChequearRefToIso());
         }
     }
 }
