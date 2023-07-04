@@ -7,6 +7,9 @@ using AriaQ;
 using Ecl = VMS.TPS.Common.Model.API;
 using VMS.TPS.Common.Model.Types;
 using VMS.TPS.Common.Model.API;
+using EvilDICOM.Core.Modules;
+using System.Numerics;
+using System.Windows;
 
 namespace PruebaTreeListView
 {
@@ -22,8 +25,9 @@ namespace PruebaTreeListView
         public bool EsPediatrico { get; set; }
         public bool EsPlanSuma { get; set; }
         public List<Plan> PlanesSumandos { get; set; }
+        public bool EsParteDeUnPlanSuma { get; set; }
 
-        public Plan(Ecl.PlanSetup _planEclipse, AriaQ.PlanSetup _planAria, Tecnica _tecnica, double _dosisTotal, double _dosisDia, double _dosisFraccion, bool _esCamillaEspecial, bool _esPediatrico)
+        public Plan(Ecl.PlanSetup _planEclipse, AriaQ.PlanSetup _planAria, Tecnica _tecnica, double _dosisTotal, double _dosisDia, double _dosisFraccion, bool _esCamillaEspecial, bool _esPediatrico, bool _esParteDeplanSuma)
         {
             PlanEclipse = _planEclipse;
             PlanAria = _planAria;
@@ -34,9 +38,23 @@ namespace PruebaTreeListView
             EsCamillaEspecial = _esCamillaEspecial;
             EsPediatrico = _esPediatrico;
             EsPlanSuma = false;
+            EsParteDeUnPlanSuma = _esParteDeplanSuma;
+        }
+        public Plan(Plan planOriginal, Tecnica _tecnica, double _dosisTotal, double _dosisDia, double _dosisFraccion, bool _esCamillaEspecial, bool _esPediatrico)
+        {
+            PlanEclipse = planOriginal.PlanEclipse;
+            PlanAria = planOriginal.PlanAria;
+            Tecnica = _tecnica;
+            DosisTotal = _dosisTotal;
+            DosisDia = _dosisDia;
+            DosisFraccion = _dosisFraccion;
+            EsCamillaEspecial = _esCamillaEspecial;
+            EsPediatrico = _esPediatrico;
+            EsPlanSuma = false;
+            EsParteDeUnPlanSuma = planOriginal.EsParteDeUnPlanSuma;
         }
 
-        public Plan(Ecl.PlanSetup _planEclipse, Aria aria, Tecnica _tecnica, double _dosisTotal, double _dosisDia, double _dosisFraccion, bool _esCamillaEspecial, bool _esPediatrico)
+        public Plan(Ecl.PlanSetup _planEclipse, Aria aria, Tecnica _tecnica, double _dosisTotal, double _dosisDia, double _dosisFraccion, bool _esCamillaEspecial, bool _esPediatrico, bool _esParteDeplanSuma)
         {
             PlanEclipse = _planEclipse;
             PlanAria = MetodosAuxiliares.AriaPlanDeEclipse(aria, _planEclipse);
@@ -47,6 +65,7 @@ namespace PruebaTreeListView
             EsCamillaEspecial = _esCamillaEspecial;
             EsPediatrico = _esPediatrico;
             EsPlanSuma = false;
+            EsParteDeUnPlanSuma = _esParteDeplanSuma;
         }
 
         public Plan(VMS.TPS.Common.Model.API.PlanSum planSumaEclipse, Aria aria)
@@ -55,7 +74,7 @@ namespace PruebaTreeListView
             PlanesSumandos = new List<Plan>();
             foreach (VMS.TPS.Common.Model.API.PlanSetup planSetup in planSumaEclipse.PlanSetups)
             {
-                PlanesSumandos.Add(new Plan(planSetup, MetodosAuxiliares.AriaPlanDeEclipse(aria, planSetup), Tecnica.Indefinida, double.NaN, double.NaN, double.NaN, false, false));
+                PlanesSumandos.Add(new Plan(planSetup, MetodosAuxiliares.AriaPlanDeEclipse(aria, planSetup), Tecnica.Indefinida, double.NaN, double.NaN, double.NaN, false, false,true));
             }
         }
 
@@ -71,6 +90,28 @@ namespace PruebaTreeListView
         public string NombreMasID()
         {
             return PlanEclipse.Course.Patient.LastName.ToUpper() + ", " + PlanEclipse.Course.Patient.FirstName.ToUpper() + " " + PlanEclipse.Course.Patient.Id;
+        }
+        public string NombreMasIDCorregida()
+        {
+            string aux = PlanEclipse.Course.Patient.LastName.ToUpper() + ", " + PlanEclipse.Course.Patient.FirstName.ToUpper() + " " + IDSitramed();
+            if (EsParteDeUnPlanSuma)
+            {
+                aux += @"\" + this.PlanEclipse.Id;
+            }
+            return aux;
+        }
+
+        public string IDSitramed()
+        {
+            string reingresoCurso = PlanEclipse.Course.Id[1].ToString();
+            string reingresoID = PlanEclipse.Course.Patient.Id.Last().ToString();
+            string IdCorregida = PlanEclipse.Course.Patient.Id;
+            if (reingresoCurso != reingresoID)
+            {
+
+                IdCorregida = PlanEclipse.Course.Patient.Id.Remove(PlanEclipse.Course.Patient.Id.Length - 1, 1) + reingresoCurso;
+            }
+            return IdCorregida;
         }
         public string NombreMasIDDRR()
         {

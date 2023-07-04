@@ -50,6 +50,10 @@ namespace PruebaTreeListView
             foreach (Chequeo chequeo in chequeos)
             {
                 chequeo.AplicarMetodo(planseleccionado);
+                /*if (chequeo.ResultadoTest==null && chequeo.EsAutomatico)
+                {
+                    chequeos.Remove(chequeo);
+                }*/
                 //obsCol.Add(chequeo);
             }
         }

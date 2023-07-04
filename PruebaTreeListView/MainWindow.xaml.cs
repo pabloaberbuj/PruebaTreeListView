@@ -212,9 +212,14 @@ namespace PruebaTreeListView
         }
         private Plan PlanSeleccionado()
         {
+            if (PlanEclipseSeleccionado() != null && PlanEclipseSeleccionado() is Ecl.PlanSetup && ListaPlanes!=null)
+            {
+                Plan planOriginal = ListaPlanes.First(p => p.PlanEclipse.Id == PlanEclipseSeleccionado().Id);
+                return new Plan(planOriginal, (Tecnica)cb_Tecnicas.SelectedItem, Convert.ToDouble(tb_dosisTotal.Text), Convert.ToDouble(tb_dosisDia.Text), Convert.ToDouble(tb_dosisFraccion.Text), chb_esCamillaEspecial.IsChecked == true, chb_esPediatrico.IsChecked == true);
+            }
             if (PlanEclipseSeleccionado() != null && PlanEclipseSeleccionado() is Ecl.PlanSetup)
             {
-                return new Plan((Ecl.PlanSetup)PlanEclipseSeleccionado(), aria, (Tecnica)cb_Tecnicas.SelectedItem, Convert.ToDouble(tb_dosisTotal.Text), Convert.ToDouble(tb_dosisDia.Text), Convert.ToDouble(tb_dosisFraccion.Text), chb_esCamillaEspecial.IsChecked == true,chb_esPediatrico.IsChecked==true);
+                return new Plan((Ecl.PlanSetup)PlanEclipseSeleccionado(), aria, (Tecnica)cb_Tecnicas.SelectedItem, Convert.ToDouble(tb_dosisTotal.Text), Convert.ToDouble(tb_dosisDia.Text), Convert.ToDouble(tb_dosisFraccion.Text), chb_esCamillaEspecial.IsChecked == true,chb_esPediatrico.IsChecked==true,false);
             }
             else if (PlanEclipseSeleccionado() != null && PlanEclipseSeleccionado() is Ecl.PlanSum)
             {
@@ -328,6 +333,7 @@ namespace PruebaTreeListView
             tbl_PlanesSumandos.Text = "";
             gb_Seleccion.IsEnabled = true;
             cb_Tecnicas.SelectedIndex = -1;
+            ListaPlanes = null;
         }
         private void ChequeoInicial(Ellipse elipse, bool Resultado)
         {

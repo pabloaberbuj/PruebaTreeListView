@@ -30,13 +30,13 @@ namespace PruebaTreeListView
             {
                 if (plan.Tecnica == Tecnica.TBI)
                 {
-                    return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\1 - Inicios\1 - TBI\" + plan.NombreMasID();
+                    return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\1 - Inicios\1 - TBI\" + plan.NombreMasIDCorregida();
                 }
                 else
                 {
                     var IdEclipse = plan.PlanEclipse.Beams.First().TreatmentUnit.Id;
                     var equipo = equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id);
-                    return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\1 - Inicios\" + plan.NombreMasID();
+                    return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\1 - Inicios\" + plan.NombreMasIDCorregida();
                 }
             }
             else
@@ -51,11 +51,11 @@ namespace PruebaTreeListView
             {
                 if (plan.Tecnica == Tecnica.TBI)
                 {
-                    return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\2 - En tratamiento\1 - TBI\" + plan.NombreMasID();
+                    return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\2 - En tratamiento\1 - TBI\" + plan.NombreMasIDCorregida();
                 }
                 else
                 {
-                    return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\2 - En tratamiento\" + plan.NombreMasID();
+                    return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\2 - En tratamiento\" + plan.NombreMasIDCorregida();
                 }
             }
             else
@@ -66,7 +66,6 @@ namespace PruebaTreeListView
 
         public static string CarpetaPaciente(Plan plan)
         {
-            
             string carpetaEnTto = CarpetaPacienteEnTratamiento(plan, plan.PlanEclipse.Beams.First().TreatmentUnit.Id);
             if (Directory.Exists(carpetaEnTto))
             {
@@ -108,8 +107,13 @@ namespace PruebaTreeListView
 
         public static Dcm ObtenerDCM(Plan plan)
         {
-            string archivoDCM = Directory.GetFiles(CarpetaPaciente(plan)).First(f => Path.GetExtension(f) == ".dcm");
-            return new Dcm(archivoDCM);
+            if (ExisteCarpetaEnEquipo(plan) == true)
+            {
+                string archivoDCM = Directory.GetFiles(CarpetaPaciente(plan)).First(f => Path.GetExtension(f) == ".dcm");
+                return new Dcm(archivoDCM);
+            }
+            return null;
+
         }
 
         public static bool? ExisteCarpetaEnEquipo(Plan plan)
@@ -121,20 +125,20 @@ namespace PruebaTreeListView
         public static bool? NoRealizoAplicacionesDicomRT(Plan plan)
         {
             string EquipoId = plan.PlanEclipse.Beams.First().TreatmentUnit.Id;
-            if (ExisteCarpetaEnEquipo(plan)==false)
+            if (ExisteCarpetaEnEquipo(plan) == false)
             {
                 return null;
             }
             else if (Directory.Exists(CarpetaPacienteEnTratamiento(plan, EquipoId)))
             {
                 var carpetabackup = Directory.GetDirectories(CarpetaPacienteEnTratamiento(plan, EquipoId)).First(d => d.ToLower().Contains("bac"));
-                if (Directory.GetFiles(carpetabackup).Count()>0)
+                if (Directory.GetFiles(carpetabackup).Count() > 0)
                 {
                     return Directory.GetFiles(carpetabackup).Where(f => f.ToLower().Contains("record")).Count() == 0;
                 }
             }
             return true;
-            
+
         }
 
         public static bool? NoExisteCarpetaEnOtroEquipo(Plan plan)
@@ -157,7 +161,8 @@ namespace PruebaTreeListView
             }
             foreach (var subPlan in plan.PlanesSumandos)
             {
-                if (!Directory.GetDirectories(CarpetaPaciente(subPlan)).Any(d => new DirectoryInfo(d).Name == subPlan.PlanEclipse.Id))
+                //if (!Directory.GetDirectories(CarpetaPaciente(subPlan)).Any(d => new DirectoryInfo(d).Name == subPlan.PlanEclipse.Id))
+                if (!Directory.Exists(CarpetaPaciente(subPlan)))
                 {
                     return false;
                 }
@@ -166,9 +171,17 @@ namespace PruebaTreeListView
         }
         public static bool? HayUnicoDicomEnCarpetaPlan(Plan plan)
         {
-            var archivos = Directory.GetFiles(CarpetaPaciente(plan));
-            var extensiones = Path.GetExtension(archivos.First());
-            return Directory.GetFiles(CarpetaPaciente(plan)).Where(f => Path.GetExtension(f) == ".dcm").Count() == 1;
+            if (ExisteCarpetaEnEquipo(plan) == true)
+            {
+                var archivos = Directory.GetFiles(CarpetaPaciente(plan));
+                var extensiones = Path.GetExtension(archivos.First());
+                return Directory.GetFiles(CarpetaPaciente(plan)).Where(f => Path.GetExtension(f) == ".dcm").Count() == 1;
+            }
+            else
+            {
+                return null;
+            }
+
         }
 
         public static bool? ArchivoCoincideConPlan(Plan plan)
