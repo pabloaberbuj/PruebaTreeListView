@@ -70,7 +70,7 @@ namespace PruebaTreeListView
         public bool AplicaASBRT_HazSRS { get; set; }
         public bool AplicaASBRT_VMAT { get; set; }
         public bool AplicaATBI { get; set; }
-        public bool ExclusivoPlanSuma { get; set; }
+        public bool? ExclusivoPlanSuma { get; set; }
         public bool? ExclusivoCamEspecial { get; set; }
         public bool? ExclusivoEquiposAria { get; set; }
         public bool? ExclusivoEquiposDicomRT { get; set; }
@@ -83,7 +83,7 @@ namespace PruebaTreeListView
         public Chequeo(string _Nombre, Categoria _Categoria, NivelDeAccion _NivelDeAccion, MyStaticMethodInvoker _TargetMethod, bool _EsAutomatico,
             bool _AplicaAStatic3DC, bool _AplicaAArcos3DC, bool _AplicaAElectrones, bool _AplicaAIMRT, bool _AplicaAVMAT, bool _AplicaAIGRT,
             bool _AplicaARC_HazSRS, bool _AplicaARC_VMAT, bool _AplicaASBRTRC_HazSRS, bool _AplicaASBRT_VMAT, bool _AplicaATBI,
-            bool _ExclusivoPlanSuma, bool? _ExclusivoCamEspecial, bool? _ExclusivoEquiposAria, bool? _ExclusivoEquiposDicomRT, bool? _ExclusivoPediatrico,
+            bool? _ExclusivoPlanSuma, bool? _ExclusivoCamEspecial, bool? _ExclusivoEquiposAria, bool? _ExclusivoEquiposDicomRT, bool? _ExclusivoPediatrico,
             string _MensajeSiFalso="")
         {
             Nombre = _Nombre;
@@ -197,7 +197,7 @@ namespace PruebaTreeListView
             lista.Add(new Chequeo("Fracciones Eclipse coincide con fracciones scheduladas", Categoria.Prescripcion, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoAria.FxSceduleCoincideConFxEclipse), true, true, true, true, true, true, true, true, true, true, true, true, false, null, null, null, null));
             lista.Add(new Chequeo("Dosis plan coincide con prescripción sitra", Categoria.Prescripcion, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.CoincidenciaDosisConPrescripcion), true, true, true, true, true, true, true, true, true, true, true, true, false, null, null, null, null));
             lista.Add(new Chequeo("Restriccion reference point coincide con prescripción sitra", Categoria.Prescripcion, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoAria.CoincidenciaDosisConReferencePoint), true, true, true, true, true, true, true, true, true, true, true, true, false, null, null, null, null));
-            lista.Add(new Chequeo("Imagenes agendadas según equipo", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoAria.ImagenesAgendadasSegunEquipoYTecnica), true, true, true, true, true, true, true, false, false, true, true, false, false, null, true, false, null));
+            lista.Add(new Chequeo("Imagenes agendadas según equipo", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoAria.ImagenesAgendadasSegunEquipo), true, true, true, true, true, true, true, false, false, true, true, false, false, null, true, false, null));
             lista.Add(new Chequeo("Existe carpeta del paciente en DICOM RT del equipo correspondiente", Categoria.Dicom, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoDICOM.ExisteCarpetaEnEquipo), true, true, true, true, true, false, false, false, false, false, false, true, false, null, false, true, null));
             lista.Add(new Chequeo("No existe carpeta del paciente en DICOM RT de otros equipos", Categoria.Dicom, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoDICOM.NoExisteCarpetaEnOtroEquipo), true, true, true, true, true, false, false, false, false, false, false, true, false, null, false, true, null));
             lista.Add(new Chequeo("Existe la carpeta correspondiente a todos los planes del plan Suma", Categoria.Dicom, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoDICOM.ExistenCarpetasDeTodosLosSubPlanes), true, false, false, false, false, false, false, false, false, false, false, false, true, null, false, null, null));
@@ -224,7 +224,7 @@ namespace PruebaTreeListView
             lista.Add(new Chequeo("No realizó aplicaciones (en ARIA)", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoAria.NoRealizoAplicacionesARIA), true, true, true, true, true, true, true, true, true, true, true, true, false, null, true, false, null));
             lista.Add(new Chequeo("No realizó aplicaciones (DicomRT)", Categoria.Dicom, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoDICOM.NoRealizoAplicacionesDicomRT), true, true, true, true, true, false, false, false, false, false, false, false, false, null, false, true, null));
             lista.Add(new Chequeo("Target es tipo PTV", Categoria.Planificacion, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.TargetEsTipoPTV), true, true, true, true, true, true, true, true, true, true, true, false, false, null, null, null, null));
-            lista.Add(new Chequeo("Informe hecho", Categoria.Informe, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoArchivos.TieneInforme), true, true, true, true, true, true, true, true, true, true, true, false, false, null, null, null, null));
+            lista.Add(new Chequeo("Informe hecho", Categoria.Informe, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoArchivos.TieneInforme), true, true, true, true, true, true, true, true, true, true, true, false, null, null, null, null, null));
             lista.Add(new Chequeo("Técnica correcta en informe", Categoria.Informe, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoArchivos.TecnicaEnInformeCorrecta), true, true, true, true, true, true, true, true, true, true, true, false, false, null, null, null, null));
             lista.Add(new Chequeo("DRRs en Centro de datos", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoArchivos.TieneImagenesDRRenCDD), true, true, true, true, true, true, false, false, false, false, false, false, false, null, null, null, null));
             lista.Add(new Chequeo("Cantidad de DRRs Correcta", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoArchivos.NumeroDeImagenesCorrectas), true, true, true, true, true, true, false, false, false, false, false, false, false, null, null, null, null));
@@ -244,7 +244,7 @@ namespace PruebaTreeListView
             List<Chequeo> ListaCompletaChequeos = ListaChequeos();
             if (plan.EsPlanSuma)
             {
-                return ListaCompletaChequeos.Where(c => c.ExclusivoPlanSuma).ToList();
+                return ListaCompletaChequeos.Where(c => c.ExclusivoPlanSuma!=false).ToList();
             }
             List<Chequeo> ListaPlan = ListaCompletaChequeos.Where(c => c.AplicaTecnica(plan.Tecnica)).ToList();
             if (plan.EsCamillaEspecial)

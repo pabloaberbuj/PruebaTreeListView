@@ -198,7 +198,7 @@ namespace PruebaTreeListView
 
         public static string CarpetaDRRs(Plan plan)
         {
-            return MetodoChequeoArchivos.pathDRRs + @"\" + NombreEquipoDRRs(plan.PlanEclipse) + @"\" + plan.NombreMasIDDRR() + @"\" + plan.PlanEclipse.Id + " (" + plan.PlanEclipse.Course.Id + @")\";
+            return MetodoChequeoArchivos.pathDRRs + @"\" + NombreEquipoDRRs(plan.PlanEclipse) + @"\" + plan.nombreMasIDDRR + @"\" + plan.PlanEclipse.Id + " (" + plan.PlanEclipse.Course.Id + @")\";
         }
 
         public static string TablaDeTolerancia(Plan plan)
@@ -246,12 +246,12 @@ namespace PruebaTreeListView
 
         public static string ArchivoCI(Plan plan)
         {
-            string pathDirectorio = MetodoChequeoArchivos.pathPacientes + @"\" + plan.NombreMasIDDRR();
+            string pathDirectorio = MetodoChequeoArchivos.pathPacientes + @"\" + plan.nombreMasIDDRR;
             Ecl.PlanSetup planCI = PlanCI(plan);
             if (planCI != null)
             {
                 string aux = planCI.Id.Replace(':', '_').Replace('\\', '_').Replace('/', '_') + " (" + plan.PlanAria.Course.CourseId + ")";
-                return pathDirectorio + @"\" + aux + @"\" + plan.NombreMasIDDRR() + "_CI.txt";
+                return pathDirectorio + @"\" + aux + @"\" + plan.nombreMasIDDRR + "_CI.txt";
             }
             else
             {
@@ -263,12 +263,12 @@ namespace PruebaTreeListView
 
         public static string ArchivoInforme(Plan plan)
         {
-            string pathDirectorio = MetodoChequeoArchivos.pathPacientes + @"\" + plan.NombreMasIDDRR();
+            string pathDirectorio = MetodoChequeoArchivos.pathPacientes + @"\" + plan.nombreMasIDDRR;
             if (plan.EsPlanSuma) //ver si hay que cambiarlo
             {
-                return pathDirectorio + @"\" + plan.PlanEclipse.Id + " (" + plan.PlanEclipse.Course.Id + @")\" + plan.NombreMasIDDRR() + "_Informe.pdf";
+                return pathDirectorio + @"\" + plan.PlanEclipseSum.Id + " (" + plan.PlanEclipseSum.Course.Id + @")\" + plan.nombreMasIDDRR + "_Informe.pdf";
             }
-            return pathDirectorio + @"\" + plan.PlanEclipse.Id + " (" + plan.PlanEclipse.Course.Id + @")\" + plan.NombreMasIDDRR() + "_Informe.pdf";
+            return pathDirectorio + @"\" + plan.PlanEclipse.Id + " (" + plan.PlanEclipse.Course.Id + @")\" + plan.nombreMasIDDRR + "_Informe.pdf";
         }
 
         public static string ObtenerTextoInforme(Plan plan)

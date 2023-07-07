@@ -62,10 +62,14 @@ namespace PruebaTreeListView
                     RTPlanVer = curso.PlanSetups.First(p => p.RTPlans.FirstOrDefault().RTPlanSer == RTPPlanVerSer).RTPlans.First();
                 }
             }
-            if (RTPlanVer!=null && RTPlanVer.SessionRTPlans.Count > 0)
+
+            //var rad = RTPlanVer.PlanSetup.Radiations.FirstOrDefault();
+            //var sl = rad.SliceRTs;
+            if (RTPlanVer!=null)// && RTPlanVer.SessionRTPlans.Count > 0)
             {
                 return RTPlanVer.PlanSetup.Radiations.FirstOrDefault().SliceRTs.Any(s => s.AcqNote != null);
             }
+
             // var RTPlanVer = plan.PlanAria.Course.Patient.Courses.Where(c => c.PlanSetups.Where(p => p.RTPlans.FirstOrDefault().RTPlanSer == RTPPlanVerSer).FirstOrDefault()).FirstOrDefault();
 
             return false;
@@ -134,7 +138,7 @@ namespace PruebaTreeListView
                 while (i < plan.PlanAria.RTPlans.First().NoFractions)
                 {
                     fraccionesConPlaca.Add(i);
-                    i += 5;
+                    i += 1;
                 }
             }
             else if (plan.Tecnica == Tecnica.Arcos3DC || plan.Tecnica == Tecnica.Electrones || plan.Tecnica == Tecnica.Static3DC)

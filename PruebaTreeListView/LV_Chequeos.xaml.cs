@@ -47,14 +47,18 @@ namespace PruebaTreeListView
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("Categoria");
             PropertyGroupDescription groupDescription2 = new PropertyGroupDescription("ResultadoTest");
             view.GroupDescriptions.Add(groupDescription);
-            foreach (Chequeo chequeo in chequeos)
+            List<Chequeo> chequeosEliminar = new List<Chequeo>();
+            foreach (Chequeo chequeo in obsCol)
             {
                 chequeo.AplicarMetodo(planseleccionado);
-                /*if (chequeo.ResultadoTest==null && chequeo.EsAutomatico)
+                if (chequeo.ResultadoTest==null && chequeo.EsAutomatico)
                 {
-                    chequeos.Remove(chequeo);
-                }*/
-                //obsCol.Add(chequeo);
+                    chequeosEliminar.Add(chequeo);
+                }
+            }
+            foreach (Chequeo chequeoEliminar in chequeosEliminar)
+            {
+                obsCol.Remove(chequeoEliminar);
             }
         }
         private void RB_OK_Checked(object sender, RoutedEventArgs e)
