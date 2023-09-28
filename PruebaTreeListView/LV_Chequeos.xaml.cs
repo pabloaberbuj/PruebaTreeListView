@@ -60,6 +60,7 @@ namespace PruebaTreeListView
             {
                 obsCol.Remove(chequeoEliminar);
             }
+            Pdf.PdfFromListView(obsCol);
         }
         private void RB_OK_Checked(object sender, RoutedEventArgs e)
         {
