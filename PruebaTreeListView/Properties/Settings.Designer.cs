@@ -22,5 +22,17 @@ namespace PruebaTreeListView.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("\\\\ariamevadb-svr\\va_data$\\Pacientes")]
+        public string PathPacientes {
+            get {
+                return ((string)(this["PathPacientes"]));
+            }
+            set {
+                this["PathPacientes"] = value;
+            }
+        }
     }
 }

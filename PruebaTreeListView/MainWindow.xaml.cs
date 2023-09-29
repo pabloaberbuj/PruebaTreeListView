@@ -375,6 +375,15 @@ namespace PruebaTreeListView
             ChequeoInicial(Ell_ConexionExactrac, Directory.Exists(@"\\ET6XWIN10\fileRef"));
             ChequeoInicial(Ell_ConexionDrive, MetodosAuxiliares.ChequearRefToIso());
         }
+
+        private void BT_Imprimir_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (TabItem item in TabControl.Items)
+            {
+                LV_Chequeos lv_chequeo = (LV_Chequeos)(item.Content);
+                Reporte.CrearReportePlan(lv_chequeo.planseleccionado, lv_chequeo.obsCol, app.CurrentUser.Name);
+            }
+        }
     }
 }
 

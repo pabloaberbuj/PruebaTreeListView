@@ -22,8 +22,9 @@ namespace PruebaTreeListView
     public partial class LV_Chequeos : UserControl
     {
         CollectionView view;
-        Plan planseleccionado;
-        List<Chequeo> chequeos;
+        public Plan planseleccionado;
+        public List<Chequeo> chequeos;
+        public ObservableCollection<Chequeo> obsCol;
         public LV_Chequeos(List<Chequeo> _chequeos)
         {
             chequeos = _chequeos;
@@ -41,7 +42,7 @@ namespace PruebaTreeListView
             InitializeComponent();
             //LVChequeos.ItemsSource = planseleccionado.Chequear();
             List<Chequeo> chequeos = Chequeo.SeleccionarChequeos(planseleccionado);
-            ObservableCollection<Chequeo> obsCol = new ObservableCollection<Chequeo>(chequeos);
+            obsCol = new ObservableCollection<Chequeo>(chequeos);
             LVChequeos.ItemsSource = obsCol;
             view = (CollectionView)CollectionViewSource.GetDefaultView(LVChequeos.Items);
             PropertyGroupDescription groupDescription = new PropertyGroupDescription("Categoria");
@@ -60,7 +61,7 @@ namespace PruebaTreeListView
             {
                 obsCol.Remove(chequeoEliminar);
             }
-            Pdf.PdfFromListView(obsCol);
+            //Pdf.PdfFromListView(obsCol);
         }
         private void RB_OK_Checked(object sender, RoutedEventArgs e)
         {

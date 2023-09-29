@@ -77,6 +77,7 @@ namespace PruebaTreeListView
         public bool? ExclusivoPediatrico { get; set; }
         public string Descripcion { get; set; }
         public string MensajeSiFalso { get; set; }
+        public string Observacion { get; set; }
 
 
 

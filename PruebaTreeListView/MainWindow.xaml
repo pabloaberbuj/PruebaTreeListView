@@ -39,6 +39,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="150" Name="Row_SeleccionPaciente"/>
             <RowDefinition Height="4*" Name ="Analisis"/>
+            <RowDefinition Height="30" Name="Row_Imprimir"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -244,5 +245,10 @@
         </Grid>
         <TabControl x:Name="TabControl" Grid.Row="1">
         </TabControl>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBlock Text="Usuario: " FontWeight="Bold"/>
+            <TextBlock Name="TBl_usuario"/>
+            <Button x:Name="BT_Imprimir" Content="Imprimir" HorizontalAlignment="Right" Click="BT_Imprimir_Click" Width="100" Height="25"/>
+        </StackPanel>
     </Grid>
 </Window>
