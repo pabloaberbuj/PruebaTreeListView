@@ -112,6 +112,7 @@ namespace PruebaTreeListView
             ExclusivoPediatrico = _ExclusivoPediatrico;
             //Descripcion = _Descripcion;
             MensajeSiFalso = _MensajeSiFalso;
+            Observacion = "Explicar por qué da mal";
         }
 
         public override string ToString()
