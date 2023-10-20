@@ -76,6 +76,31 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
+                    <GridViewColumn Width="300" Header="Observación">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Name="TB_Observacion" Margin="5,0,0,0" Width="300">
+                                    <TextBox.Style>
+                                        <Style TargetType="TextBox">
+                                            <Setter Property="Visibility" Value="Hidden"/>
+                                            <Setter Property="BorderBrush" Value="Transparent"/>
+                                            <Setter Property="BorderThickness" Value="1"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding ResultadoTest}" Value="False">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                    <Setter Property="Text" Value="{Binding Observacion}"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding ElementName=TB_Observacion, Path=Text}" Value="">
+                                                    <Setter Property="BorderBrush" Value="red"/>
+                                                    <Setter Property="BorderThickness" Value="1.5"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBox.Style>
+                                </TextBox>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
                     <GridViewColumn Width="300">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -90,25 +115,6 @@
                                         </Style>
                                     </TextBlock.Style>
                                 </TextBlock>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Width="300">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Name="TB_Observacion" Margin="5,0,0,0" Width="200">
-                                    <TextBox.Style>
-                                        <Style TargetType="TextBox">
-                                            <Setter Property="Visibility" Value="Hidden"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding ResultadoTest}" Value="False">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                    <Setter Property="Text" Value="{Binding Observacion}"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBox.Style>
-                                </TextBox>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

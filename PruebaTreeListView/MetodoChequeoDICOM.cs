@@ -14,6 +14,7 @@ namespace PruebaTreeListView
         {
             List<EquipoDicomRT> equiposDicomRT = new List<EquipoDicomRT>();
             equiposDicomRT.Add(new EquipoDicomRT("Equipo 2", @"\\fisica0\equipo2\DICOM RT", "Equipo 2 6EX"));
+            equiposDicomRT.Add(new EquipoDicomRT("Medrano", @"\\fisica0\compartido\DEMEDRANO\Pacientes_Eclipse_Medrano", "CL21EX"));
             //equiposDicomRT.Add(new EquipoDicomRT("Equipo 3", @"\\fisica0.0.0.57\equipo3\DICOM RT", "2100CMLC"));
             return equiposDicomRT;
         }
