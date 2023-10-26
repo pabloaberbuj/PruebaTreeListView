@@ -619,6 +619,32 @@ namespace PruebaTreeListView
         {
             return plan.PlanEclipse.Beams.First().TreatmentUnit.Id == "D-2300CD";
         }
+        public static bool? TieneTecnicaTOTAL(Plan plan)
+        {
+            foreach (Beam campo in plan.PlanEclipse.Beams)
+            {
+                if (TieneTecnicaTOTAL(campo) == false)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static bool? TieneTecnicaTOTAL(Beam campo)
+        {
+            return campo.Technique.Id != "TOTAL";
+        }
+
+        public static bool? MatrizDeCalculoIncluyeBody(Plan plan)
+        {
+            if (plan.PlanEclipse.StructureSet.Structures.Any(s => s.DicomType == "EXTERNAL"))
+            {
+                var Body = plan.PlanEclipse.StructureSet.Structures.First(s => s.DicomType == "EXTERNAL");
+                return plan.PlanEclipse.GetDVHCumulativeData(Body, DoseValuePresentation.Absolute, VolumePresentation.AbsoluteCm3, 1).Coverage > 0.95;
+            }
+            return false;
+            
+        }
 
     }
 }

@@ -43,12 +43,12 @@ namespace PruebaTreeListView
         {
             try
             {
-                app = VMS.TPS.Common.Model.API.Application.CreateApplication(null, null);
                 //app = VMS.TPS.Common.Model.API.Application.CreateApplication(null, null);
+                app = VMS.TPS.Common.Model.API.Application.CreateApplication("paberbuj", "123qwe");
             }
             catch (Exception)
             {
-                MessageBox.Show("No se puede conectar con Eclipse");
+                //MessageBox.Show("No se puede conectar con Eclipse");
             }
             
             aria = new Aria();
@@ -268,6 +268,7 @@ namespace PruebaTreeListView
 
         private void CommandBinding_ExecutedAnalizar(object sender, ExecutedRoutedEventArgs e)
         {
+            var res = MetodosChequeoEclipse.MatrizDeCalculoIncluyeBody(PlanSeleccionado());
             if (TabControl != null && TabControl.Items != null)
             {
                 foreach (TabItem item in TabControl.Items)
@@ -372,7 +373,7 @@ namespace PruebaTreeListView
             }
             ChequeoInicial(Ell_ConexionVaData, Directory.Exists(@"\\ariamevadb-svr\va_data$"));
             ChequeoInicial(Ell_ConexionCDD, Directory.Exists(@"\\fisica0\centro_de_datos2018\000_Centro de Datos 2021"));
-            ChequeoInicial(Ell_ConexionExactrac, Directory.Exists(@"\\ET6XWIN10\fileRef"));
+            ChequeoInicial(Ell_ConexionExactrac, MetodoChequeoExactrac.HayConexionExactracEq4());
             ChequeoInicial(Ell_ConexionDrive, MetodosAuxiliares.ChequearRefToIso());
         }
 

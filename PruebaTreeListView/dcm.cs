@@ -95,6 +95,7 @@ namespace PruebaTreeListView
                     {
                         if (((EvilDICOM.Core.DICOMObject)refBeam).FindFirst("300C0006").DData.Equals(((EvilDICOM.Core.DICOMObject)beam).FindFirst("300A00C0").DData))
                         {
+                            //((EvilDICOM.Core.DICOMObject)refBeam).TryGetDataValue<double>(TagHelper.BeamMeterset,0)
                             CampoDCM.UM = Convert.ToInt32(Math.Round((double)((EvilDICOM.Core.DICOMObject)refBeam).FindFirst("300A0086").DData));
                             CampoDCM.TieneTiempo = ((EvilDICOM.Core.DICOMObject)refBeam).FindFirst("32491000") != null;
                             break;

@@ -46,7 +46,7 @@
                 <ColumnDefinition Width="4*"/>
                 <ColumnDefinition Width="2.5*"/>
                 <ColumnDefinition Width="2.5*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2.2*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <GroupBox Name="gb_Seleccion" Header="Seleccion" Height="130" Margin="10,10,10,10">
@@ -197,7 +197,7 @@
                     <TextBlock Text="Aprobado por: " FontWeight="Bold"/>
                     <TextBlock Name="tbl_medico"/>
                 </StackPanel>
-                <Button Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_Analizar" Content="Analizar" Margin="5,0,5,5" Width="100" Height="25" Command="local:Commands.Analizar" />
+                <Button Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center" x:Name="BT_Analizar" Content="Analizar" Margin="54,3,53,0" Width="100" Height="24" Command="local:Commands.Analizar" />
                 <Button Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_SiguientePlan" Content="Siguiente plan" Margin="5,0,5,5" Width="100" Height="25" Command="local:Commands.SiguientePlan" />
                 <Button Grid.Row="4" VerticalAlignment="Center" HorizontalAlignment="Center" x:Name="BT_Reinicoar" Content="Reiniciar" Margin="5,0,5,5" Width="100" Height="25" Command="local:Commands.Reiniciar" />
             </Grid>

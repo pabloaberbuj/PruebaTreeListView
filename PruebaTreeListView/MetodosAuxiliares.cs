@@ -207,7 +207,7 @@ namespace PruebaTreeListView
             {
                 return "T_CamEspecial";
             }
-            if (plan.Tecnica == Tecnica.IGRT || plan.Tecnica == Tecnica.RC_HazSRS || plan.Tecnica == Tecnica.RC_VMAT || plan.Tecnica == Tecnica.SBRT_HazSRS || plan.Tecnica == Tecnica.SBRT_VMAT)
+            if (plan.Tecnica == Tecnica.IGRT || plan.Tecnica == Tecnica.RC_HazSRS || plan.Tecnica == Tecnica.RC_VMAT || plan.Tecnica == Tecnica.SBRT_HazSRS || plan.Tecnica == Tecnica.SBRT_VMAT || plan.EsPediatrico)
             {
                 return "T_IGRT";
             }

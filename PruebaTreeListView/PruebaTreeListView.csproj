@@ -59,7 +59,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AriaQ">
-      <HintPath>..\..\..\..\..\Documents\GitHub\ProyectoChequeos\ProyectoChequeos\bin\x64\Debug\AriaQ.dll</HintPath>
+      <HintPath>bin\x64\Debug\AriaQ.dll</HintPath>
     </Reference>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.9.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
       <HintPath>..\packages\BouncyCastle.1.8.9\lib\BouncyCastle.Crypto.dll</HintPath>
@@ -219,6 +219,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="IO.cs" />
+    <Compile Include="MetodoChequeoExactrac.cs" />
     <Compile Include="Reporte.cs" />
     <Page Include="LV_Chequeos.xaml">
       <SubType>Designer</SubType>

@@ -49,6 +49,17 @@
                                             </Style>
                                         </RadioButton.Style>
                                     </RadioButton>
+                                    <RadioButton Name="RB_NoAplica" Content="N/A" Margin="5,0,0,0" Checked="RB_NoAplica_Checked">
+                                        <RadioButton.Style>
+                                            <Style TargetType="RadioButton">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding ResultadoTest}" Value="{x:Null}">
+                                                        <Setter Property="IsChecked" Value="True"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </RadioButton.Style>
+                                    </RadioButton>
                                 </StackPanel>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
@@ -76,10 +87,10 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Width="300" Header="Observación">
+                    <GridViewColumn Width="370" Header="Observación">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Name="TB_Observacion" Margin="5,0,0,0" Width="300">
+                                <TextBox Name="TB_Observacion" Margin="5,0,0,0" Width="350">
                                     <TextBox.Style>
                                         <Style TargetType="TextBox">
                                             <Setter Property="Visibility" Value="Hidden"/>

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using PdfSharp.Pdf.Content.Objects;
 
 namespace PruebaTreeListView
 {
@@ -37,6 +38,11 @@ namespace PruebaTreeListView
                 {
                     var IdEclipse = plan.PlanEclipse.Beams.First().TreatmentUnit.Id;
                     var equipo = equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id);
+
+                    if (EquipoId == "CL21EX")
+                    {
+                        return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\" + plan.nombreMasIDDRR + @"\" + plan.PlanEclipse.Id + " (" + plan.PlanEclipse.Course.Id + @")\";
+                    }
                     return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\1 - Inicios\" + plan.nombreMasIDCorregida;
                 }
             }
@@ -56,6 +62,10 @@ namespace PruebaTreeListView
                 }
                 else
                 {
+                    if (EquipoId == "CL21EX")
+                    {
+                        return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\" + plan.nombreMasIDDRR + @"\" + plan.PlanEclipse.Id + " (" + plan.PlanEclipse.Course.Id + @")\";
+                    }
                     return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\2 - En tratamiento\" + plan.nombreMasIDCorregida;
                 }
             }
@@ -120,12 +130,20 @@ namespace PruebaTreeListView
         public static bool? ExisteCarpetaEnEquipo(Plan plan)
         {
             string EquipoId = plan.PlanEclipse.Beams.First().TreatmentUnit.Id;
+            if (EquipoId == "CL21EX")
+            {
+                return null;
+            }
             return Directory.Exists(CarpetaPacienteInicios(plan, EquipoId)) || Directory.Exists(CarpetaPacienteEnTratamiento(plan, EquipoId));
         }
 
         public static bool? NoRealizoAplicacionesDicomRT(Plan plan)
         {
             string EquipoId = plan.PlanEclipse.Beams.First().TreatmentUnit.Id;
+            if (EquipoId == "CL21EX")
+            {
+                return null;
+            }
             if (ExisteCarpetaEnEquipo(plan) == false)
             {
                 return null;
