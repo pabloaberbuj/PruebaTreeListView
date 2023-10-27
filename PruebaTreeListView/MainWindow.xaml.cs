@@ -21,6 +21,8 @@ using VMS.TPS.Common.Model.API;
 using UglyToad.PdfPig.DocumentLayoutAnalysis.WordExtractor;
 using System.IO;
 using System.Net.NetworkInformation;
+using MigraDoc.DocumentObjectModel;
+using MigraDoc.Rendering;
 
 namespace PruebaTreeListView
 {
@@ -268,7 +270,7 @@ namespace PruebaTreeListView
 
         private void CommandBinding_ExecutedAnalizar(object sender, ExecutedRoutedEventArgs e)
         {
-            var res = MetodosChequeoEclipse.MatrizDeCalculoIncluyeBody(PlanSeleccionado());
+            //var res = MetodosChequeoEclipse.MatrizDeCalculoIncluyeBody(PlanSeleccionado());
             if (TabControl != null && TabControl.Items != null)
             {
                 foreach (TabItem item in TabControl.Items)
@@ -341,11 +343,11 @@ namespace PruebaTreeListView
         {
             if (Resultado)
             {
-                elipse.Fill = new SolidColorBrush(Colors.LightGreen);
+                elipse.Fill = new SolidColorBrush(System.Windows.Media.Colors.LightGreen);
             }
             else
             {
-                elipse.Fill = new SolidColorBrush(Colors.Red);
+                elipse.Fill = new SolidColorBrush(System.Windows.Media.Colors.Red);
             }
         }
 
@@ -379,11 +381,26 @@ namespace PruebaTreeListView
 
         private void BT_Imprimir_Click(object sender, RoutedEventArgs e)
         {
+            List<MigraDoc.DocumentObjectModel.Tables.Table> Tablas = new List<MigraDoc.DocumentObjectModel.Tables.Table>();
+            List<string> planesString = new List<string>();
+            
             foreach (TabItem item in TabControl.Items)
             {
-                LV_Chequeos lv_chequeo = (LV_Chequeos)(item.Content);
-                Reporte.CrearReportePlan(lv_chequeo.planseleccionado, lv_chequeo.obsCol, app.CurrentUser.Name);
+                LV_Chequeos lv_chequeo = (LV_Chequeos)item.Content;
+                if (lv_chequeo.planseleccionado.PlanEclipse != null) 
+                {
+                    planesString.Add(lv_chequeo.planseleccionado.PlanEclipse.Id);
+                }
+                else
+                {
+                    planesString.Add(lv_chequeo.planseleccionado.PlanEclipseSum.Id);
+                }
+                
+                //Reporte.CrearReportePlan(lv_chequeo.planseleccionado, lv_chequeo.obsCol, app.CurrentUser.Name);
+                Tablas.Add(Reporte.TablaChequeos(lv_chequeo.obsCol));
             }
+            Reporte.CrearReportePlan(PlanSeleccionado(), Tablas, planesString,app.CurrentUser.Name);
+
         }
     }
 }
