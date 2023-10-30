@@ -164,7 +164,6 @@ namespace PruebaTreeListView
 
         public static bool? TreatmentApprovalHecho(Plan plan)
         {
-
             return plan.PlanEclipse.ApprovalStatus == PlanSetupApprovalStatus.TreatmentApproved;
         }
 
@@ -173,6 +172,7 @@ namespace PruebaTreeListView
 
             return plan.PlanEclipse.Beams.Any(b => b.IsSetupField);
         }
+
 
         public static bool? TieneCampoAntYLatSetUp(Plan plan)
         {
