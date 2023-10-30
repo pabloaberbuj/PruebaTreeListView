@@ -47,6 +47,7 @@ namespace PruebaTreeListView
             {
                 //app = VMS.TPS.Common.Model.API.Application.CreateApplication(null, null);
                 app = VMS.TPS.Common.Model.API.Application.CreateApplication("paberbuj", "123qwe");
+                
             }
             catch (Exception)
             {
@@ -66,6 +67,10 @@ namespace PruebaTreeListView
                 pacientes = null;
             }
             InitializeComponent();
+            if (app!=null)
+            {
+                TBl_usuario.Text = app.CurrentUser.Name;
+            }
             cb_Tecnicas.ItemsSource = Enum.GetValues(typeof(Tecnica));
             ConexionInicial();
         }
