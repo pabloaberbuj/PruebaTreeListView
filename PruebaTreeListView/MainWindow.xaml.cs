@@ -325,11 +325,6 @@ namespace PruebaTreeListView
             gb_Seleccion.IsEnabled = false;
         }
 
-        private void cb_planes_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
         private void CommandBinding_CanExecuteReiniciar(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = TabControl != null && TabControl.Items != null && TabControl.Items.Count > 0;
@@ -339,6 +334,9 @@ namespace PruebaTreeListView
         {
             TabControl.Items.Clear();
             cb_pacientes.SelectedItem = null;
+            tb_dosisTotal.Text = "";
+            tb_dosisFraccion.Text = "";
+            tb_dosisDia.Text = "";
             tbl_PlanesSumandos.Text = "";
             gb_Seleccion.IsEnabled = true;
             cb_Tecnicas.SelectedIndex = -1;
@@ -384,15 +382,43 @@ namespace PruebaTreeListView
             ChequeoInicial(Ell_ConexionDrive, MetodosAuxiliares.ChequearRefToIso());
         }
 
-        private void BT_Imprimir_Click(object sender, RoutedEventArgs e)
+
+        private void CommandBinding_CanExecuteImprimir(object sender, CanExecuteRoutedEventArgs e)
+        {
+            if (TabControl.Items.Count==0)
+            {
+                e.CanExecute = false;
+                return;
+            }
+            foreach (TabItem item in TabControl.Items)
+            {
+                var chequeos = ((LV_Chequeos)item.Content).obsCol;
+                if (chequeos==null || chequeos.Count==0)
+                {
+                    e.CanExecute = false;
+                    return;
+                }
+                foreach (var Chequeo in chequeos)
+                {
+                    if (Chequeo.ResultadoTest==false && Chequeo.Observacion=="")
+                    {
+                        e.CanExecute = false;
+                        return;
+                    }
+                }
+            }
+            e.CanExecute = true;
+        }
+
+        private void CommandBinding_ExecutedImprimir(object sender, ExecutedRoutedEventArgs e)
         {
             List<MigraDoc.DocumentObjectModel.Tables.Table> Tablas = new List<MigraDoc.DocumentObjectModel.Tables.Table>();
             List<string> planesString = new List<string>();
-            
+
             foreach (TabItem item in TabControl.Items)
             {
                 LV_Chequeos lv_chequeo = (LV_Chequeos)item.Content;
-                if (lv_chequeo.planseleccionado.PlanEclipse != null) 
+                if (lv_chequeo.planseleccionado.PlanEclipse != null)
                 {
                     planesString.Add(lv_chequeo.planseleccionado.PlanEclipse.Id);
                 }
@@ -400,12 +426,11 @@ namespace PruebaTreeListView
                 {
                     planesString.Add(lv_chequeo.planseleccionado.PlanEclipseSum.Id);
                 }
-                
+
                 //Reporte.CrearReportePlan(lv_chequeo.planseleccionado, lv_chequeo.obsCol, app.CurrentUser.Name);
                 Tablas.Add(Reporte.TablaChequeos(lv_chequeo.obsCol));
             }
-            Reporte.CrearReportePlan(PlanSeleccionado(), Tablas, planesString,app.CurrentUser.Name);
-
+            Reporte.CrearReportePlan(PlanSeleccionado(), Tablas, planesString, app.CurrentUser.Name);
         }
     }
 }

@@ -39,6 +39,16 @@ namespace PruebaTreeListView
                     new KeyGesture(Key.S, ModifierKeys.Alt)
                 }
             );
+        public static readonly RoutedUICommand Imprimir = new RoutedUICommand
+            (
+                "Imprimir",
+                "Imprimir",
+                typeof(Commands),
+                new InputGestureCollection()
+                {
+                    new KeyGesture(Key.A, ModifierKeys.Control)
+                }
+            );
 
     }
 }

@@ -21,6 +21,7 @@
         <CommandBinding Command="local:Commands.Analizar" CanExecute="CommandBinding_CanExecuteAnalizar" Executed="CommandBinding_ExecutedAnalizar"/>
         <CommandBinding Command="local:Commands.SiguientePlan" CanExecute="CommandBinding_CanExecuteSiguientePlan" Executed="CommandBinding_ExecutedSiguientePlan"/>
         <CommandBinding Command="local:Commands.Reiniciar" CanExecute="CommandBinding_CanExecuteReiniciar" Executed="CommandBinding_ExecutedReiniciar"/>
+        <CommandBinding Command="local:Commands.Imprimir" CanExecute="CommandBinding_CanExecuteImprimir" Executed="CommandBinding_ExecutedImprimir"/>
     </Window.CommandBindings>
 
     <Grid>
@@ -254,7 +255,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock Text="Usuario: " FontWeight="Bold"/>
             <TextBlock Grid.Column="1" Name="TBl_usuario" Width="80"/>
-            <Button Grid.Column="3" x:Name="BT_Imprimir" Content="Imprimir" Click="BT_Imprimir_Click" HorizontalAlignment="Center" Width="100" Height="25"/>
+            <Button Grid.Column="3" x:Name="BT_Imprimir" Content="Imprimir" HorizontalAlignment="Center" Width="100" Height="25" Command="local:Commands.Imprimir"/>
         </Grid>
     </Grid>
 </Window>
