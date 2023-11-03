@@ -45,8 +45,8 @@ namespace PruebaTreeListView
         {
             try
             {
-                //app = VMS.TPS.Common.Model.API.Application.CreateApplication(null, null);
-                app = VMS.TPS.Common.Model.API.Application.CreateApplication("paberbuj", "123qwe");
+                app = VMS.TPS.Common.Model.API.Application.CreateApplication(null, null);
+                //app = VMS.TPS.Common.Model.API.Application.CreateApplication("paberbuj", "123qwe");
                 
             }
             catch (Exception)

@@ -137,9 +137,9 @@ namespace PruebaTreeListView
                 }
             }
             Estilos.formatearTabla(tabla);
-            tabla.Columns[0].Width = 200;
+            tabla.Columns[0].Width = 250;
             tabla.Columns[1].Width = 20;
-            tabla.Columns[2].Width = 300;
+            tabla.Columns[2].Width = 250;
             tabla.Columns[2].Format.Alignment = ParagraphAlignment.Left;
             //tabla.Columns[1].Format.Alignment = ParagraphAlignment.Center;
             tabla.Rows.LeftIndent = "0.5cm";
