@@ -289,6 +289,9 @@
   <ItemGroup>
     <Resource Include="check.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="check2.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
