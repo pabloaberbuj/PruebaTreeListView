@@ -174,6 +174,10 @@ namespace PruebaTreeListView
 
         public static bool? ExistenCarpetasDeTodosLosSubPlanes(Plan plan)
         {
+            if (plan.PlanesSumandos==null || plan.PlanesSumandos.Count==0)
+            {
+                return null;
+            }
             if (!equiposDicomRT().Any(e => e.ID == plan.PlanesSumandos.First().PlanEclipse.Beams.First().TreatmentUnit.Id))
             {
                 return null;
