@@ -209,7 +209,7 @@ namespace PruebaTreeListView
 
         public static bool? ArchivoCoincideConPlan(Plan plan)
         {
-            if (ExisteCarpetaEnEquipo(plan) == false || HayUnicoDicomEnCarpetaPlan(plan) == false)
+            if (ExisteCarpetaEnEquipo(plan) != true || HayUnicoDicomEnCarpetaPlan(plan) != true)
             {
                 return null;
             }
@@ -221,7 +221,7 @@ namespace PruebaTreeListView
 
         public static bool? DicomTieneTiempos(Plan plan)
         {
-            if (ArchivoCoincideConPlan(plan) == false)
+            if (ExisteCarpetaEnEquipo(plan) != true || HayUnicoDicomEnCarpetaPlan(plan) != true || ArchivoCoincideConPlan(plan) != true)
             {
                 return null;
             }
@@ -241,7 +241,7 @@ namespace PruebaTreeListView
 
         public static bool? DicomEsCompatibleConConsolaVieja(Plan plan)
         {
-            if (ArchivoCoincideConPlan(plan) == false)
+            if (ExisteCarpetaEnEquipo(plan) != true || HayUnicoDicomEnCarpetaPlan(plan) != true || ArchivoCoincideConPlan(plan) != true)
             {
                 return null;
             }

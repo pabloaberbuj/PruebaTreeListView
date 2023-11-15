@@ -77,6 +77,11 @@ namespace PruebaTreeListView
 
         public static bool? DeltaCouchIgualParTodosLosCampos(Plan plan)
         {
+            string EquipoId = plan.PlanEclipse.Beams.First().TreatmentUnit.Id;
+            if (EquipoId == "CL21EX")
+            {
+                return null;
+            }
             foreach (Radiation campoAria in plan.PlanAria.Radiations)
             {
                 double? ariaxFirst = plan.PlanAria.Radiations.First().ExternalFieldCommon.CouchLatDelta;
@@ -98,6 +103,11 @@ namespace PruebaTreeListView
 
         public static bool? DeltaCouchCoincideConIso(Plan plan)
         {
+            string EquipoId = plan.PlanEclipse.Beams.First().TreatmentUnit.Id;
+            if (EquipoId == "CL21EX")
+            {
+                return null;
+            }
             foreach (Ecl.Beam campoEclipse in plan.PlanEclipse.Beams)
             {
                 Radiation campoAria = plan.PlanAria.Radiations.Where(r => r.RadiationId == campoEclipse.Id).FirstOrDefault();
