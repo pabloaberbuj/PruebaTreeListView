@@ -278,7 +278,7 @@ namespace PruebaTreeListView
             {
                 return campo.DoseRate == 600;
             }
-            else if ((campo.TreatmentUnit.Id == "Equipo1" || campo.TreatmentUnit.Id == "D-2300CD") && campo.MLCPlanType.Equals(MLCPlanType.DoseDynamic))
+            else if ((campo.TreatmentUnit.Id == "Equipo1" || campo.TreatmentUnit.Id == "D-2300CD") && campo.ControlPoints.Count()>15)
             {
                 return campo.DoseRate == 600;
             }
@@ -381,11 +381,11 @@ namespace PruebaTreeListView
             bool origen = plan.StructureSet.Image.UserOrigin.Equals(new VVector(0, 0, 0));
             if (!origen && campo.MLCPlanType == MLCPlanType.VMAT)
             {
-                if ((campo.IsocenterPosition.x - plan.StructureSet.Image.UserOrigin.x) >= 30.5 && campo.ControlPoints.Select(c => c.GantryAngle).Max() > 210)
+                if ((campo.IsocenterPosition.x - plan.StructureSet.Image.UserOrigin.x) >= 30.5 && campo.ControlPoints.Select(c => MetodosAuxiliares.IECaVarian(c.GantryAngle)).Max() > 235)
                 {
                     return false;
                 }
-                else if ((campo.IsocenterPosition.x - plan.StructureSet.Image.UserOrigin.x) <= -30.5 && campo.ControlPoints.Select(c => c.GantryAngle).Min() < 110)
+                else if ((campo.IsocenterPosition.x - plan.StructureSet.Image.UserOrigin.x) <= -30.5 && campo.ControlPoints.Select(c => MetodosAuxiliares.IECaVarian(c.GantryAngle)).Min() < 135)
                 {
                     return false;
                 }
