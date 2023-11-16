@@ -113,9 +113,9 @@ namespace PruebaTreeListView
                 Radiation campoAria = plan.PlanAria.Radiations.Where(r => r.RadiationId == campoEclipse.Id).FirstOrDefault();
                 VVector ecl = new VVector();
 
-                ecl.x = Math.Round(campoEclipse.IsocenterPosition.x - plan.PlanEclipse.StructureSet.Image.UserOrigin.x, 2);
-                ecl.y = Math.Round(campoEclipse.IsocenterPosition.y - plan.PlanEclipse.StructureSet.Image.UserOrigin.y, 2);
-                ecl.z = Math.Round(campoEclipse.IsocenterPosition.z - plan.PlanEclipse.StructureSet.Image.UserOrigin.z, 2);
+                ecl.x = Math.Round(campoEclipse.IsocenterPosition.x - plan.PlanEclipse.StructureSet.Image.UserOrigin.x, 0);
+                ecl.y = Math.Round(campoEclipse.IsocenterPosition.y - plan.PlanEclipse.StructureSet.Image.UserOrigin.y, 0);
+                ecl.z = Math.Round(campoEclipse.IsocenterPosition.z - plan.PlanEclipse.StructureSet.Image.UserOrigin.z, 0);
 
                 VVector eclCorregido = MetodosAuxiliares.corregirPorPatientOrientation(ecl, plan.PlanEclipse.TreatmentOrientation);
 
@@ -182,6 +182,7 @@ namespace PruebaTreeListView
         {
             //List<int> fraccionesConPlaca = new List<int>();
             string sptId = "";
+            int cantidad = 2;
             /*if (plan.Tecnica == Tecnica.IMRT || plan.Tecnica == Tecnica.VMAT || plan.Tecnica == Tecnica.Mama3DC)
             {
                 int i = 1;
@@ -195,18 +196,27 @@ namespace PruebaTreeListView
             {
                 fraccionesConPlaca.Add(1);
             }*/
-            if (plan.PlanAria.Radiations.First().RadiationDevice.Machine.MachineId == "Equipo1")
+            if (plan.Tecnica==Tecnica.SBRT_HazSRS ||plan.Tecnica==Tecnica.SBRT_VMAT || plan.Tecnica==Tecnica.IGRT)
+            {
+                sptId = "CBCT";
+                cantidad = 1;
+            }
+            else if (plan.PlanAria.Radiations.First().RadiationDevice.Machine.MachineId == "Equipo1")
             {
                 sptId = "SingleExp";
+                
             }
             else if (plan.PlanAria.Radiations.First().RadiationDevice.Machine.MachineId == "D-2300CD")
             {
                 sptId = "kV";
+                
             }
             var Sessions = plan.PlanAria.RTPlans.First().SessionRTPlans;
             foreach (var session in Sessions)
             {
-                if (session.Session.SessionProcedures.Count != 2 || session.Session.SessionProcedures.Any(p => !p.SessionProcedureTemplateId.Contains(sptId)))
+                var ss = session.Session;
+                var sss = ss.SessionProcedures;
+                if (session.Session.SessionProcedures.Count != cantidad || session.Session.SessionProcedures.Any(p => !p.SessionProcedureTemplateId.Contains(sptId)))
                 {
                     return false;
                 }
