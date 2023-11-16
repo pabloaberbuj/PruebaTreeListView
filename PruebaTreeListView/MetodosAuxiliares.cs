@@ -534,6 +534,27 @@ namespace PruebaTreeListView
             }
             return false;
         }
+
+        public static VVector corregirPorPatientOrientation(VVector iso, PatientOrientation patientOrientation)
+        {
+            VVector nuevoIso = iso;
+            if (patientOrientation == PatientOrientation.FeetFirstSupine)
+            {
+                nuevoIso.x = -1 * iso.x;
+                nuevoIso.z = -1 * iso.z;
+            }
+            else if (patientOrientation == PatientOrientation.FeetFirstProne)
+            {
+                nuevoIso.y = -1 * iso.y;
+                nuevoIso.z = -1 * iso.z;
+            }
+            else if (patientOrientation == PatientOrientation.HeadFirstProne)
+            {
+                nuevoIso.x = -1 * iso.x;
+                nuevoIso.y = -1 * iso.y;
+            }
+            return nuevoIso;
+        }
     }
 
 }

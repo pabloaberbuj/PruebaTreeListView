@@ -111,15 +111,19 @@ namespace PruebaTreeListView
             foreach (Ecl.Beam campoEclipse in plan.PlanEclipse.Beams)
             {
                 Radiation campoAria = plan.PlanAria.Radiations.Where(r => r.RadiationId == campoEclipse.Id).FirstOrDefault();
-                double eclx = Math.Round(campoEclipse.IsocenterPosition.x - plan.PlanEclipse.StructureSet.Image.UserOrigin.x, 2);
-                double ecly = Math.Round(campoEclipse.IsocenterPosition.y - plan.PlanEclipse.StructureSet.Image.UserOrigin.y, 2);
-                double eclz = Math.Round(campoEclipse.IsocenterPosition.z - plan.PlanEclipse.StructureSet.Image.UserOrigin.z, 2);
+                VVector ecl = new VVector();
+
+                ecl.x = Math.Round(campoEclipse.IsocenterPosition.x - plan.PlanEclipse.StructureSet.Image.UserOrigin.x, 2);
+                ecl.y = Math.Round(campoEclipse.IsocenterPosition.y - plan.PlanEclipse.StructureSet.Image.UserOrigin.y, 2);
+                ecl.z = Math.Round(campoEclipse.IsocenterPosition.z - plan.PlanEclipse.StructureSet.Image.UserOrigin.z, 2);
+
+                VVector eclCorregido = MetodosAuxiliares.corregirPorPatientOrientation(ecl, plan.PlanEclipse.TreatmentOrientation);
 
                 double? ariax = -plan.PlanAria.Radiations.First().ExternalFieldCommon.CouchLatDelta * 10;
                 double? ariay = plan.PlanAria.Radiations.First().ExternalFieldCommon.CouchVrtDelta * 10;
                 double? ariaz = -plan.PlanAria.Radiations.First().ExternalFieldCommon.CouchLngDelta * 10;
 
-                if (eclx != ariax || ecly != ariay || eclz != ariaz)
+                if (eclCorregido.x != ariax || eclCorregido.y != ariay || eclCorregido.z != ariaz)
                 {
                     return false;
                 }
