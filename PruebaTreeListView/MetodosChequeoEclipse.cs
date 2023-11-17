@@ -463,6 +463,10 @@ namespace PruebaTreeListView
                 {
                     return null;
                 }
+            }
+            //if (!campo.IsSetupField && campo.CalculationLogs.Any(cl => cl.Category == "LMC"))
+            if (true)
+            {
                 if (campo.CalculationLogs.First(cl => cl.Category == "LMC").MessageLines.Any(m => m.Contains("carriage") || m.Contains("carro")))
                 {
                     return null;

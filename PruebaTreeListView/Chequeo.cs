@@ -124,7 +124,16 @@ namespace PruebaTreeListView
         {
             if (this.EsAutomatico)
             {
-                ResultadoTest = TargetMethod.Invoke(plan);
+                try
+                {
+                    ResultadoTest = TargetMethod.Invoke(plan);
+                }
+                catch (Exception)
+                {
+                    ResultadoTest = false;
+                    Observacion = "Falló el programa. Chequear manualmente";
+                }
+                
             }
 
         }
