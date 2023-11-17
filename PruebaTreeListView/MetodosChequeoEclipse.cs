@@ -278,7 +278,7 @@ namespace PruebaTreeListView
             {
                 return campo.DoseRate == 600;
             }
-            else if ((campo.TreatmentUnit.Id == "Equipo1" || campo.TreatmentUnit.Id == "D-2300CD") && campo.ControlPoints.Count()>15)
+            else if ((campo.TreatmentUnit.Id == "Equipo1" || campo.TreatmentUnit.Id == "D-2300CD") && campo.ControlPoints.Count() > 15)
             {
                 return campo.DoseRate == 600;
             }
@@ -457,12 +457,23 @@ namespace PruebaTreeListView
 
         public static bool? IsoFueraDeCampo(Beam campo)
         {
+            if (!campo.IsSetupField && campo.CalculationLogs.Any(cl => cl.Category == "Dose"))
+            {
+                if (campo.CalculationLogs.First(cl => cl.Category == "Dose").MessageLines.Any(m => m.Contains("carriage") || m.Contains("carro")))
+                {
+                    return null;
+                }
+                if (campo.CalculationLogs.First(cl => cl.Category == "LMC").MessageLines.Any(m => m.Contains("carriage") || m.Contains("carro")))
+                {
+                    return null;
+                }
+            }
             var mordazas = campo.ControlPoints.First().JawPositions;
             double MordazaMasCerrada = new List<double> { -mordazas.X1, mordazas.X2, -mordazas.Y1, mordazas.Y2 }.Min();
             return MordazaMasCerrada > -10;
         }
 
-        public static bool? IsoFueraDeCampo(Plan plan)
+         public static bool? IsoFueraDeCampo(Plan plan)
         {
             foreach (Beam campo in plan.PlanEclipse.Beams)
             {
@@ -608,8 +619,13 @@ namespace PruebaTreeListView
 
         public static bool? TargetEsTipoPTV(Plan plan)
         {
-            Structure target = plan.PlanEclipse.StructureSet.Structures.First(s => s.Id == plan.PlanEclipse.TargetVolumeID);
-            return target.DicomType == "PTV";// || target.Id.ToLower().Contains("ptv");
+            if (plan.PlanEclipse.StructureSet.Structures.Any(s => s.Id == plan.PlanEclipse.TargetVolumeID))
+            {
+                Structure target = plan.PlanEclipse.StructureSet.Structures.First(s => s.Id == plan.PlanEclipse.TargetVolumeID);
+                return target.DicomType == "PTV";// || target.Id.ToLower().Contains("ptv");
+            }
+            return false;
+
         }
         public static bool? CTTieneMasDe400Cortes(Plan plan)
         {
@@ -643,7 +659,7 @@ namespace PruebaTreeListView
                 return plan.PlanEclipse.GetDVHCumulativeData(Body, DoseValuePresentation.Absolute, VolumePresentation.AbsoluteCm3, 1).Coverage > 0.95;
             }
             return false;
-            
+
         }
 
     }

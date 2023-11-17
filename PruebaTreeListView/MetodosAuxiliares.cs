@@ -33,6 +33,10 @@ namespace PruebaTreeListView
             {
                 return true;
             }
+            else if (camilla.Contains("Unipanel") && equipo == "CL21EX")
+            {
+                return true;
+            }
             else if (camilla.Contains("IGRT") && equipo == "Equipo1")
             {
                 return true;
