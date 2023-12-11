@@ -393,6 +393,45 @@ namespace PruebaTreeListView
             return true;
         }
 
+
+        public static bool? CamposQueRequierenLateralizar(Beam campo, PlanningItem planCorrespondiente)
+        {
+            PlanSetup plan = planCorrespondiente as PlanSetup;
+            double desplazamiento = campo.IsocenterPosition.x - plan.StructureSet.Image.UserOrigin.x;
+            if (Math.Abs(desplazamiento) >50)
+            {
+                if (desplazamiento > 50 && MetodosAuxiliares.IECaVarian(campo.ControlPoints.First().GantryAngle) > 270) //izquierdo
+                {
+                    return false;
+                }
+                else if (desplazamiento < -50 && campo.ControlPoints.First().GantryAngle<90) //izquierdo
+                {
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            return null;
+        }
+
+        public static bool? CamposQueRequierenLateralizar(Plan plan)
+        {
+            double desplazamiento = plan.PlanEclipse.Beams.First().IsocenterPosition.x - plan.PlanEclipse.StructureSet.Image.UserOrigin.x;
+            if (Math.Abs(desplazamiento) > 50)
+            {
+                foreach (Beam campo in plan.PlanEclipse.Beams)
+                {
+                    if (CamposQueRequierenLateralizar(campo,plan.PlanEclipse)==false)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return null;
+        }
         public static bool? IsoEnArcos(Plan plan)
         {
             foreach (Beam campo in plan.PlanEclipse.Beams)

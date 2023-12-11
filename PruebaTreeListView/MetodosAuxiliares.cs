@@ -313,7 +313,7 @@ namespace PruebaTreeListView
             }
             else
             {
-                foreach (Ecl.Beam campo1 in plan1.Beams)
+                foreach (Ecl.Beam campo1 in plan1.Beams.Where(b=>!b.IsSetupField))
                 {
                     if (!plan2.Beams.Any(b => CamposIguales(b, campo1)))
                     {
