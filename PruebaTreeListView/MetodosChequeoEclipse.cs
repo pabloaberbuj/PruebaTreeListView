@@ -180,6 +180,10 @@ namespace PruebaTreeListView
             {
                 return null;
             }
+            if (plan.PlanEclipse.Beams.First().TreatmentUnit.Id == "D-2300CD" || plan.PlanEclipse.Beams.First().TreatmentUnit.Id == "Equipo3")
+            {
+                return plan.PlanEclipse.Beams.Any(b => b.IsSetupField && b.ControlPoints.First().GantryAngle == 0 || b.IsSetupField && b.ControlPoints.First().GantryAngle == 180) && plan.PlanEclipse.Beams.Any(b => b.IsSetupField && b.ControlPoints.First().GantryAngle == 270 || b.ControlPoints.First().GantryAngle == 90); //eq3 y eq4 pueden tener campo de set up posterior
+            }
             return plan.PlanEclipse.Beams.Any(b => b.IsSetupField && b.ControlPoints.First().GantryAngle == 0) && plan.PlanEclipse.Beams.Any(b => b.IsSetupField && b.ControlPoints.First().GantryAngle == 270 || b.ControlPoints.First().GantryAngle == 90);
         }
 
@@ -192,6 +196,10 @@ namespace PruebaTreeListView
             }
             if ((plan.PlanEclipse.Beams.First().IsocenterPosition.x - plan.PlanEclipse.StructureSet.Image.UserOrigin.x) < -30) //3cm a la derecha
             {
+                if (plan.PlanEclipse.Beams.First().TreatmentUnit.Id == "D-2300CD" || plan.PlanEclipse.Beams.First().TreatmentUnit.Id == "Equipo3")
+                {
+                    return plan.PlanEclipse.Beams.Any(b => b.IsSetupField && b.ControlPoints.First().GantryAngle == 180);
+                }
                 return plan.PlanEclipse.Beams.Any(b => b.IsSetupField && b.ControlPoints.First().GantryAngle == 270);
             }
             else if ((plan.PlanEclipse.Beams.First().IsocenterPosition.x - plan.PlanEclipse.StructureSet.Image.UserOrigin.x) > 30) //3cm a la izquierda
@@ -398,13 +406,13 @@ namespace PruebaTreeListView
         {
             PlanSetup plan = planCorrespondiente as PlanSetup;
             double desplazamiento = campo.IsocenterPosition.x - plan.StructureSet.Image.UserOrigin.x;
-            if (Math.Abs(desplazamiento) >50)
+            if (Math.Abs(desplazamiento) > 50)
             {
                 if (desplazamiento > 50 && MetodosAuxiliares.IECaVarian(campo.ControlPoints.First().GantryAngle) > 270) //izquierdo
                 {
                     return false;
                 }
-                else if (desplazamiento < -50 && campo.ControlPoints.First().GantryAngle<90) //izquierdo
+                else if (desplazamiento < -50 && campo.ControlPoints.First().GantryAngle < 90) //derecho
                 {
                     return false;
                 }
@@ -423,7 +431,7 @@ namespace PruebaTreeListView
             {
                 foreach (Beam campo in plan.PlanEclipse.Beams)
                 {
-                    if (CamposQueRequierenLateralizar(campo,plan.PlanEclipse)==false)
+                    if (CamposQueRequierenLateralizar(campo, plan.PlanEclipse) == false)
                     {
                         return false;
                     }
@@ -515,7 +523,7 @@ namespace PruebaTreeListView
             return MordazaMasCerrada > -10;
         }
 
-         public static bool? IsoFueraDeCampo(Plan plan)
+        public static bool? IsoFueraDeCampo(Plan plan)
         {
             foreach (Beam campo in plan.PlanEclipse.Beams)
             {
@@ -704,5 +712,55 @@ namespace PruebaTreeListView
 
         }
 
+        public static bool? CalculoCada1grado(Beam campo)
+        {
+            if (campo.Technique.Id == "ARC")
+            {
+                var logs = campo.CalculationLogs;
+                if (logs.Any(l => l.Category == "Dose"))
+                {
+                    var logdose = logs.First(l => l.Category == "Dose");
+                    return logdose.MessageLines.Any(l => l.Contains("with maximum angle interval of 1.00 degrees"));
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            return null;
+        }
+        public static bool? CalculoCada1grado(Plan plan)
+        {
+            foreach (Beam campo in plan.PlanEclipse.Beams)
+            {
+                if (CalculoCada1grado(campo) == false)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static bool? ColimadorRotado(Beam campo)
+        {
+            if (campo.EnergyModeDisplayName.Contains("E"))
+            {
+                return campo.ControlPoints.First().CollimatorAngle < 45 || campo.ControlPoints.First().CollimatorAngle > 315;
+            }
+            return null;
+        }
+
+        public static bool? ColimadorRotado(Plan plan)
+        {
+            foreach (Beam campo in plan.PlanEclipse.Beams)
+            {
+                if (ColimadorRotado(campo) == false)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
+
 }
