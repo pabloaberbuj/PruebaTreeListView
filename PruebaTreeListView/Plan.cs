@@ -209,6 +209,11 @@ namespace PruebaTreeListView
 
         }
 
+        public bool EsTtodeMama()
+        {
+            return PlanEclipse.StructureSet.Structures.Any(s => s.Id.ToLower().Contains("ptv_wb_eval") || s.Id.ToLower().Contains("ptv_cw_eval"));
+        }
+
         public List<Chequeo> Chequear()
         {
             List<Chequeo> chequeos = Chequeo.SeleccionarChequeos(this);

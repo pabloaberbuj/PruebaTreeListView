@@ -761,6 +761,41 @@ namespace PruebaTreeListView
             }
             return true;
         }
+
+        public static bool? TienePlannedSSD(Beam beam)
+        {
+            return double.IsNaN(beam.PlannedSSD);
+        }
+        public static bool? TienePlannedSSD(Plan plan)
+        {
+            foreach (Beam campo in plan.PlanEclipse.Beams)
+            {
+                if (TienePlannedSSD(campo) == false)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public static bool? CoordenadasIsoRedondeadas(Plan plan)
+        {
+            VVector Iso = plan.PlanEclipse.Beams.First().IsocenterPosition - plan.PlanEclipse.StructureSet.Image.UserOrigin;
+            for (int i = 0; i < 3; i++)
+            {
+                var parteDecimal = Iso[i] / 10 - Math.Truncate(Iso[i] / 10);
+                var dosDecimales = Math.Abs(Math.Truncate(parteDecimal * 100) / 100);
+                if (dosDecimales != 0 && dosDecimales != 0.5)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        public static bool? NormalizacionVariaMucho(Plan plan)
+        {
+            return plan.PlanEclipse.PlanNormalizationValue <= 105 && plan.PlanEclipse.PlanNormalizationValue >= 95;
+        }
     }
 
 }

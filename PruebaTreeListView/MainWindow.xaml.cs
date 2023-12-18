@@ -245,6 +245,7 @@ namespace PruebaTreeListView
         {
             if (cb_planes.SelectedIndex != -1)
             {
+                MetodosChequeoEclipse.NormalizacionVariaMucho((Ecl.PlanSetup)cb_planes.SelectedItem);
                 return (Ecl.PlanningItem)cb_planes.SelectedItem;
             }
             return null;
