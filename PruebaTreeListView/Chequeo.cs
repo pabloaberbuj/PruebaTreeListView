@@ -43,7 +43,7 @@ namespace PruebaTreeListView
         
 
 
-        public bool EsAutomatico { get; set; }
+        public bool? EsAutomatico { get; set; } //si es semiautomático va null
         public bool? resultadoTest;
         public bool? ResultadoTest
         {
@@ -81,7 +81,7 @@ namespace PruebaTreeListView
 
 
 
-        public Chequeo(string _Nombre, Categoria _Categoria, NivelDeAccion _NivelDeAccion, MyStaticMethodInvoker _TargetMethod, bool _EsAutomatico,
+        public Chequeo(string _Nombre, Categoria _Categoria, NivelDeAccion _NivelDeAccion, MyStaticMethodInvoker _TargetMethod, bool? _EsAutomatico,
             bool _AplicaAStatic3DC, bool _AplicaAArcos3DC, bool _AplicaAElectrones, bool _AplicaAIMRT, bool _AplicaAVMAT, bool _AplicaAIGRT,
             bool _AplicaARC_HazSRS, bool _AplicaARC_VMAT, bool _AplicaASBRTRC_HazSRS, bool _AplicaASBRT_VMAT, bool _AplicaATBI,
             bool? _ExclusivoPlanSuma, bool? _ExclusivoCamEspecial, bool? _ExclusivoEquiposAria, bool? _ExclusivoEquiposDicomRT, bool? _ExclusivoPediatrico,
@@ -122,7 +122,7 @@ namespace PruebaTreeListView
    
         public void AplicarMetodo(Plan plan)
         {
-            if (this.EsAutomatico)
+            if (this.EsAutomatico==true)
             {
                 try
                 {
@@ -134,6 +134,29 @@ namespace PruebaTreeListView
                     Observacion = "Falló el programa. Chequear manualmente";
                 }
                 
+            }
+            else if (this.EsAutomatico==null)
+            {
+                try
+                {
+                    bool? aplicarMetodo = TargetMethod.Invoke(plan);
+                    if (aplicarMetodo==true)
+                    {
+                        EsAutomatico = false; //para que lo analice manualmente
+                        resultadoTest = null;
+                    }
+                    else if (aplicarMetodo==false)
+                    {
+                        EsAutomatico = true; //para que lo saltee
+                        resultadoTest = null;
+                    }
+                }
+                catch (Exception)
+                {
+                    EsAutomatico = false; //para que lo analice manualmente
+                    ResultadoTest = null;
+                    Observacion = "Falló el programa. Chequear manualmente";
+                }
             }
 
         }
@@ -189,7 +212,6 @@ namespace PruebaTreeListView
             lista.Add(new Chequeo("DICOM RT Compatible con consola", Categoria.Dicom, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoDICOM.DicomEsCompatibleConConsolaVieja), true, true, true, true, true, false, false, false, false, false, false, false, false, null, false, true, null));
             lista.Add(new Chequeo("No realizó aplicaciones (DicomRT)", Categoria.Dicom, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoDICOM.NoRealizoAplicacionesDicomRT), true, true, true, true, true, false, false, false, false, false, false, false, false, null, false, true, null));
             lista.Add(new Chequeo("Informe hecho", Categoria.Informe, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoArchivos.TieneInforme), true, true, true, true, true, true, true, true, true, true, true, true, false, null, null, null, null));
-            lista.Add(new Chequeo("El informe está cargado en Sitramed", Categoria.Informe, NivelDeAccion.Advertencia, null, false, true, true, true, true, true, true, true, true, true, true, true, false, null, null, null, null));
             lista.Add(new Chequeo("Técnica correcta en informe", Categoria.Informe, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoArchivos.TecnicaEnInformeCorrecta), true, true, true, true, true, true, true, true, true, true, true, false, false, null, null, null, null));
             lista.Add(new Chequeo("Tiene Camilla y debe", Categoria.Planificacion, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.TieneCamilla), true, true, true, false, true, true, true, true, true, true, true, false, false, false, null, null, null));
             lista.Add(new Chequeo("Tiene Camilla y no debe", Categoria.Planificacion, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.TieneCamillaYNoDebe), true, false, false, false, false, false, false, false, false, false, false, true, false, true, null, null, null));
@@ -228,18 +250,19 @@ namespace PruebaTreeListView
             lista.Add(new Chequeo("Se midió plan QA Otro (MC, SRSMC, etc)", Categoria.QA, NivelDeAccion.Advertencia, null, false, false, false, false, true, true, true, false, true, false, true, false, false, null, null, null, null));
             lista.Add(new Chequeo("QA OK", Categoria.QA, NivelDeAccion.Advertencia, null, false, false, false, false, true, true, true, false, true, false, true, false, false, null, null, null, null));
             lista.Add(new Chequeo("Tiene campos de setup", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.TieneCamposSetUp), true, true, true, true, true, true, true, false, false, true, true, false, false, null, null, null, null));
-            lista.Add(new Chequeo("Tiene un campo de Setup Ant y uno Lat", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.TieneCampoAntYLatSetUp), true, true, true, true, true, true, false, false, false, false, false, false, false, null, null, null, null));
-            lista.Add(new Chequeo("Campos de Setup LD o LI en función de Xiso", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.CampoSetupLateralCorrecto), true, true, true, true, true, true, false, false, false, false, false, false, false, null, null, null, null));
+            lista.Add(new Chequeo("Tiene un campo de Setup Ap y uno Lat", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.TieneCampoAntYLatSetUp), true, true, true, true, true, true, false, false, false, false, false, false, false, null, null, null, null));
+            lista.Add(new Chequeo("Campos de Setup LD o LI y A o P en función de Xiso y equipo", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.CampoSetupLateralCorrecto), true, true, true, true, true, true, false, false, false, false, false, false, false, null, null, null, null));
             lista.Add(new Chequeo("DRR en campos de set up creada", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.DRRCreadasEnCamposSetup), true, true, true, true, true, true, true, false, false, false, false, false, false, null, null, null, null));
             lista.Add(new Chequeo("Imagenes agendadas según equipo", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoAria.ImagenesAgendadasSegunEquipo), true, true, true, true, true, true, true, false, false, true, true, false, false, null, null, false, null));
             lista.Add(new Chequeo("Delta Couch es el mismo para todos los campos", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoAria.DeltaCouchIgualParTodosLosCampos), true, true, true, true, true, true, true, false, false, true, true, false, false, null, null, null, null));
             lista.Add(new Chequeo("Delta Couch coincide con Iso", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoAria.DeltaCouchCoincideConIso), true, true, true, true, true, true, true, false, false, true, true, false, false, null, null, null, null));
-            //lista.Add(new Chequeo("Revisar que coordenadas de Imager sean correctas", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoAria.PosicionImagerCorrecta), true, true, true, true, true, true, true, false, false, false, false, false, false, null, true, false, null));
+            lista.Add(new Chequeo("Revisar que coordenadas de Imager sean correctas", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoAria.PosicionImagerCorrecta), true, true, true, true, true, true, true, false, false, false, false, false, false, null, true, false, null));
             lista.Add(new Chequeo("Tabla de tolerancia incluida", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.TieneTablaDeTolerancia), true, true, true, true, true, true, true, true, true, true, true, true, false, null, null, null, null));
             lista.Add(new Chequeo("Tabla de tolerancia correcta", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.TablaToleranciaCorrecta), true, true, true, true, true, true, true, true, true, true, true, true, false, null, null, null, null));
             lista.Add(new Chequeo("No realizó aplicaciones (en ARIA)", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoAria.NoRealizoAplicacionesARIA), true, true, true, true, true, true, true, true, true, true, true, true, false, null, true, false, null));
             lista.Add(new Chequeo("DRRs en Centro de datos", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoArchivos.TieneImagenesDRRenCDD), true, true, true, true, true, true, false, false, false, false, false, false, false, null, null, null, null));
             lista.Add(new Chequeo("Cantidad de DRRs Correcta", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoArchivos.NumeroDeImagenesCorrectas), true, true, true, true, true, true, false, false, false, false, false, false, false, null, null, null, null));
+            lista.Add(new Chequeo("Se crearon las imágenes con entrada de campo en piel", Categoria.SetUp, NivelDeAccion.Advertencia, null, true, true, false, true, false, false, false, false, false, false, false, false, false, false, false, false, false));
             lista.Add(new Chequeo("Corrimientos correctos en GSheet", Categoria.SetUp, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoArchivos.CorrimientosEnRef2IsoOK), true, true, true, true, true, false, false, false, false, false, false, false, false, null, false, true, null));
             lista.Add(new Chequeo("DRR con filtro correcto", Categoria.SetUp, NivelDeAccion.Advertencia, null, false, true, true, true, true, true, true, false, false, false, false, false, false, null, null, null, null));
             lista.Add(new Chequeo("Chequeos Pb en bunker Electrones/TBI", Categoria.SetUp, NivelDeAccion.Advertencia, null, false, false, false, true, false, false, false, false, false, false, false, true, false, null, null, null, null));
@@ -251,6 +274,21 @@ namespace PruebaTreeListView
             lista.Add(new Chequeo("Se exportó CT a Exactrac", Categoria.Exactrac, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoExactrac.EstaExportadaCT), true, false, false, false, false, false, true, true, true, true, true, false, false, null, null, null, true));
             lista.Add(new Chequeo("La CT exportada tiene más de 400 cortes", Categoria.Exactrac, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoExactrac.SeExportaronMenosDe400Cortes), true, false, false, false, false, false, true, true, true, true, true, false, false, null, null, null, true));
             lista.Add(new Chequeo("Se exportó set de estructuras a Exactrac", Categoria.Exactrac, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodoChequeoExactrac.SeExportoSetDeEstructuras), true, false, false, false, false, false, true, true, true, true, true, false, false, null, null, null, true));
+            lista.Add(new Chequeo("El informe está cargado en Sitramed", Categoria.Informe, NivelDeAccion.Advertencia, null, false, true, true, true, true, true, true, true, true, true, true, false, false, null, null, null, null));
+            lista.Add(new Chequeo("Dosis día y total correctas en simulación", Categoria.APF, NivelDeAccion.Advertencia, null, false, true, true, true, true, true, true, true, true, true, true, true, false, null, null, null, null));
+            lista.Add(new Chequeo("Expansiones realizadas correctamente y sin puntitos", Categoria.Planificacion, NivelDeAccion.Advertencia, null, false, true, true, true, true, true, true, true, true, true, true, false, false, null, null, null, null));
+            lista.Add(new Chequeo("Distribución de dosis del plan OK", Categoria.Planificacion, NivelDeAccion.Advertencia, null, false, true, true, true, true, true, true, true, true, true, true, true, false, null, null, null, null));
+            lista.Add(new Chequeo("Constraints en OARs y PTVs OK", Categoria.Planificacion, NivelDeAccion.Advertencia, null, false, true, true, true, true, true, true, true, true, true, true, true, false, null, null, null, null));
+            lista.Add(new Chequeo("Report en carpeta es el del plan aprobado", Categoria.Planificacion, NivelDeAccion.Advertencia, null, false, true, true, true, true, true, true, true, true, true, true, true, false, null, null, null, null));
+            lista.Add(new Chequeo("TBI calculado cada 1 grado", Categoria.Planificacion, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.CalculoCada1grado), true, false, false, false, false, false, false, false, false, false, false, true, false, null, null, null, null));
+            lista.Add(new Chequeo("Campo tiene Planned SSD en TBI", Categoria.Planificacion, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.TienePlannedSSD), true, false, false, false, false, false, false, false, false, false, false, true, false, null, null, null, null));
+            lista.Add(new Chequeo("Hay campos que pueden requerir lateralizar camilla", Categoria.Planificacion, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.CamposQueRequierenLateralizar), false, true, false, false, true, false, false, false, false, false, false, false, false, null, null, null, null));
+            lista.Add(new Chequeo("El campo tiene el colimador con una rotación mayor a 45 grados", Categoria.Planificacion, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.ColimadorRotado), false, false, false, false, false, false, false, false, false, false, false, false, false, null, null, null, null));
+            lista.Add(new Chequeo("El iso está redondeado a 5mm", Categoria.Planificacion, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.CoordenadasIsoRedondeadas), true, true, true, false, true, false, false, false, false, false, false, false, false, null, false, true, null));
+            lista.Add(new Chequeo("La normalización está entre 95 y 105%", Categoria.Planificacion, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.NormalizacionVariaMucho), true, false, false, false, true, true, true, false, true, false, true, false, false, null, null, null, null));
+            lista.Add(new Chequeo("La lateralidad del PTV coincide con lo prescripto", Categoria.Planificacion, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.EsLateralCorrecto), null, true, true, true, true, true, true, true, true, true, true, false, false, null, null, null, null));
+            lista.Add(new Chequeo("Está contemplado el márgen por respiración en el MLC (flash, skin flash, VB)", Categoria.Planificacion, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.MargenRespiracionEnMama), null, true, false, false, true, true, true, true, false, false, false, false, false, null, null, null, null));
+            lista.Add(new Chequeo("La distancia de la camilla al iso es menor a 25cm", Categoria.Planificacion, NivelDeAccion.Advertencia, new MyStaticMethodInvoker(MetodosChequeoEclipse.DistanciaCamillaAIsoMenorA25cm), null, true, true, false, true, true, true, false, false, true, true, false, false, null, null, null, null));
             return lista;
         }
 

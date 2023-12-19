@@ -52,7 +52,7 @@ namespace PruebaTreeListView
             foreach (Chequeo chequeo in obsCol)
             {
                 chequeo.AplicarMetodo(planseleccionado);
-                if (chequeo.ResultadoTest==null && chequeo.EsAutomatico)
+                if (chequeo.ResultadoTest==null && chequeo.EsAutomatico==true)
                 {
                     chequeosEliminar.Add(chequeo);
                 }

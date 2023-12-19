@@ -796,6 +796,41 @@ namespace PruebaTreeListView
         {
             return plan.PlanEclipse.PlanNormalizationValue <= 105 && plan.PlanEclipse.PlanNormalizationValue >= 95;
         }
+
+        #region ChequeosSemiautomáticos
+        public static bool? EsLateralCorrecto(Plan plan)
+        {
+            return Math.Abs(plan.PlanEclipse.Beams.First().IsocenterPosition.x - plan.PlanEclipse.StructureSet.Image.UserOrigin.x) >= 50; //activa método si está lateralizado el iso
+        }
+
+        public static bool? MargenRespiracionEnMama(Plan plan)
+        {
+            return plan.EsTtodeMama();
+        }
+
+        public static bool? DistanciaCamillaAIsoMenorA25cm(Plan plan)
+        {
+            foreach (Beam campo in plan.PlanEclipse.Beams)
+            {
+                if (DistanciaCamillaAIsoMenorA25cm(campo)==true)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool? DistanciaCamillaAIsoMenorA25cm(Beam campo)
+        {
+            if (campo.ControlPoints.Any(c=>c.GantryAngle>95 && c.GantryAngle<265))
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+        #endregion
     }
 
 }
