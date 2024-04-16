@@ -146,7 +146,7 @@ namespace PruebaTreeListView
         {
             List<int> fraccionesConPlaca = new List<int>();
             string sptId = "";
-            if (plan.Tecnica == Tecnica.IMRT || plan.Tecnica == Tecnica.VMAT || plan.Tecnica == Tecnica.Mama3DC)
+            if (plan.Tecnica == Tecnica.IMRT || plan.Tecnica == Tecnica.VMAT )
             {
                 int i = 1;
                 while (i < plan.PlanAria.RTPlans.First().NoFractions)

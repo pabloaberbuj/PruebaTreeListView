@@ -412,7 +412,7 @@ namespace PruebaTreeListView
                 {
                     return false;
                 }
-                else if (desplazamiento < -50 && campo.ControlPoints.First().GantryAngle < 90) //derecho
+                else if (desplazamiento < -50 && MetodosAuxiliares.IECaVarian(campo.ControlPoints.First().GantryAngle) < 90) //derecho
                 {
                     return false;
                 }
@@ -783,9 +783,9 @@ namespace PruebaTreeListView
             VVector Iso = plan.PlanEclipse.Beams.First().IsocenterPosition - plan.PlanEclipse.StructureSet.Image.UserOrigin;
             for (int i = 0; i < 3; i++)
             {
-                var parteDecimal = Iso[i] / 10 - Math.Truncate(Iso[i] / 10);
-                var dosDecimales = Math.Abs(Math.Truncate(parteDecimal * 100) / 100);
-                if (dosDecimales != 0 && dosDecimales != 0.5)
+                var parteDecimal = Math.Round(Iso[i] / 10,4) - Math.Truncate(Iso[i] / 10);
+                var dosDecimales = Math.Abs(Math.Round(parteDecimal * 100) / 100);
+                if (dosDecimales != 0 && dosDecimales != 0.5 && dosDecimales != 1)
                 {
                     return false;
                 }

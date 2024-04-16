@@ -45,8 +45,8 @@ namespace PruebaTreeListView
         {
             try
             {
-                app = VMS.TPS.Common.Model.API.Application.CreateApplication(null, null);
-                //app = VMS.TPS.Common.Model.API.Application.CreateApplication("paberbuj", "123qwe");
+                //app = VMS.TPS.Common.Model.API.Application.CreateApplication(null, null);
+                app = VMS.TPS.Common.Model.API.Application.CreateApplication("paberbuj", "123qwe");
                 
             }
             catch (Exception)
@@ -154,7 +154,8 @@ namespace PruebaTreeListView
 
                 if (cursoSeleccionado.PlanSetups.Count() + cursoSeleccionado.PlanSums.Count() > 0)
                 {
-                    List<Ecl.PlanningItem> planes = cursoSeleccionado.PlanSetups.ToList<Ecl.PlanningItem>();
+                    List<Ecl.PlanningItem> planes = cursoSeleccionado.PlanSetups.Where(p=>p.ApprovalStatus==PlanSetupApprovalStatus.PlanningApproved || p.ApprovalStatus == PlanSetupApprovalStatus.TreatmentApproved).ToList<Ecl.PlanningItem>();
+                    //List<Ecl.PlanningItem> planes = cursoSeleccionado.PlanSetups.ToList<Ecl.PlanningItem>();
                     planes.AddRange(cursoSeleccionado.PlanSums);
                     cb_planes.ItemsSource = planes;
                 }

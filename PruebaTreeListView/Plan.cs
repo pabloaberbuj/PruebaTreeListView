@@ -229,7 +229,7 @@ namespace PruebaTreeListView
     public enum Tecnica
     {
         Static3DC,
-        Mama3DC, //quitar porque todos llevan las mismas imágenes: Entra en static3D
+        //Mama3DC, //quitar porque todos llevan las mismas imágenes: Entra en static3D
         Arcos3DC,//
         Electrones,//
         IMRT,//

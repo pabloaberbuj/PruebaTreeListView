@@ -301,7 +301,7 @@ namespace PruebaTreeListView
 
         public static bool CamposIguales(Ecl.Beam campo1, Ecl.Beam campo2)
         {
-            return (campo1.Id == campo2.Id && campo1.Meterset.Value == campo2.Meterset.Value && campo1.ControlPoints.First().JawPositions.Equals(campo2.ControlPoints.First().JawPositions)
+            return (campo1.Id == campo2.Id && Math.Round(campo1.Meterset.Value,0) == Math.Round(campo2.Meterset.Value,0) && campo1.ControlPoints.First().JawPositions.Equals(campo2.ControlPoints.First().JawPositions)
                 && campo1.ControlPoints.First().GantryAngle == campo2.ControlPoints.First().GantryAngle && campo1.WeightFactor == campo2.WeightFactor);
         }
 
@@ -315,7 +315,12 @@ namespace PruebaTreeListView
             {
                 foreach (Ecl.Beam campo1 in plan1.Beams.Where(b=>!b.IsSetupField))
                 {
-                    if (!plan2.Beams.Any(b => CamposIguales(b, campo1)))
+                    List<Ecl.Beam> campos2 = plan2.Beams.Where(b=>!b.IsSetupField).ToList();
+                    if (campos2.Any(b=> CamposIguales(b, campo1)))
+                    {
+
+                    }
+                    else
                     {
                         return false;
                     }
@@ -532,7 +537,7 @@ namespace PruebaTreeListView
             {
                 return true;
             }
-            else if (informe.Contains("(3DC)") && (plan.Tecnica==Tecnica.Arcos3DC || plan.Tecnica == Tecnica.Electrones) || plan.Tecnica == Tecnica.Mama3DC || plan.Tecnica == Tecnica.Static3DC) //TBI no tiene informe
+            else if (informe.Contains("(3DC)") && (plan.Tecnica==Tecnica.Arcos3DC || plan.Tecnica == Tecnica.Electrones) || plan.Tecnica == Tecnica.Static3DC) //TBI no tiene informe
             {
                 return true;
             }

@@ -140,6 +140,10 @@ namespace PruebaTreeListView
             string sentidoY = iso.y >= 0 ? "Up" : "Down";
             string sentidoZ = iso.z >= 0 ? "Out" : "In";
             string Equipo = "";
+            if (desplazX==0 && desplazY==0 && desplazZ==0)
+            {
+                return null;
+            }
             Ecl.Patient paciente = plan.PlanEclipse.Course.Patient;
             if (plan.PlanEclipse.Beams.First().TreatmentUnit.Id == "2100CMLC")
             {
@@ -154,10 +158,6 @@ namespace PruebaTreeListView
                 Equipo = "Medrano";
             }
             else
-            {
-                Equipo = null;
-            }
-            if (Equipo == null)
             {
                 return null;
             }
