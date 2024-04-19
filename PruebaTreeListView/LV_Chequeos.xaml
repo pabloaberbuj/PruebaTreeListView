@@ -13,7 +13,7 @@
         <ListView x:Name="LVChequeos" Grid.Row="1">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn DisplayMemberBinding="{Binding Nombre}" Width="420"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Nombre}" Width="540"/>
                     <GridViewColumn>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
@@ -143,9 +143,9 @@
                                             <Expander.Header>
                                                 <StackPanel x:Name="tb_prueba" Orientation="Horizontal">
                                                     <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="14"/>
-                                                    <TextBlock Text="{Binding Path=Items, Converter={StaticResource Contador}}" Margin="10,0,0,0"/>
+                                                    <!--<TextBlock Text="{Binding Path=Items, Converter={StaticResource Contador}}" Margin="10,0,0,0"/>
                                                     <TextBlock Text="/"/>
-                                                    <TextBlock Text="{Binding Path=ItemCount}" />
+                                                    TextBlock Text="{Binding Path=ItemCount}" />-->
                                                 </StackPanel>
                                             </Expander.Header>
                                             <ItemsPresenter />

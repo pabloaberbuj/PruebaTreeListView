@@ -20,7 +20,12 @@ namespace PruebaTreeListView
             var RefPointPrimario = plan.PlanAria.RTPlans.First().RadiationRefPoints.FirstOrDefault(r => r.RefPoint.RefPointId == plan.PlanEclipse.PrimaryReferencePoint.Id).RefPoint;
             if (RefPointPrimario.TotalDoseLimit!=null && RefPointPrimario.SessionDoseLimit!=null && RefPointPrimario.DailyDoseLimit!=null)
             {
-                return Math.Round((double)RefPointPrimario.TotalDoseLimit * 100, 1) == plan.DosisTotal && Math.Round((double)RefPointPrimario.SessionDoseLimit * 100, 1) == plan.DosisFraccion && Math.Round((double)RefPointPrimario.DailyDoseLimit * 100, 1) == plan.DosisDia;
+                int factor = 1;
+                if (plan.Tecnica==Tecnica.TBI)
+                {
+                    factor = 2;
+                }
+                return Math.Round((double)RefPointPrimario.TotalDoseLimit * 100, 1) == plan.DosisTotal*factor && Math.Round((double)RefPointPrimario.SessionDoseLimit * 100, 1) == plan.DosisFraccion* factor && Math.Round((double)RefPointPrimario.DailyDoseLimit * 100, 1) == plan.DosisDia* factor;
             }
             return false;
             

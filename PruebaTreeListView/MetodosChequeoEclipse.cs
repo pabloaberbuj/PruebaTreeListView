@@ -621,8 +621,6 @@ namespace PruebaTreeListView
                 return true;
             }
             return null;
-
-
         }
 
         public static bool? PlanesEnMismoEquipo(Plan plan)
@@ -639,6 +637,24 @@ namespace PruebaTreeListView
                         {
                             return false;
                         }
+                    }
+                }
+                return true;
+            }
+            return null;
+        }
+
+        public static bool? PlanesEnMismaCT(Plan plan)
+        {
+            if (plan.EsPlanSuma)
+            {
+                List<PlanSetup> planesEclipse = plan.planesEclipse();
+                string primerUID = planesEclipse.First().SeriesUID;
+                foreach (PlanSetup planSetup in planesEclipse.Skip(1))
+                {
+                    if (planSetup.SeriesUID != primerUID)
+                    {
+                        return false;
                     }
                 }
                 return true;

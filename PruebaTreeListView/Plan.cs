@@ -194,7 +194,7 @@ namespace PruebaTreeListView
                 }
                 else if (primerCampo.Technique.Id == "ARC" && primerCampo.MLCPlanType != MLCPlanType.VMAT)
                 {
-                    if (PlanEclipse.Id.ToUpper().Contains("TBI") && primerCampo.ControlPoints.First().JawPositions == new VRect<double>(20, 20, 20, 20))
+                    if (PlanEclipse.Id.ToUpper().Contains("TBI") && primerCampo.ControlPoints.First().JawPositions == new VRect<double>(-200, -200, 200, 200))
                     {
                         return Tecnica.TBI;
                     }
