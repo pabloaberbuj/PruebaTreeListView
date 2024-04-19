@@ -16,13 +16,13 @@ namespace PruebaTreeListView
             List<EquipoDicomRT> equiposDicomRT = new List<EquipoDicomRT>();
             equiposDicomRT.Add(new EquipoDicomRT("Equipo 2", @"\\fisica0\equipo2\DICOM RT", "Equipo 2 6EX"));
             equiposDicomRT.Add(new EquipoDicomRT("Medrano", @"\\fisica0\compartido\DEMEDRANO\Pacientes_Eclipse_Medrano", "CL21EX"));
-            //equiposDicomRT.Add(new EquipoDicomRT("Equipo 3", @"\\fisica0.0.0.57\equipo3\DICOM RT", "2100CMLC"));
+            equiposDicomRT.Add(new EquipoDicomRT("Equipo 3", @"\\fisica0\equipo3\DICOM RT", "Equipo3"));
             return equiposDicomRT;
         }
         public static bool EquipoEsDicomRT(Plan plan)
         {
             List<EquipoDicomRT> _equiposDicomRT = equiposDicomRT();
-            return _equiposDicomRT.Any(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id);
+            return _equiposDicomRT.Any(e => e.ID == plan.Equipo());
         }
 
 
@@ -32,18 +32,18 @@ namespace PruebaTreeListView
             {
                 if (plan.Tecnica == Tecnica.TBI)
                 {
-                    return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\1 - Inicios\1 - TBI\" + plan.nombreMasIDCorregida;
+                    return equiposDicomRT().First(e => e.ID == EquipoId).Path + @"\1 - Inicios\1 - TBI\" + plan.nombreMasIDCorregida;
                 }
                 else
                 {
-                    var IdEclipse = plan.PlanEclipse.Beams.First().TreatmentUnit.Id;
-                    var equipo = equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id);
+                    var IdEclipse = plan.Equipo();
+                    var equipo = equiposDicomRT().First(e => e.ID == EquipoId);
 
                     if (EquipoId == "CL21EX")
                     {
-                        return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\" + plan.nombreMasIDDRR + @"\" + plan.PlanEclipse.Id + " (" + plan.PlanEclipse.Course.Id + @")\";
+                        return equiposDicomRT().First(e => e.ID == EquipoId).Path + @"\" + plan.nombreMasIDDRR + @"\" + plan.PlanEclipse.Id + " (" + plan.PlanEclipse.Course.Id + @")\";
                     }
-                    return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\1 - Inicios\" + plan.nombreMasIDCorregida;
+                    return equiposDicomRT().First(e => e.ID == EquipoId).Path + @"\1 - Inicios\" + plan.nombreMasIDCorregida;
                 }
             }
             else
@@ -58,15 +58,15 @@ namespace PruebaTreeListView
             {
                 if (plan.Tecnica == Tecnica.TBI)
                 {
-                    return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\2 - En tratamiento\1 - TBI\" + plan.nombreMasIDCorregida;
+                    return equiposDicomRT().First(e => e.ID == EquipoId).Path + @"\2 - En tratamiento\1 - TBI\" + plan.nombreMasIDCorregida;
                 }
                 else
                 {
                     if (EquipoId == "CL21EX")
                     {
-                        return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\" + plan.nombreMasIDDRR + @"\" + plan.PlanEclipse.Id + " (" + plan.PlanEclipse.Course.Id + @")\";
+                        return equiposDicomRT().First(e => e.ID == EquipoId).Path + @"\" + plan.nombreMasIDDRR + @"\" + plan.PlanEclipse.Id + " (" + plan.PlanEclipse.Course.Id + @")\";
                     }
-                    return equiposDicomRT().First(e => e.ID == plan.PlanEclipse.Beams.First().TreatmentUnit.Id).Path + @"\2 - En tratamiento\" + plan.nombreMasIDCorregida;
+                    return equiposDicomRT().First(e => e.ID == EquipoId).Path + @"\2 - En tratamiento\" + plan.nombreMasIDCorregida;
                 }
             }
             else
@@ -77,14 +77,14 @@ namespace PruebaTreeListView
 
         public static string CarpetaPaciente(Plan plan)
         {
-            string carpetaEnTto = CarpetaPacienteEnTratamiento(plan, plan.PlanEclipse.Beams.First().TreatmentUnit.Id);
+            string carpetaEnTto = CarpetaPacienteEnTratamiento(plan, plan.Equipo());
             if (Directory.Exists(carpetaEnTto))
             {
                 return carpetaEnTto;
             }
             else
             {
-                string carpetaInicios = CarpetaPacienteInicios(plan, plan.PlanEclipse.Beams.First().TreatmentUnit.Id);
+                string carpetaInicios = CarpetaPacienteInicios(plan, plan.Equipo());
                 if (Directory.Exists(carpetaInicios))
                 {
                     return carpetaInicios;
@@ -129,7 +129,7 @@ namespace PruebaTreeListView
 
         public static bool? ExisteCarpetaEnEquipo(Plan plan)
         {
-            string EquipoId = plan.PlanEclipse.Beams.First().TreatmentUnit.Id;
+            string EquipoId = plan.Equipo();
             if (EquipoId == "CL21EX")
             {
                 return null;
@@ -139,7 +139,7 @@ namespace PruebaTreeListView
 
         public static bool? NoRealizoAplicacionesDicomRT(Plan plan)
         {
-            string EquipoId = plan.PlanEclipse.Beams.First().TreatmentUnit.Id;
+            string EquipoId = plan.Equipo();
             if (EquipoId == "CL21EX")
             {
                 return null;
@@ -162,7 +162,7 @@ namespace PruebaTreeListView
 
         public static bool? NoExisteCarpetaEnOtroEquipo(Plan plan)
         {
-            foreach (EquipoDicomRT equipo in equiposDicomRT().Where(e => e.ID != plan.PlanEclipse.Beams.First().TreatmentUnit.Id))
+            foreach (EquipoDicomRT equipo in equiposDicomRT().Where(e => e.ID != plan.Equipo()))
             {
                 if (Directory.Exists(CarpetaPacienteInicios(plan, equipo.ID)) || Directory.Exists(CarpetaPacienteEnTratamiento(plan, equipo.ID)))
                 {
@@ -178,7 +178,7 @@ namespace PruebaTreeListView
             {
                 return null;
             }
-            if (!equiposDicomRT().Any(e => e.ID == plan.PlanesSumandos.First().PlanEclipse.Beams.First().TreatmentUnit.Id))
+            if (!equiposDicomRT().Any(e => e.ID == plan.PlanesSumandos.First().Equipo()))
             {
                 return null;
             }
@@ -198,7 +198,7 @@ namespace PruebaTreeListView
             {
                 var archivos = Directory.GetFiles(CarpetaPaciente(plan));
                 var extensiones = Path.GetExtension(archivos.First());
-                return Directory.GetFiles(CarpetaPaciente(plan)).Where(f => Path.GetExtension(f) == ".dcm").Count() == 1;
+                return Directory.GetFiles(CarpetaPaciente(plan)).Where(f => Path.GetExtension(f) == ".dcm" && !Path.GetFileNameWithoutExtension(f).Contains("RI") && !Path.GetFileNameWithoutExtension(f).Contains("CT") && !Path.GetFileNameWithoutExtension(f).Contains("RS")).Count()  == 1;
             }
             else
             {
@@ -241,6 +241,10 @@ namespace PruebaTreeListView
 
         public static bool? DicomEsCompatibleConConsolaVieja(Plan plan)
         {
+            if (plan.Equipo()=="Equipo3" || plan.Equipo()=="CL21EX")
+            {
+                return null;
+            }
             if (ExisteCarpetaEnEquipo(plan) != true || HayUnicoDicomEnCarpetaPlan(plan) != true || ArchivoCoincideConPlan(plan) != true)
             {
                 return null;

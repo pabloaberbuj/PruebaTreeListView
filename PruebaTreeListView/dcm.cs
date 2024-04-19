@@ -88,6 +88,10 @@ namespace PruebaTreeListView
 
                 foreach (var beam in Beams)
                 {
+                    if ((string)((EvilDICOM.Core.DICOMObject)beam).FindFirst("300A00CE").DData=="SETUP")
+                    {
+                        break;
+                    }
                     var ControlPoints = ((EvilDICOM.Core.DICOMObject)beam).FindFirst("300A0111").DData_;
                     CampoDCM CampoDCM = new CampoDCM();
                     CampoDCM.ID = (string)((EvilDICOM.Core.DICOMObject)beam).FindFirst("300A00C2").DData;

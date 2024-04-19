@@ -180,7 +180,7 @@ namespace PruebaTreeListView
             {
                 return null;
             }
-            if (plan.PlanEclipse.Beams.First().TreatmentUnit.Id == "D-2300CD" || plan.PlanEclipse.Beams.First().TreatmentUnit.Id == "Equipo3")
+            if (plan.Equipo() == "D-2300CD" || plan.Equipo() == "Equipo3")
             {
                 return plan.PlanEclipse.Beams.Any(b => b.IsSetupField && b.ControlPoints.First().GantryAngle == 0 || b.IsSetupField && b.ControlPoints.First().GantryAngle == 180) && plan.PlanEclipse.Beams.Any(b => b.IsSetupField && b.ControlPoints.First().GantryAngle == 270 || b.ControlPoints.First().GantryAngle == 90); //eq3 y eq4 pueden tener campo de set up posterior
             }
@@ -196,7 +196,7 @@ namespace PruebaTreeListView
             }
             if ((plan.PlanEclipse.Beams.First().IsocenterPosition.x - plan.PlanEclipse.StructureSet.Image.UserOrigin.x) < -30) //3cm a la derecha
             {
-                if (plan.PlanEclipse.Beams.First().TreatmentUnit.Id == "D-2300CD" || plan.PlanEclipse.Beams.First().TreatmentUnit.Id == "Equipo3")
+                if (plan.Equipo() == "D-2300CD" || plan.Equipo() == "Equipo3")
                 {
                     return plan.PlanEclipse.Beams.Any(b => b.IsSetupField && b.ControlPoints.First().GantryAngle == 180);
                 }
@@ -429,7 +429,7 @@ namespace PruebaTreeListView
             double desplazamiento = plan.PlanEclipse.Beams.First().IsocenterPosition.x - plan.PlanEclipse.StructureSet.Image.UserOrigin.x;
             if (Math.Abs(desplazamiento) > 50)
             {
-                foreach (Beam campo in plan.PlanEclipse.Beams)
+                foreach (Beam campo in plan.PlanEclipse.Beams.Where(b=>!b.IsSetupField))
                 {
                     if (CamposQueRequierenLateralizar(campo, plan.PlanEclipse) == false)
                     {
@@ -683,7 +683,7 @@ namespace PruebaTreeListView
         }
         public static bool? PlanEnEquipo4(Plan plan)
         {
-            return plan.PlanEclipse.Beams.First().TreatmentUnit.Id == "D-2300CD";
+            return plan.Equipo() == "D-2300CD";
         }
         public static bool? TieneTecnicaTOTAL(Plan plan)
         {
@@ -780,6 +780,10 @@ namespace PruebaTreeListView
 
         public static bool? CoordenadasIsoRedondeadas(Plan plan)
         {
+            if (plan.Equipo()=="Equipo3")
+            {
+                return null;
+            }
             VVector Iso = plan.PlanEclipse.Beams.First().IsocenterPosition - plan.PlanEclipse.StructureSet.Image.UserOrigin;
             for (int i = 0; i < 3; i++)
             {

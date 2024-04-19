@@ -77,7 +77,7 @@ namespace PruebaTreeListView
 
         public static bool? DeltaCouchIgualParTodosLosCampos(Plan plan)
         {
-            string EquipoId = plan.PlanEclipse.Beams.First().TreatmentUnit.Id;
+            string EquipoId = plan.Equipo();
             if (EquipoId == "CL21EX")
             {
                 return null;
@@ -103,7 +103,7 @@ namespace PruebaTreeListView
 
         public static bool? DeltaCouchCoincideConIso(Plan plan)
         {
-            string EquipoId = plan.PlanEclipse.Beams.First().TreatmentUnit.Id;
+            string EquipoId = plan.Equipo();
             if (EquipoId == "CL21EX")
             {
                 return null;
@@ -216,7 +216,8 @@ namespace PruebaTreeListView
             {
                 var ss = session.Session;
                 var sss = ss.SessionProcedures;
-                if (session.Session.SessionProcedures.Count != cantidad || session.Session.SessionProcedures.Any(p => !p.SessionProcedureTemplateId.Contains(sptId)))
+                if (session.Session.SessionProcedures.Count < cantidad || session.Session.SessionProcedures.Any(p => !p.SessionProcedureTemplateId.Contains(sptId)))
+                //if (session.Session.SessionProcedures.Any(p => !p.SessionProcedureTemplateId.Contains(sptId)))
                 {
                     return false;
                 }

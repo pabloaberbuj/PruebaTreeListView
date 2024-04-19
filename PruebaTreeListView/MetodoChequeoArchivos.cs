@@ -74,7 +74,7 @@ namespace PruebaTreeListView
 
         public static bool? TecnicaEnInformeCorrecta(Plan plan)
         {
-            if (plan.EsParteDeUnPlanSuma || TieneInforme(plan)==false)
+            if (plan.EsParteDeUnPlanSuma || TieneInforme(plan) == false)
             {
                 return null;
             }
@@ -82,17 +82,20 @@ namespace PruebaTreeListView
             {
                 string textoInforme = MetodosAuxiliares.ObtenerTextoInforme(plan);
                 return MetodosAuxiliares.CoincideTextoInformeConTecnica(textoInforme, plan);
-                
+
             }
 
         }
 
         public static bool? TieneImagenesDRRenCDD(Plan plan)
         {
-            //var carpeta = MetodosAuxiliares.CarpetaDRRs(plan);
-            //var archivos = Directory.GetFiles(MetodosAuxiliares.CarpetaDRRs(plan));
-            
-            if (Directory.Exists(MetodosAuxiliares.CarpetaDRRs(plan)) && Directory.GetFiles(MetodosAuxiliares.CarpetaDRRs(plan)).Any(f => Path.GetExtension(f)==".png"))
+            string equipoID = plan.Equipo();
+            if (equipoID != "Equipo 2 6EX" || equipoID != "CL21EX")
+            {
+                return null;
+            }
+
+            if (Directory.Exists(MetodosAuxiliares.CarpetaDRRs(plan)) && Directory.GetFiles(MetodosAuxiliares.CarpetaDRRs(plan)).Any(f => Path.GetExtension(f) == ".png"))
             {
                 var imagenes = Directory.GetFiles(MetodosAuxiliares.CarpetaDRRs(plan)).Where(f => Path.GetExtension(f) == ".png");
                 if (imagenes != null)
@@ -109,12 +112,19 @@ namespace PruebaTreeListView
 
         public static bool? NumeroDeImagenesCorrectas(Plan plan)
         {
-            if(TieneImagenesDRRenCDD(plan) == true)
+            if (TieneImagenesDRRenCDD(plan) == true)
             {
                 var imagenes = Directory.GetFiles(MetodosAuxiliares.CarpetaDRRs(plan)).Where(f => Path.GetExtension(f) == ".png");
-                if (plan.Tecnica==Tecnica.Static3DC)
+                if (plan.Tecnica == Tecnica.Static3DC)
                 {
-                    return imagenes.Count() >= plan.PlanEclipse.Beams.Count();
+                    if (plan.EsTtodeMama())
+                    {
+                        return imagenes.Count() >= plan.PlanEclipse.Beams.Count()+2; //Tiene que tener todos los campos + mínimo 2 de luz de campo de tg
+                    }
+                    else
+                    {
+                        return imagenes.Count() >= plan.PlanEclipse.Beams.Count();
+                    }
                 }
                 else
                 {
@@ -125,8 +135,8 @@ namespace PruebaTreeListView
             {
                 return null;
             }
-            
-            
+
+
         }
 
 
@@ -140,20 +150,21 @@ namespace PruebaTreeListView
             string sentidoY = iso.y >= 0 ? "Up" : "Down";
             string sentidoZ = iso.z >= 0 ? "Out" : "In";
             string Equipo = "";
-            if (desplazX==0 && desplazY==0 && desplazZ==0)
+            if (desplazX == 0 && desplazY == 0 && desplazZ == 0)
             {
                 return null;
             }
             Ecl.Patient paciente = plan.PlanEclipse.Course.Patient;
-            if (plan.PlanEclipse.Beams.First().TreatmentUnit.Id == "2100CMLC")
+            /*if (plan.PlanEclipse.Beams.First().TreatmentUnit.Id == "2100CMLC")
             {
                 Equipo = "Equipo 3";
             }
-            else if (plan.PlanEclipse.Beams.First().TreatmentUnit.Id == "Equipo 2 6EX")
+            else */
+            if (plan.Equipo() == "Equipo 2 6EX")
             {
                 Equipo = "Equipo 2";
             }
-            else if (plan.PlanEclipse.Beams.First().TreatmentUnit.Id == "CL21EX")
+            else if (plan.Equipo() == "CL21EX")
             {
                 Equipo = "Medrano";
             }
@@ -171,7 +182,7 @@ namespace PruebaTreeListView
             }
             //int ubicacion = pacientesCargados.IndexOf(pacientePlan);
             return pacientesCargados.Contains(pacientePlan);
-            
+
         }
 
     }

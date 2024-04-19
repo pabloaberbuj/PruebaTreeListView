@@ -147,6 +147,12 @@ namespace PruebaTreeListView
             return PlanEclipse.Course.Patient.LastName.ToUpper() + ", " + PlanEclipse.Course.Patient.FirstName.ToUpper() + "-" + PlanEclipse.Course.Patient.Id;
         }
 
+        public string Equipo()
+        {
+            return PlanEclipse.Beams.First().TreatmentUnit.Id;
+        }
+
+
         public static Tecnica ObtenerTecnica(Ecl.PlanSetup PlanEclipse)
         {
             if (PlanEclipse.Beams.Count(f => !f.IsSetupField) > 0)

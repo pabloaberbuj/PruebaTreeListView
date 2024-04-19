@@ -41,7 +41,7 @@ namespace PruebaTreeListView
             {
                 return true;
             }
-            else if (camilla.Contains("IGRT") && equipo == "2100CMLC")
+            else if (camilla.Contains("IGRT") && equipo == "Equipo3")
             {
                 return true;
             }
@@ -339,7 +339,7 @@ namespace PruebaTreeListView
             {
                 return "Equipo2";
             }
-            else if (plan.Beams.First().TreatmentUnit.Id == "2100CMLC")
+            else if (plan.Beams.First().TreatmentUnit.Id == "Equipo3")
             {
                 return "Equipo3";
             }
@@ -367,7 +367,7 @@ namespace PruebaTreeListView
             {
                 return "Equipo 2";
             }
-            else if (plan.Beams.First().TreatmentUnit.Id == "2100CMLC")
+            else if (plan.Beams.First().TreatmentUnit.Id == "Equipo3")
             {
                 return "Equipo 3";
             }
