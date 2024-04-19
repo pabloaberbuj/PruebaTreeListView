@@ -66,19 +66,19 @@ namespace PruebaTreeListView
         private void RB_OK_Checked(object sender, RoutedEventArgs e)
         {
             ((Chequeo)((RadioButton)sender).DataContext).ResultadoTest = true;
-            view.Refresh();
+            //view.Refresh();
         }
 
         private void RB_Falla_Checked(object sender, RoutedEventArgs e)
         {
             ((Chequeo)((RadioButton)sender).DataContext).ResultadoTest = false;
-            view.Refresh();
+            //view.Refresh();
         }
 
         private void RB_NoAplica_Checked(object sender, RoutedEventArgs e)
         {
             ((Chequeo)((RadioButton)sender).DataContext).ResultadoTest = null;
-            view.Refresh();
+            //view.Refresh();
         }
     }
 }

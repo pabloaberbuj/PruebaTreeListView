@@ -73,6 +73,7 @@ namespace PruebaTreeListView
             }
             cb_Tecnicas.ItemsSource = Enum.GetValues(typeof(Tecnica));
             ConexionInicial();
+            //aria.Dispose();
         }
 
 
