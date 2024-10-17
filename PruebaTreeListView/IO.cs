@@ -138,6 +138,18 @@ namespace PruebaTreeListView
             }
         }
 
+        public static string RutaFisica0()
+        {
+            if (Directory.Exists(@"\\fisica0\centro_de_datos2018\"))
+            {
+                return "fisica0";
+            }
+            else
+            {
+                return "10.100.0.252";
+            }
+        }
+
         /*public static void moverArchivo(string pathOrigen, string pathDestino)
         {
             if (!File.Exists(pathOrigen))

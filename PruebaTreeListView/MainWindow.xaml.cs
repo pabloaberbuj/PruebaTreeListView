@@ -35,6 +35,13 @@ namespace PruebaTreeListView
         //List<Chequeo> Chequeos;
         List<string> pacientesRes;
         Ecl.Patient pacienteSeleccionado;
+
+
+
+
+
+
+
         Ecl.Course cursoSeleccionado;
         //Ecl.PlanningItem planEclipseSeleccionado;
         VMS.TPS.Common.Model.API.Application app;
@@ -45,8 +52,8 @@ namespace PruebaTreeListView
         {
             try
             {
-                //app = VMS.TPS.Common.Model.API.Application.CreateApplication(null, null);
-                app = VMS.TPS.Common.Model.API.Application.CreateApplication("paberbuj", "123qwe");
+                app = VMS.TPS.Common.Model.API.Application.CreateApplication(null, null);
+                //app = VMS.TPS.Common.Model.API.Application.CreateApplication("paberbuj", "123qwe");
                 
             }
             catch (Exception)
@@ -380,7 +387,8 @@ namespace PruebaTreeListView
                 ChequeoInicial(Ell_ConexionARIA, false);
             }
             ChequeoInicial(Ell_ConexionVaData, Directory.Exists(@"\\ariamevadb-svr\va_data$"));
-            ChequeoInicial(Ell_ConexionCDD, Directory.Exists(@"\\fisica0\centro_de_datos2018\000_Centro de Datos 2021"));
+            string fisica0 = IO.RutaFisica0();
+            ChequeoInicial(Ell_ConexionCDD, Directory.Exists(@"\\"+ fisica0 + @"\centro_de_datos2018\000_Centro de Datos 2021"));
             ChequeoInicial(Ell_ConexionExactrac, MetodoChequeoExactrac.HayConexionExactracEq4());
             ChequeoInicial(Ell_ConexionDrive, MetodosAuxiliares.ChequearRefToIso());
         }
