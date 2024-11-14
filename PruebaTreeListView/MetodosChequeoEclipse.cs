@@ -509,9 +509,6 @@ namespace PruebaTreeListView
             return true;
         }
 
-
-        //nuevos
-
         public static bool? IsoFueraDeCampo(Beam campo)
         {
             if (!campo.IsSetupField && campo.CalculationLogs.Any(cl => cl.Category == "Dose"))
@@ -827,6 +824,37 @@ namespace PruebaTreeListView
             return plan.PlanEclipse.PlanNormalizationValue <= 105 && plan.PlanEclipse.PlanNormalizationValue >= 95;
         }
 
+        //nuevos
+
+        public static bool? BolusLinkeado(Beam campo)
+        {
+            return campo.Boluses.Count() > 0;
+        }
+
+        public static bool? BolusLinkeado(Plan plan)
+        {
+            if (TieneBolus(plan))
+            {
+                foreach (Beam campo in plan.PlanEclipse.Beams.Where(b=>!b.IsSetupField))
+                {
+                    if (BolusLinkeado(campo) == false)
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+            return null;
+            
+        }
+
+        public static bool TieneBolus(Plan plan)
+        {
+            return plan.PlanEclipse.StructureSet.Structures.Any(s => s.Name.Contains("Bolus"));
+        }
+
+
+
         #region ChequeosSemiautomáticos
         public static bool? EsLateralCorrecto(Plan plan)
         {
@@ -857,6 +885,11 @@ namespace PruebaTreeListView
                 return true;
             }
             return false;
+        }
+
+        public static bool? SeGeneraronImagenesBolus(Plan plan)
+        {
+            return TieneBolus(plan);
         }
 
 
