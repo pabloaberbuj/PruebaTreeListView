@@ -31,7 +31,7 @@ namespace PruebaTreeListView
             }
             foreach (Structure estructura in plan.PlanEclipse.StructureSet.Structures)
             {
-                if (estructura.DicomType == "SUPPORT" && MetodosAuxiliares.CoincidenciaCamillas(estructura.Name, plan.PlanEclipse))
+                if (estructura.DicomType.ToUpper() == "SUPPORT" && MetodosAuxiliares.CoincidenciaCamillas(estructura.Id, plan.PlanEclipse))
                 {
                     return true;
                 }

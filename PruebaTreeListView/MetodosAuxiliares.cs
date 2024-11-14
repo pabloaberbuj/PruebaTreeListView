@@ -74,7 +74,7 @@ namespace PruebaTreeListView
                     }
                 }
             }
-            else if (camilla.Contains("BL_ICT") && equipo == "D-2300CD")
+            else if (camilla.Contains("BL ICT") && equipo == "D-2300CD" && esRadioCirugia(plan))
             {
                 return true;
             }
