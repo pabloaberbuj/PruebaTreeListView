@@ -18,6 +18,7 @@ namespace PruebaTreeListView
         public static bool? EstaExportadoPlanAExactrac(Plan plan)
         {
             string[] carpetas = CarpetaPaciente(plan);
+            CarpetaPlanExactrac(plan);
             List<string> rps = new List<string>();
             if (carpetas != null && carpetas.Count() > 0)
             {
@@ -40,7 +41,7 @@ namespace PruebaTreeListView
             return false;
         }
 
-       /* public static string CarpetaPlanExactrac(Plan plan)
+       public static string CarpetaPlanExactrac(Plan plan)
         {
             string[] carpetas = CarpetaPaciente(plan);
             List<string> rps = new List<string>();
@@ -57,17 +58,17 @@ namespace PruebaTreeListView
                         Dcm dcm = new Dcm(rp);
                         if (dcm.coincide(plan))
                         {
-                            return true;
+                            return Directory.GetParent(Path.GetDirectoryName(rp)).FullName;
                         }
                     }
                 }
             }
-            return false;
-        }*/
+            return null;
+        }
 
         public static int CTsExportadas(Plan plan)
         {
-            string[] carpetas = CarpetaPaciente(plan);
+            /*string[] carpetas = CarpetaPaciente(plan);
             List<string> cts = new List<string>();
             if (carpetas != null && carpetas.Count()>0)
             {
@@ -77,7 +78,9 @@ namespace PruebaTreeListView
                 }
                 return cts.Count;
             }
-            return 0;
+            return 0;*/
+            string carpeta = CarpetaPlanExactrac(plan);
+            return Directory.GetFiles(carpeta, "CT*", SearchOption.AllDirectories).Count();
 
         }
         public static bool? EstaExportadaCT(Plan plan)
