@@ -40,6 +40,31 @@ namespace PruebaTreeListView
             return false;
         }
 
+       /* public static string CarpetaPlanExactrac(Plan plan)
+        {
+            string[] carpetas = CarpetaPaciente(plan);
+            List<string> rps = new List<string>();
+            if (carpetas != null && carpetas.Count() > 0)
+            {
+                foreach (string carpetaPlanes in carpetas)
+                {
+                    rps.AddRange(Directory.GetFiles(carpetaPlanes, "RTPLAN*", SearchOption.AllDirectories).ToList());
+                }
+                if (rps.Count > 0)
+                {
+                    foreach (string rp in rps)
+                    {
+                        Dcm dcm = new Dcm(rp);
+                        if (dcm.coincide(plan))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
+        }*/
+
         public static int CTsExportadas(Plan plan)
         {
             string[] carpetas = CarpetaPaciente(plan);
