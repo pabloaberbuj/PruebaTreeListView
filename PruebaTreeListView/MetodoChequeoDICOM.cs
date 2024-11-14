@@ -121,7 +121,7 @@ namespace PruebaTreeListView
         {
             if (ExisteCarpetaEnEquipo(plan) == true)
             {
-                string archivoDCM = Directory.GetFiles(CarpetaPaciente(plan)).First(f => Path.GetExtension(f) == ".dcm" && !Path.GetFileName(f).ToLower().Contains("record"));
+                string archivoDCM = Directory.GetFiles(CarpetaPaciente(plan)).First(f => Path.GetExtension(f) == ".dcm" && !Path.GetFileName(f).ToLower().Contains("record") && !Path.GetFileName(f).ToLower().Contains("ct.") && !Path.GetFileName(f).ToLower().Contains("ri.") && !Path.GetFileName(f).ToLower().Contains("rs."));
                 return new Dcm(archivoDCM);
             }
             return null;
